@@ -25,4 +25,7 @@ jobs:
         run: jupyter-book build --all
 
       - name: Deploy to GitHub Pages
-        run: ghp-import -n -p -f _build/site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ghp-import -n -p -f _build/site -r "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
