@@ -36,6 +36,9 @@ x = np.linalg.solve(A, b)
 print("Solution: x =", x[0], ", y =", x[1])
 ```
 ### Video Lecture
-[![Video](youtube.png)](https://www.youtube.com/watch?v=ZK3O402wf1c)
+:::{iframe} https://www.youtube.com/embed/F3st8X0L1Ys
+:width: 100%
+Get up and running with MyST in Jupyter!
+:::
 
 ## Lecture 2: Elimination with matrices
