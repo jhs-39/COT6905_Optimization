@@ -2,6 +2,11 @@
 
 ## Lecture 1: The Geometry of Linear Equations
 
+:::{iframe} https://www.youtube.com/embed/F3st8X0L1Ys
+:width: 100%
+Lecture 1
+:::
+
 Jake notes: In this section we need to communicate row and column pictures; intuition for solving systems of equations in both ways; introduce foundations for invertibility in high dim spaces (even if we don't use that language yet)
 
 ## Summary
@@ -11,6 +16,7 @@ This lecture introduces linear algebra through the lens of solving systems of eq
 - **Row Picture**: Each equation represents a line (in 2D) or plane (in 3D). Solutions are the intersections of these structures.
 - **Column Picture**: Rewrite as x * column1 + y * column2 = b, finding coefficients for vector combinations.
 - Basic solving via elimination: Subtract multiples of equations to isolate variables.
+- Sneak peek: invertibility
 
 ## Tutorial: Solving a 2x2 System
 Consider the system:
@@ -35,7 +41,5 @@ b = np.array([5, 1])
 x = np.linalg.solve(A, b)
 print("Solution: x =", x[0], ", y =", x[1])
 ```
-### Video Lecture
-[![Video](youtube.png)](https://www.youtube.com/watch?v=ZK3O402wf1c)
 
 ## Lecture 2: Elimination with matrices
