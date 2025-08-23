@@ -1,18 +1,13 @@
 # Information Theory: Introduction to Shannon Entropy
 
 ## Overview
-Information theory provides tools to quantify uncertainty and information in data, which is crucial for deep learning tasks like optimization and model compression. Shannon entropy measures the average "surprise" in a probability distribution, helping us understand concepts like cross-entropy loss and KL divergence (as covered in our syllabus on probabilistic tools).
-
-:::{note}
-In deep learning, low entropy indicates confident predictions, while high entropy signals uncertainty—useful for detecting out-of-distribution data or guiding compression strategies.
-:::
+Information theory provides tools to quantify uncertainty and information content of data. Tools from information theory form the backbone of neural net loss functions which are used to train models. Cross-Entropy loss and KL Divergence are used extensively, which are derived from information-theoretic formulations. Separately, many models predict outcomes using categorical probability distributions. The Shannon Entropy can be applied to these outputs to characterized how uncertain the model is about its prediction, which is important for evaluating models for risk-aware deployments. Finally, these tools can be applied during training dynamics, by researchers at the cutting edge -- we give a brief overview of these recent contributions.
 
 ## Shannon Entropy Formula
-For a categorical probability vector \( P = [p_1, p_2, \dots, p_n] \) where \( \sum p_i = 1 \):
 
 :::{math}
 :name: eq:shannon_entropy
-
+For a categorical probability vector P = [p_1, p_2, \dots, p_n] \) where \( \sum p_i = 1 \):
 H(P) = -\sum_{i=1}^n p_i \log_2 p_i
 :::
 
