@@ -4,21 +4,21 @@
 Information theory provides tools to quantify uncertainty and information content of data. Tools from information theory form the backbone of neural net loss functions which are used to train models. Cross-Entropy loss and KL Divergence are used extensively, which are derived from information-theoretic formulations. Separately, many models predict outcomes using categorical probability distributions. The Shannon Entropy can be applied to these outputs to characterized how uncertain the model is about its prediction, which is important for evaluating models for risk-aware deployments. Finally, these tools can be applied during training dynamics, by researchers at the cutting edge -- we give a brief overview of these recent contributions.
 
 ## Shannon Entropy Formula
+For a categorical probability vector $P = [p_1, p_2, \dots, p_n]$ where $\sum p_i = 1$:
 
 :::{math}
 :name: eq:shannon_entropy
-For a categorical probability vector P = [p_1, p_2, \dots, p_n] \) where \( \sum p_i = 1 \):
 H(P) = -\sum_{i=1}^n p_i \log_2 p_i
 :::
 
 We use base-2 logarithms to measure in *bits*. For \( p_i = 0 \), the term is defined as 0.
 
 ## Binary Entropy Example
-Let's simplify to a binary distribution: probabilities \( p \) and \( 1-p \). The entropy is:
+Let's simplify to a binary distribution, aka a coin flip: probabilities \( p \) and \( 1-p \). The entropy is:
 
 \[ H(p) = -p \log_2 p - (1-p) \log_2 (1-p) \]
 
-This reaches a maximum of 1 bit at \( p = 0.5 \) (complete uncertainty) and 0 at the extremes (certainty).
+This reaches a maximum of 1 bit at \( p = 0.5 \) (complete uncertainty) and 0 at the extremes (certainty). In simple terms: a fair coin has 1 bit of entropy. A weighted coin that always comes up heads has no information associated with it.
 
 ## Interactive Visualization
 Use the slider below to adjust \( p \) and see how entropy changes. (If not interactive, clone the repo and run locally.)
