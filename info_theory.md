@@ -1,7 +1,7 @@
 # Information Theory: Introduction to Shannon Entropy
 
 ## Overview
-Information theory provides tools to quantify uncertainty and information content of data. Tools from information theory form the backbone of neural net loss functions which are used to train models. Cross-Entropy loss and KL Divergence are used extensively, which are derived from information-theoretic formulations. Separately, many models predict outcomes using categorical probability distributions. The Shannon Entropy can be applied to these outputs to characterized how uncertain the model is about its prediction, which is important for evaluating models for risk-aware deployments. Finally, these tools can be applied during training dynamics, by researchers at the cutting edge -- we give a brief overview of these recent contributions.
+Information theory provides tools to quantify uncertainty and information content of data. Tools from information theory form the backbone of neural net loss functions which are used to train models. Cross-Entropy loss and KL Divergence are used extensively for this purpose, which are derived from information-theoretic formulations. Separately, many models predict outcomes using categorical probability distributions. The Shannon Entropy can be applied to these outputs to characterized how uncertain the model is about its prediction, which is important for evaluating models for risk-aware deployments. Finally, these tools can be applied during training to analyze the dynamics, by researchers at the cutting edge -- we give a brief overview of these recent contributions.
 
 ## Shannon Entropy Formula
 For a categorical probability vector $P = [p_1, p_2, \dots, p_n]$ where $\sum p_i = 1$:
@@ -13,15 +13,23 @@ H(P) = -\sum_{i=1}^n p_i \log_2 p_i
 
 We use base-2 logarithms to measure in *bits*. For \( p_i = 0 \), the term is defined as 0.
 
-## Binary Entropy Example
+## What is the Shannon Entropy? A Binary Entropy Example
 Let's simplify to a binary distribution, aka a coin flip: probabilities \( p \) and \( 1-p \). The entropy is:
 
 \[ H(p) = -p \log_2 p - (1-p) \log_2 (1-p) \]
 
-This reaches a maximum of 1 bit at \( p = 0.5 \) (complete uncertainty) and 0 at the extremes (certainty). In simple terms: a fair coin has 1 bit of entropy. A weighted coin that always comes up heads has no information associated with it.
+This reaches a maximum of 1 bit at \( p = 0.5 \) (complete uncertainty) and 0 at the extremes (certainty). In simple terms: a fair coin has 1 bit of entropy. A weighted coin that always comes up heads reveals no additional information when its outcome is observed.
+
+## What is the Shannon Entropy? A Lottery Ticket Example
+
+A coin flip may be low stakes (or not)
+
+no country for old men image
+
+We all might agree that predicting a winning lottery ticket would be tremendously valuable. Suppose a million unique lottery tickets are sold, and each has an equal probability of winning. If you know the winning ticket before the drawing occurs, how many more bits of information do you have?
 
 ## Interactive Visualization
-Use the slider below to adjust \( p \) and see how entropy changes. (If not interactive, clone the repo and run locally.)
+Use the slider below to adjust $p$ and see how entropy changes. (If not interactive, clone the repo and run locally.)
 
 :::{code-cell} python
 :tags: [remove-input]  # Hides code input for cleaner display; remove if you want visible code
@@ -50,18 +58,21 @@ interact(plot_entropy, p=FloatSlider(min=0.0, max=1.0, step=0.01, value=0.5));
 Experiment: Slide p toward 0 or 1—what happens to Shannon entropy?
 
 ## Relevance to Deep Learning
-In optimization (e.g., SGD variants from the syllabus), entropy helps regularize models. For example, in knowledge distillation, we minimize KL divergence, which involves entropy differences between teacher and student models.
+Loss function discussion -- cross entropy, KL divergence. Minimize the amount of additional information you need to predict the outcome
 
 ## Advanced Applications: Kolmogorov-Sinai Entropy in Training Dynamics
 
-Building on Shannon entropy, Kolmogorov-Sinai (KS) entropy extends the concept to dynamical systems, measuring the *rate* of information production over trajectories. In deep learning, training (e.g., via SGD) can be viewed as a discrete-time dynamical system in parameter space. KS entropy quantifies the unpredictability of these trajectories—high values indicate chaotic dynamics (e.g., sensitive to initial conditions, like in overparameterized models), while low values suggest ordered convergence.
+Building on Shannon entropy, Kolmogorov-Sinai (KS) entropy asks a similar question. Consider a particle moving probabilistically and in discrete time. It has many possible surrounding hypercubes it could end up in at time $t+1$. In this sense, what is the entropy of the particle?
 
-:::{note}
-For your thesis, KS entropy sharpens analysis of training stability: It relates to Lyapunov exponents (sum of positives ≈ h_{KS}), linking chaos theory to optimization. In neural nets, chaotic regimes during early training (high h_{KS}) may aid exploration, but low h_{KS} in later phases correlates with generalization in flat minima.
-:::
+We hope to show that:
+1. The loss landscape is what informs the prediction probabilities. Therefore, what we've learned about second-order optimizers can be combined with this research area.
+2. Via the second law of thermodynamics, the amount of information we learn during a single batch during SGD has the upper bound of the change in KS Entropy; multiple batches have a component
+3. IBM research suggests the highest-noise directions on the loss landscape from batch to batch are also the
+4. Muon optimizer has revolutionized training efficiency by descending under the spectral norm, decreasing the principal eigenvector.
+3. It suggests further research be done
 
 ### KS Entropy: From Shannon to Trajectories
-KS entropy is similar to Shannon entropy but applied over time-evolving states. Consider phase space partitioned into hypercubes (cells). A trajectory is a sequence of visited hypercubes. KS entropy asks: "Given the current hypercube, which one does the particle go to next?" It’s the supremum over partitions ξ of the entropy rate:
+KS entropy is similar to Shannon entropy but applied over time-evolving states. Consider space partitioned into hypercubes (cells). A trajectory is a sequence of visited hypercubes. KS entropy asks: "Given the current hypercube, which one does the particle go to next?" It’s the supremum over partitions ξ of the entropy rate:
 
 :::{math}
 :name: eq:ks_entropy
