@@ -13,9 +13,16 @@ project:
     - file: syllabus.md
     - file: week_one.md
     - file: info_theory.md
-    
 site:
   template: book-theme
   # options:
   #   favicon: favicon.ico
   #   logo: site_logo.png
+jupyter:
+  execute:
+    execute_notebooks: force
+    timeout: 60
+    stderr_output: show
+  kernel:
+    name: python3
+    display_name: Python 3
