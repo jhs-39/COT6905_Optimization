@@ -15,7 +15,7 @@ project:
     - file: info_theory.md
 site:
   template: book-theme
-  # option:
+  # options:
   #   favicon: favicon.ico
   #   logo: site_logo.png
 jupyter:
