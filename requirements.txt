@@ -1,6 +1,5 @@
 numpy
 matplotlib
 ipywidgets
-jupyter-book>=2.0.0
 ipykernel
 mystmd
