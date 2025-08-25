@@ -1,8 +1,14 @@
+---
+kernelspec:
+  name: python3
+  display_name: 'Python 3'
+---
+
 # Week 1: Matrix Review
 
 ## Lecture 1: The Geometry of Linear Equations
 
-:::{iframe} https://www.youtube.com/embed/F3st8X0L1Ys
+:::{iframe} https://www.youtube.com/embed/J7DzL2_Na80
 :width: 100%
 Lecture 1
 :::
