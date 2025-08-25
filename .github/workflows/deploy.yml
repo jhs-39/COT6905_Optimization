@@ -47,6 +47,8 @@ jobs:
       - name: Install MyST Markdown
         run: npm install -g mystmd
       - name: Build HTML Assets
+        run: jupyter-book build --html
+      - name: Upload Artifact
         run: myst build --all
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
