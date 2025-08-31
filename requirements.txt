@@ -2,4 +2,7 @@ numpy
 matplotlib
 ipywidgets
 ipykernel
+jupyter
+nbclient
+nbconvert
 mystmd

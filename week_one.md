@@ -3,7 +3,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-
+(launch:thebe)=
 # Week 1: Matrix Review
 
 ## Lecture 1: The Geometry of Linear Equations

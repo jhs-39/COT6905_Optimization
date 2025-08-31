@@ -15,9 +15,16 @@ project:
     - file: info_theory.md
 site:
   template: book-theme
-  # options:
-  #   favicon: favicon.ico
-  #   logo: site_logo.png
+  options:
+    thebe: true
+    thebe-config:
+      binder:
+        repo: jhs-39/COT6905_Optimization
+        branch: main
+        path: _build/jupyter_execute
+      kernelName: python3
+      useBinder: true
+      useJupyterLab: false
 jupyter:
   execute:
     execute_notebooks: force
