@@ -30,7 +30,7 @@ This lecture introduces linear algebra through the lens of solving systems of eq
 Below is an interactive visualization of the row picture for a 2x2 system of equations (ax + by = c and dx + ey = f). Adjust the sliders to change the coefficients and observe how the lines and their intersection point (solution) change. The matrix form of the system is also shown.
 
 ```{code-cell} python3
-:tags: [hide-input]
+:tags: []
 import numpy as np
 import matplotlib.pyplot as plt
 from ipywidgets import interact, FloatSlider
