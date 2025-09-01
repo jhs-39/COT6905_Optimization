@@ -12,6 +12,7 @@ project:
     # Auto-make by `myst init --write-toc`
     - file: syllabus.md
     - file: week_one.md
+    - file: week_two.md
     - file: info_theory.md
 site:
   template: book-theme
