@@ -13,6 +13,12 @@ project:
     - file: syllabus.md
     - file: week_one.md
     - file: week_two.md
+    - file: week_three.md
+    - file: week_four.md
+    - file: week_five.md
+    - file: week_six.md
+    - file: week_seven.md
+    - file: week_eight.md
     - file: info_theory.md
 site:
   template: book-theme
