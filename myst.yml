@@ -23,7 +23,6 @@ project:
 site:
   template: book-theme
   options:
-    thebe: true
     thebe-config:
       binder:
         repo: jhs-39/COT6905_Optimization
@@ -32,9 +31,9 @@ site:
       kernelName: python3
       useBinder: true
       useJupyterLab: false
-    launch_buttons:
-      binderhub_url: "https://mybinder.org"
-      thebe: true
+launch_buttons:
+  binderhub_url: "https://mybinder.org"
+  thebe: true
 jupyter:
   execute:
     execute_notebooks: force
