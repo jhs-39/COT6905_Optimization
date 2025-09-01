@@ -11,32 +11,32 @@ kernelspec:
   display_name: 'Python 3'
 ---
 (launch:thebe)=
-# Week 3: Independence
+# Week 7: 
 
-## Lecture 9: Independence, basis, and dimension
+## Lecture 25: Symmetric matrices and positive definiteness
 
-:::{iframe} https://www.youtube.com/embed/yjBerM5jWsc
+:::{iframe} https://www.youtube.com/embed/UCc9q_cAhho
 :width: 100%
-Lecture 9
+Lecture 25
 :::
 
-## Lecture 10: The four fundamental subspaces
+## Lecture 26: Complex matrices; fast fourier transform
 
-:::{iframe} https://www.youtube.com/embed/nHlE7EgJFds
+:::{iframe} https://www.youtube.com/embed/M0Sa8fLOajA
 :width: 100%
-Lecture 10
+Lecture 26
 :::
 
-## Lecture 11: Matrix spaces; rank 1; small world graphs
+## Lecture 27: Positive definite matrices and minima
 
-:::{iframe} https://www.youtube.com/embed/2IdtqGM6KWU
+:::{iframe} https://www.youtube.com/embed/vF7eyJ2g3kU
 :width: 100%
-Lecture 11
+Lecture 27
 :::
 
-## Lecture 12: Graphs, networks, incidence matrices
+## Lecture 28: Similar matrices and Jordan form
 
-:::{iframe} https://www.youtube.com/embed/6-wh6yvk6uc
+:::{iframe} https://www.youtube.com/embed/TSdXJw83kyA
 :width: 100%
-Lecture 12
+Lecture 28
 :::

@@ -11,32 +11,32 @@ kernelspec:
   display_name: 'Python 3'
 ---
 (launch:thebe)=
-# Week 3: Independence
+# Week 4: Orthogonal Basis and Projection
 
-## Lecture 9: Independence, basis, and dimension
+## Lecture 13: Concept Review & Consolidation
 
-:::{iframe} https://www.youtube.com/embed/yjBerM5jWsc
+:::{iframe} https://www.youtube.com/embed/l88D4r74gtM
 :width: 100%
-Lecture 9
+Lecture 13
 :::
 
-## Lecture 10: The four fundamental subspaces
+## Lecture 14: Orthogonal Basis
 
-:::{iframe} https://www.youtube.com/embed/nHlE7EgJFds
+:::{iframe} https://www.youtube.com/embed/YzZUIYRCE38
 :width: 100%
-Lecture 10
+Lecture 14
 :::
 
-## Lecture 11: Matrix spaces; rank 1; small world graphs
+## Lecture 15: Projections onto subspaces
 
-:::{iframe} https://www.youtube.com/embed/2IdtqGM6KWU
+:::{iframe} https://www.youtube.com/embed/Y_Ac6KiQ1t0
 :width: 100%
-Lecture 11
+Lecture 15
 :::
 
-## Lecture 12: Graphs, networks, incidence matrices
+## Lecture 16: Projection Matrices
 
-:::{iframe} https://www.youtube.com/embed/6-wh6yvk6uc
+:::{iframe} https://www.youtube.com/embed/osh80YCg_GM
 :width: 100%
-Lecture 12
+Lecture 16
 :::

@@ -11,32 +11,32 @@ kernelspec:
   display_name: 'Python 3'
 ---
 (launch:thebe)=
-# Week 3: Independence
+# Week 5: Determinants
 
-## Lecture 9: Independence, basis, and dimension
+## Lecture 17: Orthogonal matrices and Gram-Schmidt
 
-:::{iframe} https://www.youtube.com/embed/yjBerM5jWsc
+:::{iframe} https://www.youtube.com/embed/0MtwqhIwdrI
 :width: 100%
-Lecture 9
+Lecture 17
 :::
 
-## Lecture 10: The four fundamental subspaces
+## Lecture 18: Properties of determinants
 
-:::{iframe} https://www.youtube.com/embed/nHlE7EgJFds
+:::{iframe} https://www.youtube.com/embed/srxexLishgY
 :width: 100%
-Lecture 10
+Lecture 18
 :::
 
-## Lecture 11: Matrix spaces; rank 1; small world graphs
+## Lecture 19: Determinant formulas and cofactors
 
-:::{iframe} https://www.youtube.com/embed/2IdtqGM6KWU
+:::{iframe} https://www.youtube.com/embed/23LLB9mNJvc
 :width: 100%
-Lecture 11
+Lecture 19
 :::
 
-## Lecture 12: Graphs, networks, incidence matrices
+## Lecture 20: Cramer's rule, inverse matrix, and volume
 
-:::{iframe} https://www.youtube.com/embed/6-wh6yvk6uc
+:::{iframe} https://www.youtube.com/embed/QNpj-gOXW9M
 :width: 100%
-Lecture 12
+Lecture 20
 :::

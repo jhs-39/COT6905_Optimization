@@ -11,32 +11,32 @@ kernelspec:
   display_name: 'Python 3'
 ---
 (launch:thebe)=
-# Week 3: Independence
+# Week 6: 
 
-## Lecture 9: Independence, basis, and dimension
+## Lecture 21: Eigenvalues and eigenvectors
 
-:::{iframe} https://www.youtube.com/embed/yjBerM5jWsc
+:::{iframe} https://www.youtube.com/embed/cdZnhQjJu4I
 :width: 100%
-Lecture 9
+Lecture 21
 :::
 
-## Lecture 10: The four fundamental subspaces
+## Lecture 22: Diagonalization and powers of A
 
-:::{iframe} https://www.youtube.com/embed/nHlE7EgJFds
+:::{iframe} https://www.youtube.com/embed/13r9QY6cmjc
 :width: 100%
-Lecture 10
+Lecture 22
 :::
 
-## Lecture 11: Matrix spaces; rank 1; small world graphs
+## Lecture 23: Differential equations and exp(At)
 
-:::{iframe} https://www.youtube.com/embed/2IdtqGM6KWU
+:::{iframe} https://www.youtube.com/embed/IZqwi0wJovM
 :width: 100%
-Lecture 11
+Lecture 23
 :::
 
-## Lecture 12: Graphs, networks, incidence matrices
+## Lecture 24: Markov matrices; fourier series
 
-:::{iframe} https://www.youtube.com/embed/6-wh6yvk6uc
+:::{iframe} https://www.youtube.com/embed/lGGDIGizcQ0
 :width: 100%
-Lecture 12
+Lecture 24
 :::
