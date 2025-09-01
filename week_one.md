@@ -20,17 +20,17 @@ kernelspec:
 Lecture 1
 :::
 
-Jake notes: In this section we need to communicate row and column pictures [ ]; intuition for solving systems of equations in both ways [ ]; introduce foundations for invertibility in high dim spaces [ ] (even if we don't use that language yet)
+Jake notes (to remove): In this section we need to communicate row and column pictures [ ]; intuition for solving systems of equations in both ways [ ]; introduce foundations for invertibility in high dim spaces [ ] (even if we don't use that language yet)
 
 ## Summary
 This lecture introduces linear algebra through the lens of solving systems of equations. We can view matrices two ways, either through the "row picture" (geometric intersection of lines/planes defined by each row-equation) and the "column picture" (linear combinations of vectors corresponding to each column).
 
 ## Key Concepts
-- **Row Picture**: Each equation represents a line (in 2D) or plane (in 3D). Solutions are the intersections of these structures.
+- **Row Picture**: Each equation represents a line (in 2D) or plane (in 3D), corresponding to a row of the matrix. Solutions are the intersections of these structures.
 Below is an interactive visualization of the row picture for a 2x2 system of equations (ax + by = c and dx + ey = f). Adjust the sliders to change the coefficients and observe how the lines and their intersection point (solution) change. The matrix form of the system is also shown.
 
 ```{code-cell} ipython3
-:tags: [hide-input]
+:tags: [hide-input, thebe]
 import numpy as np
 import matplotlib.pyplot as plt
 from ipywidgets import interact, FloatSlider
@@ -98,10 +98,9 @@ def plot_row_picture(a1=2.0, b1=1.0, c1=5.0, a2=1.0, b2=-1.0, c2=1.0):
 
 - **Column Picture**: Rewrite as x * column1 + y * column2 = b, finding coefficients for vector combinations.
 
+Each column represents a vector; a solution to the problem is the proper combination of vectors. 
 
-
-- Basic solving via elimination: Subtract multiples of equations to isolate variables.
-- Sneak peek: invertibility
+- Sneak peek: invertibility. If multiple points in a high dimensional space are transformed into the same point in low-dimemnsional space, can the reverse be performed?
 
 ## Tutorial: Solving a 2x2 System
 Consider the system:
