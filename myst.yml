@@ -33,6 +33,7 @@ site:
       useBinder: true
       useJupyterLab: false
     launch_buttons:
+      binderhub_url: "https://mybinder.org"
       thebe: true
 jupyter:
   execute:
