@@ -2,14 +2,8 @@
 version: 1
 project:
   id: 27b53f82-9105-48f5-a83c-11c5d2229043
-  # title:
-  # description:
-  # keywords: []
-  # authors: []
   github: https://github.com/jhs-39/COT6905_Optimization
-  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
   toc:
-    # Auto-make by `myst init --write-toc`
     - file: syllabus.md
     - file: week_one.md
     - file: week_two.md
@@ -20,28 +14,24 @@ project:
     - file: week_seven.md
     - file: week_eight.md
     - file: info_theory.md
+
 site:
   template: book-theme
   options:
-    thebe-config:
-      binder:
-        repo: jhs-39/COT6905_Optimization
-        branch: main
-        path: _build/jupyter_execute
-      kernelName: python3
-      useBinder: true
-      useJupyterLab: false
+    thebe: true
+
 launch_buttons:
   binderhub_url: "https://mybinder.org"
   thebe: true
+
 sphinx:
   extra_extensions:
     - sphinx_thebe
-jupyter:
-  execute:
-    execute_notebooks: force
-    timeout: 60
-    stderr_output: show
-  kernel:
-    name: python3
-    display_name: Python 3
+
+thebe_config:
+  repository_url: "https://github.com/jhs-39/COT6905_Optimization"
+  repository_branch: main
+  binderhub_url: "https://mybinder.org"
+  kernel_name: "python3"
+
+jupyter: true
