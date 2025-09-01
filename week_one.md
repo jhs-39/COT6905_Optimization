@@ -10,6 +10,8 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
+:::{thebe-button}
+:::
 (launch:thebe)=
 # Week 1: Matrix Review
 
