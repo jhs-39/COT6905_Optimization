@@ -10,8 +10,6 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-:::{thebe-button}
-:::
 (launch:thebe)=
 # Week 1: Matrix Review
 
@@ -31,8 +29,8 @@ This lecture introduces linear algebra through the lens of solving systems of eq
 - **Row Picture**: Each equation represents a line (in 2D) or plane (in 3D), corresponding to a row of the matrix. Solutions are the intersections of these structures.
 Below is an interactive visualization of the row picture for a 2x2 system of equations (ax + by = c and dx + ey = f). Adjust the sliders to change the coefficients and observe how the lines and their intersection point (solution) change. The matrix form of the system is also shown.
 
-```{code-cell} ipython3
-:tags: [hide-input, thebe]
+```{code-cell} python3
+:tags: [hide-input]
 import numpy as np
 import matplotlib.pyplot as plt
 from ipywidgets import interact, FloatSlider
