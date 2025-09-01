@@ -128,3 +128,22 @@ print("Solution: x =", x[0], ", y =", x[1])
 ```
 
 ## Lecture 2: Elimination with matrices
+
+:::{iframe} https://www.youtube.com/embed/QVKj3LADCnA
+:width: 100%
+Lecture 2
+:::
+
+## Lecture 3: Multiplication and inverse matrices
+
+:::{iframe} https://www.youtube.com/embed/FX4C-JpTFgY
+:width: 100%
+Lecture 3
+:::
+
+## Lecture 4: Factorization into A = LU
+
+:::{iframe} https://www.youtube.com/embed/MsIvs_6vC38
+:width: 100%
+Lecture 4
+:::

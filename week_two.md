@@ -11,12 +11,32 @@ kernelspec:
   display_name: 'Python 3'
 ---
 (launch:thebe)=
-# Week 2: 
+# Week 2: Spaces
 
-## Lecture 5:
+## Lecture 5: Transposes, permutations, spaces R^n
 
-:::{iframe} https://www.youtube.com/embed/J7DzL2_Na80
+:::{iframe} https://www.youtube.com/embed/JibVXBElKL0
 :width: 100%
-Lecture 1
+Lecture 5
 :::
 
+## Lecture 6: Column space and nullspace
+
+:::{iframe} https://www.youtube.com/embed/8o5Cmfpeo6g
+:width: 100%
+Lecture 6
+:::
+
+## Lecture 7: Solving Ax = 0: pivot variables, special solutions
+
+:::{iframe} https://www.youtube.com/embed/VqP2tREMvt0
+:width: 100%
+Lecture 7
+:::
+
+## Lecture 8: Solving Ax = b: row reduced form R
+
+:::{iframe} https://www.youtube.com/embed/9Q1q7s1jTzU
+:width: 100%
+Lecture 8
+:::
