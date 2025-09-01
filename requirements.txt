@@ -6,3 +6,4 @@ jupyter
 nbclient
 nbconvert
 mystmd
+sphinx-thebe
