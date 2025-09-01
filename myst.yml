@@ -32,6 +32,8 @@ site:
       kernelName: python3
       useBinder: true
       useJupyterLab: false
+    launch_buttons:
+      thebe: true
 jupyter:
   execute:
     execute_notebooks: force
