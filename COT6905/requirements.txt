@@ -1,3 +1,7 @@
 jupyter-book
 matplotlib
 numpy
+ipywidgets
+scipy
+pandas
+scikit-learn

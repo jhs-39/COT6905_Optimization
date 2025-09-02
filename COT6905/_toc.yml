@@ -4,5 +4,6 @@
 format: jb-book
 root: syllabus
 chapters:
-- file: thebe_test
+- file: week_one.md
+- file: week_two.md
 

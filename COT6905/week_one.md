@@ -14,10 +14,12 @@ kernelspec:
 
 ## Lecture 1: The Geometry of Linear Equations
 
-:::{iframe} https://www.youtube.com/embed/J7DzL2_Na80
-:width: 100%
-Lecture 1
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/J7DzL2_Na80"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
 
 Jake notes (to remove): In this section we need to communicate row and column pictures [ ]; intuition for solving systems of equations in both ways [ ]; introduce foundations for invertibility in high dim spaces [ ] (even if we don't use that language yet)
 
@@ -30,70 +32,100 @@ Below is an interactive visualization of the row picture for a 2x2 system of equ
 
 ```{code-cell} python
 :tags: [thebe]
+
 import numpy as np
 import matplotlib.pyplot as plt
-from ipywidgets import interact, FloatSlider
-import warnings
-warnings.filterwarnings("ignore")  # Suppress warnings for cleaner output
+from ipywidgets import FloatSlider, HBox, VBox, Output
+from IPython.display import display, Markdown
 
-def plot_row_picture(a1=2.0, b1=1.0, c1=5.0, a2=1.0, b2=-1.0, c2=1.0):
-    # Create figure
-    fig, ax = plt.subplots(figsize=(6, 6))
-      
-    # Define x range for plotting
-    x = np.linspace(-5, 5, 100)
-      
-    # Plot line 1: ax + by = c
-    if b1 != 0:
-        y1 = (c1 - a1 * x) / b1
-        ax.plot(x, y1, 'b-', label=f'{a1:.1f}x + {b1:.1f}y = {c1:.1f}')
-    else:
-        ax.axvline(c1/a1 if a1 != 0 else 0, color='b', label=f'x = {(c1/a1):.1f}' if a1 != 0 else 'No line')
-      
-    # Plot line 2: dx + ey = f
-    if b2 != 0:
-        y2 = (c2 - a2 * x) / b2
-        ax.plot(x, y2, 'r-', label=f'{a2:.1f}x + {b2:.1f}y = {c2:.1f}')
-    else:
-        ax.axvline(c2/a2 if a2 != 0 else 0, color='r', label=f'x = {(c2/a2):.1f}' if a2 != 0 else 'No line')
-      
-    # Calculate intersection
-    A = np.array([[a1, b1], [a2, b2]])
-    b = np.array([c1, c2])
-    det = np.linalg.det(A)
-      
-    if det != 0:
-        sol = np.linalg.solve(A, b)
-        x_sol, y_sol = sol
-        ax.plot(x_sol, y_sol, 'ko', markersize=8, label=f'Solution: ({x_sol:.2f}, {y_sol:.2f})')
-        print(f"Solution: x = {x_sol:.2f}, y = {y_sol:.2f}")
-    else:
-        print("No unique solution (parallel or coincident lines)")
-      
-    # Set plot properties
-    ax.set_xlim(-5, 5)
-    ax.set_ylim(-5, 5)
-    ax.axhline(0, color='k', linestyle='-', alpha=0.3)
-    ax.axvline(0, color='k', linestyle='-', alpha=0.3)
-    ax.grid(True)
-    ax.legend()
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_title('Row Picture: Intersection of Lines')
-    plt.show()
-      
-    # Display matrix form
-    print(f"Matrix form:\n$$\\begin{{bmatrix}} {a1:.1f} & {b1:.1f} \\\\ {a2:.1f} & {b2:.1f} \\end{{bmatrix}} \\begin{{bmatrix}} x \\\\ y \\end{{bmatrix}} = \\begin{{bmatrix}} {c1:.1f} \\\\ {c2:.1f} \\end{{bmatrix}}$$")
+# Output area for plot and text
+out = Output()
 
-  interact(plot_row_picture,
-           a1=FloatSlider(min=-5, max=5, step=0.1, value=2.0, description='a'),
-           b1=FloatSlider(min=-5, max=5, step=0.1, value=1.0, description='b'),
-           c1=FloatSlider(min=-10, max=10, step=0.1, value=5.0, description='c'),
-           a2=FloatSlider(min=-5, max=5, step=0.1, value=1.0, description='d'),
-           b2=FloatSlider(min=-5, max=5, step=0.1, value=-1.0, description='e'),
-           c2=FloatSlider(min=-10, max=10, step=0.1, value=1.0, description='f'))
+# Define sliders for all 6 parameters
+a1_slider = FloatSlider(value=2.0, min=-5, max=5, step=0.1, description='a1')
+b1_slider = FloatSlider(value=1.0, min=-5, max=5, step=0.1, description='b1')
+c1_slider = FloatSlider(value=5.0, min=-10, max=10, step=0.1, description='c1')
+
+a2_slider = FloatSlider(value=1.0, min=-5, max=5, step=0.1, description='a2')
+b2_slider = FloatSlider(value=-1.0, min=-5, max=5, step=0.1, description='b2')
+c2_slider = FloatSlider(value=1.0, min=-10, max=10, step=0.1, description='c2')
+
+def update_plot(change=None):
+    with out:
+        out.clear_output(wait=True)
+        
+        # Plot setup
+        x = np.linspace(-5,5,200)
+        fig, ax = plt.subplots(figsize=(6,6))
+        
+        # Line 1
+        if b1_slider.value != 0:
+            y1 = (c1_slider.value - a1_slider.value*x)/b1_slider.value
+            ax.plot(x, y1, 'b-', label=f'{a1_slider.value:.1f}x + {b1_slider.value:.1f}y = {c1_slider.value:.1f}')
+        else:
+            ax.axvline(c1_slider.value/a1_slider.value if a1_slider.value!=0 else 0, color='b', 
+                       label=f'x = {(c1_slider.value/a1_slider.value):.1f}' if a1_slider.value!=0 else 'No line')
+        
+        # Line 2
+        if b2_slider.value != 0:
+            y2 = (c2_slider.value - a2_slider.value*x)/b2_slider.value
+            ax.plot(x, y2, 'r-', label=f'{a2_slider.value:.1f}x + {b2_slider.value:.1f}y = {c2_slider.value:.1f}')
+        else:
+            ax.axvline(c2_slider.value/a2_slider.value if a2_slider.value!=0 else 0, color='r',
+                       label=f'x = {(c2_slider.value/a2_slider.value):.1f}' if a2_slider.value!=0 else 'No line')
+        
+        # Intersection
+        A = np.array([[a1_slider.value, b1_slider.value],
+                      [a2_slider.value, b2_slider.value]])
+        b_vec = np.array([c1_slider.value, c2_slider.value])
+        det = np.linalg.det(A)
+        
+        if det != 0:
+            sol = np.linalg.solve(A, b_vec)
+            ax.plot(sol[0], sol[1], 'ko', markersize=8, label=f'Solution: ({sol[0]:.2f},{sol[1]:.2f})')
+            sol_text = f"Solution: x = {sol[0]:.2f}, y = {sol[1]:.2f}"
+        else:
+            sol_text = "No unique solution (parallel or coincident lines)"
+        
+        # Plot formatting
+        ax.set_xlim(-5,5)
+        ax.set_ylim(-5,5)
+        ax.axhline(0, color='k', alpha=0.3)
+        ax.axvline(0, color='k', alpha=0.3)
+        ax.grid(True)
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_title('Row Picture: Intersection of Lines')
+        ax.legend()
+        plt.show()
+        
+        # Display solution and matrix form in Markdown
+        matrix_md = f"""
+**{sol_text}**
+
+Matrix form:
+
+$$
+\\begin{{bmatrix}} {a1_slider.value:.1f} & {b1_slider.value:.1f} \\\\ {a2_slider.value:.1f} & {b2_slider.value:.1f} \\end{{bmatrix}}
+\\begin{{bmatrix}} x \\\\ y \\end{{bmatrix}} =
+\\begin{{bmatrix}} {c1_slider.value:.1f} \\\\ {c2_slider.value:.1f} \\end{{bmatrix}}
+$$
+"""
+        display(Markdown(matrix_md))
+
+# Observe sliders
+for s in [a1_slider, b1_slider, c1_slider, a2_slider, b2_slider, c2_slider]:
+    s.observe(update_plot, names='value')
+
+# Layout sliders inline
+slider_box = HBox([a1_slider, b1_slider, c1_slider])
+slider_box2 = HBox([a2_slider, b2_slider, c2_slider])
+
+display(VBox([slider_box, slider_box2, out]))
+
+# Initial plot
+update_plot()
 ```
-
 
 - **Column Picture**: Rewrite as x * column1 + y * column2 = b, finding coefficients for vector combinations.
 
@@ -127,21 +159,27 @@ print("Solution: x =", x[0], ", y =", x[1])
 
 ## Lecture 2: Elimination with matrices
 
-:::{iframe} https://www.youtube.com/embed/QVKj3LADCnA
-:width: 100%
-Lecture 2
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/QVKj3LADCnA"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
 
 ## Lecture 3: Multiplication and inverse matrices
 
-:::{iframe} https://www.youtube.com/embed/FX4C-JpTFgY
-:width: 100%
-Lecture 3
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/FX4C-JpTFgY"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
 
 ## Lecture 4: Factorization into A = LU
 
-:::{iframe} https://www.youtube.com/embed/MsIvs_6vC38
-:width: 100%
-Lecture 4
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/MsIvs_6vC38"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
