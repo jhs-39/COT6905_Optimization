@@ -6,4 +6,4 @@ root: syllabus
 chapters:
 - file: week_one.md
 - file: week_two.md
-
+- file: info_theory.md

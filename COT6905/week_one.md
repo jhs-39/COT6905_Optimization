@@ -29,7 +29,7 @@ This lecture introduces linear algebra through the lens of solving systems of eq
 Each row from the matrix form represents a line (in 2D) or plane (in 3D). Solutions occur at the intersections of these structures.
 Below is an interactive visualization of the row picture for a 2x2 system of equations (ax + by = c and dx + ey = f). Launch a live code session with Binder and change the coefficients to observe how the lines and their intersection point (solution) change!
 
-Question for understanding: will you be able to get a solution [X, Y] for any point in the plane, if the given rows are parallel lines? Hint: parallel lines don't intersect!
+> Question for understanding: will you be able to get a solution [X, Y] for **any point** in the plane, if the given rows are parallel lines? Hint: parallel lines don't intersect!
 
 ```{code-cell} python
 :tags: [thebe]
@@ -99,7 +99,7 @@ plot_row_picture(row1, row2)
 
 As a completely equivalent alternative, we can split the matrix into its column vectors. Our geometric intuition here is rather different. In this form, the solutions for x and y are the proper linear combination of column vectors that are equivalent to the desired solution vector. Again, each column vector represents a vector in the space; a solution to the problem is the right combination of the column vectors (e.g., you find a combination of x=.5 * vector 1 and y=2.75 * vector 2 are equivalent to the desired vector)
 
-Question for understanding: if your column vectors are parallel or lie on the same line, can you compose a vector off that parallel line in terms of your given column vectors? Try it in the code below! How is this equivalent to our earlier question?
+> Question for understanding: if your column vectors are parallel or lie on the same line, can you compose a vector that is **off** that parallel line in terms of the given column vectors? Try it in the code below! How is this equivalent to our earlier question in row picture form?
 
 
 ```{code-cell} python
