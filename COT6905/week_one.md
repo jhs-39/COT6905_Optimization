@@ -34,97 +34,81 @@ Below is an interactive visualization of the row picture for a 2x2 system of equ
 :tags: [thebe]
 
 import numpy as np
-import matplotlib.pyplot as plt
-from ipywidgets import FloatSlider, HBox, VBox, Output
+import plotly.graph_objects as go
 from IPython.display import display, Markdown
 
-# Output area for plot and text
-out = Output()
+# Initial slider ranges
+a1_vals = np.linspace(-5,5,11)
+b1_vals = np.linspace(-5,5,11)
+c1_vals = np.linspace(-10,10,11)
+a2_vals = np.linspace(-5,5,11)
+b2_vals = np.linspace(-5,5,11)
+c2_vals = np.linspace(-10,10,11)
 
-# Define sliders for all 6 parameters
-a1_slider = FloatSlider(value=2.0, min=-5, max=5, step=0.1, description='a1')
-b1_slider = FloatSlider(value=1.0, min=-5, max=5, step=0.1, description='b1')
-c1_slider = FloatSlider(value=5.0, min=-10, max=10, step=0.1, description='c1')
+# Initial values
+a1, b1, c1 = 2.0, 1.0, 5.0
+a2, b2, c2 = 1.0, -1.0, 1.0
+x = np.linspace(-5,5,200)
 
-a2_slider = FloatSlider(value=1.0, min=-5, max=5, step=0.1, description='a2')
-b2_slider = FloatSlider(value=-1.0, min=-5, max=5, step=0.1, description='b2')
-c2_slider = FloatSlider(value=1.0, min=-10, max=10, step=0.1, description='c2')
-
-def update_plot(change=None):
-    with out:
-        out.clear_output(wait=True)
-        
-        # Plot setup
-        x = np.linspace(-5,5,200)
-        fig, ax = plt.subplots(figsize=(6,6))
-        
-        # Line 1
-        if b1_slider.value != 0:
-            y1 = (c1_slider.value - a1_slider.value*x)/b1_slider.value
-            ax.plot(x, y1, 'b-', label=f'{a1_slider.value:.1f}x + {b1_slider.value:.1f}y = {c1_slider.value:.1f}')
-        else:
-            ax.axvline(c1_slider.value/a1_slider.value if a1_slider.value!=0 else 0, color='b', 
-                       label=f'x = {(c1_slider.value/a1_slider.value):.1f}' if a1_slider.value!=0 else 'No line')
-        
-        # Line 2
-        if b2_slider.value != 0:
-            y2 = (c2_slider.value - a2_slider.value*x)/b2_slider.value
-            ax.plot(x, y2, 'r-', label=f'{a2_slider.value:.1f}x + {b2_slider.value:.1f}y = {c2_slider.value:.1f}')
-        else:
-            ax.axvline(c2_slider.value/a2_slider.value if a2_slider.value!=0 else 0, color='r',
-                       label=f'x = {(c2_slider.value/a2_slider.value):.1f}' if a2_slider.value!=0 else 'No line')
-        
-        # Intersection
-        A = np.array([[a1_slider.value, b1_slider.value],
-                      [a2_slider.value, b2_slider.value]])
-        b_vec = np.array([c1_slider.value, c2_slider.value])
-        det = np.linalg.det(A)
-        
-        if det != 0:
-            sol = np.linalg.solve(A, b_vec)
-            ax.plot(sol[0], sol[1], 'ko', markersize=8, label=f'Solution: ({sol[0]:.2f},{sol[1]:.2f})')
-            sol_text = f"Solution: x = {sol[0]:.2f}, y = {sol[1]:.2f}"
-        else:
-            sol_text = "No unique solution (parallel or coincident lines)"
-        
-        # Plot formatting
-        ax.set_xlim(-5,5)
-        ax.set_ylim(-5,5)
-        ax.axhline(0, color='k', alpha=0.3)
-        ax.axvline(0, color='k', alpha=0.3)
-        ax.grid(True)
-        ax.set_xlabel('x')
-        ax.set_ylabel('y')
-        ax.set_title('Row Picture: Intersection of Lines')
-        ax.legend()
-        plt.show()
-        
-        # Display solution and matrix form in Markdown
-        matrix_md = f"""
+def make_figure(a1,b1,c1,a2,b2,c2):
+    fig = go.Figure()
+    
+    # Line 1
+    if b1 != 0:
+        y1 = (c1 - a1*x)/b1
+        fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name=f'{a1:.1f}x+{b1:.1f}y={c1:.1f}', line=dict(color='blue')))
+    else:
+        fig.add_trace(go.Scatter(x=[c1/a1]*2, y=[-5,5], mode='lines', name=f'x={c1/a1:.1f}', line=dict(color='blue')))
+    
+    # Line 2
+    if b2 != 0:
+        y2 = (c2 - a2*x)/b2
+        fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name=f'{a2:.1f}x+{b2:.1f}y={c2:.1f}', line=dict(color='red')))
+    else:
+        fig.add_trace(go.Scatter(x=[c2/a2]*2, y=[-5,5], mode='lines', name=f'x={c2/a2:.1f}', line=dict(color='red')))
+    
+    # Intersection
+    A = np.array([[a1,b1],[a2,b2]])
+    b_vec = np.array([c1,c2])
+    det = np.linalg.det(A)
+    
+    if det != 0:
+        sol = np.linalg.solve(A,b_vec)
+        fig.add_trace(go.Scatter(x=[sol[0]], y=[sol[1]], mode='markers', marker=dict(color='black', size=10), name=f'Solution ({sol[0]:.2f},{sol[1]:.2f})'))
+        sol_text = f"Solution: x={sol[0]:.2f}, y={sol[1]:.2f}"
+    else:
+        sol_text = "No unique solution (parallel or coincident lines)"
+    
+    # Layout
+    fig.update_layout(
+        title='Row Picture: Intersection of Lines',
+        xaxis=dict(range=[-5,5], zeroline=True, zerolinecolor='gray'),
+        yaxis=dict(range=[-5,5], zeroline=True, zerolinecolor='gray'),
+        width=600,
+        height=600
+    )
+    
+    fig.show()
+    
+    # Display LaTeX matrix
+    matrix_md = f"""
 **{sol_text}**
 
 Matrix form:
 
 $$
-\\begin{{bmatrix}} {a1_slider.value:.1f} & {b1_slider.value:.1f} \\\\ {a2_slider.value:.1f} & {b2_slider.value:.1f} \\end{{bmatrix}}
+\\begin{{bmatrix}} {a1:.1f} & {b1:.1f} \\\\ {a2:.1f} & {b2:.1f} \\end{{bmatrix}}
 \\begin{{bmatrix}} x \\\\ y \\end{{bmatrix}} =
-\\begin{{bmatrix}} {c1_slider.value:.1f} \\\\ {c2_slider.value:.1f} \\end{{bmatrix}}
+\\begin{{bmatrix}} {c1:.1f} \\\\ {c2:.1f} \\end{{bmatrix}}
 $$
 """
-        display(Markdown(matrix_md))
+    display(Markdown(matrix_md))
 
-# Observe sliders
-for s in [a1_slider, b1_slider, c1_slider, a2_slider, b2_slider, c2_slider]:
-    s.observe(update_plot, names='value')
+# Use Plotly sliders
+fig = go.FigureWidget()
+fig.update_layout(width=600, height=600)
+fig.show()
 
-# Layout sliders inline
-slider_box = HBox([a1_slider, b1_slider, c1_slider])
-slider_box2 = HBox([a2_slider, b2_slider, c2_slider])
-
-display(VBox([slider_box, slider_box2, out]))
-
-# Initial plot
-update_plot()
 ```
 
 - **Column Picture**: Rewrite as x * column1 + y * column2 = b, finding coefficients for vector combinations.

@@ -5,3 +5,7 @@ ipywidgets
 scipy
 pandas
 scikit-learn
+jupyterlab
+jupyterlab_widgets
+plotly
+anywidget
