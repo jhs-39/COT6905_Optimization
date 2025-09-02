@@ -23,8 +23,10 @@ jobs:
           pip install -U pip
           pip install jupyter-book==0.15.1 ghp-import
 
-      - name: Build the book
-        run: jupyter-book build .
+      - name: Build Jupyter Book
+        run: |
+          cd COT6905
+          jupyter-book build .
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
