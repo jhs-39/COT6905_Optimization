@@ -3,33 +3,33 @@ name: deploy-book
 on:
   push:
     branches:
-      - main    # or 'master', depending on your default branch
+      - main  # change if your default branch is different
+
+permissions:
+  contents: write
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
-          pip install -U pip
+          python -m pip install --upgrade pip
           pip install jupyter-book==0.15.1 ghp-import
 
-      - name: Build Jupyter Book
+      - name: Build the book
         run: |
-          cd COT6905
-          jupyter-book build .
+          jupyter-book build COT6905  # update with your subdir path
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_build/html
+        run: |
+          ghp-import -n -p -f COT6905/_build/html
