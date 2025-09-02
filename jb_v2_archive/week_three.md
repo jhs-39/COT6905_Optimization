@@ -10,7 +10,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-(launch:thebe)=
+
 # Week 3: Independence, Spaces, Graphs
 
 ## Lecture 9: Independence, basis, and dimension

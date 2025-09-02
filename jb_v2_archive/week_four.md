@@ -10,7 +10,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-(launch:thebe)=
+
 # Week 4: Orthogonal Basis and Projection
 
 ## Lecture 13: Concept Review & Consolidation

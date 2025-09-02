@@ -10,7 +10,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-(launch:thebe)=
+
 # Week 8: 
 
 ## Lecture 29: Singular value decomposition

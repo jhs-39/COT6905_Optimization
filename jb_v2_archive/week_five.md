@@ -10,7 +10,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-(launch:thebe)=
+
 # Week 5: Determinants
 
 ## Lecture 17: Orthogonal matrices and Gram-Schmidt

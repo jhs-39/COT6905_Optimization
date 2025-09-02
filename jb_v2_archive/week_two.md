@@ -10,7 +10,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-(launch:thebe)=
+
 # Week 2: Spaces
 
 ## Lecture 5: Transposes, permutations, spaces R^n

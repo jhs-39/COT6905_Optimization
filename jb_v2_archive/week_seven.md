@@ -10,7 +10,7 @@ kernelspec:
   name: python3
   display_name: 'Python 3'
 ---
-(launch:thebe)=
+
 # Week 7: 
 
 ## Lecture 25: Symmetric matrices and positive definiteness

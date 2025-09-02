@@ -1,9 +1,13 @@
-numpy
-matplotlib
 ipywidgets
 ipykernel
 jupyter
 nbclient
 nbconvert
 mystmd
-sphinx-thebe
+
+altair
+matplotlib
+numpy
+vega_datasets
+
+jupyterlab_myst
