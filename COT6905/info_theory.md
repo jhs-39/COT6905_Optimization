@@ -6,18 +6,17 @@ Information theory provides tools to quantify uncertainty and information conten
 ## Shannon Entropy Formula
 For a categorical probability vector $P = [p_1, p_2, \dots, p_n]$ where $\sum p_i = 1$:
 
-:::{math}
-:name: eq:shannon_entropy
+$$
 H(P) = -\sum_{i=1}^n p_i \log_2 p_i
-:::
+$$
 
 We use base-2 logarithms to measure in *bits*. For \( p_i = 0 \), the term is defined as 0.
 
 ## What is the Shannon Entropy? A Binary Entropy Example
 Let's simplify to a binary distribution, aka a coin flip: probabilities \( p \) and \( 1-p \). The entropy is:
-
-\[ H(p) = -p \log_2 p - (1-p) \log_2 (1-p) \]
-
+$$
+H(p) = -p \log_2 p - (1-p) \log_2 (1-p)
+$$
 This reaches a maximum of 1 bit at \( p = 0.5 \) (complete uncertainty) and 0 at the extremes (certainty). In simple terms: a fair coin has 1 bit of entropy associated with its unknown outcome (heads or tails). A weighted coin that always comes up heads reveals no additional information when its outcome is observed.
 
 ## What is the Shannon Entropy? A Lottery Ticket Example
@@ -31,7 +30,7 @@ We all might agree that predicting a winning lottery ticket would be tremendousl
 ## Interactive Code
 Change the code to adjust $p$ and see how entropy changes.
 
-:::{code-cell} python
+```{code-cell} python
 :tags: [thebe]
 
 import numpy as np
@@ -50,7 +49,7 @@ def plot_entropy(p=0.5):
     ax.set_ylabel('Bits')
     ax.set_title(f'Shannon Entropy: {entropy:.2f} bits')
     plt.show()
-:::
+```
 
 Experiment: change p toward 0 or 1: what happens to Shannon entropy?
 
@@ -71,11 +70,10 @@ We hope to show that:
 ### KS Entropy: From Shannon to Trajectories
 KS entropy is similar to Shannon entropy but applied over time-evolving states. Consider space partitioned into hypercubes (cells). A trajectory is a sequence of visited hypercubes. KS entropy asks: "Given the current hypercube, how many bits of information do we need to predict where the particle goes next?" It’s the supremum over partitions ξ of the entropy rate:
 
-:::{math}
-:name: eq:ks_entropy
 
+$$
 h_{KS} = \sup_{\xi} \lim_{n \to \infty} \frac{1}{n} H(\xi^n)
-:::
+$$
 
 Where \( H(\xi^n) \) is the Shannon entropy of the joint partition after n steps, measuring how much new information is generated per step.
 
@@ -86,7 +84,7 @@ To build intuition, compare two scenarios in a simplified 2D phase space (grid o
 
 Use the interactive tool below: Toggle scenarios or adjust "sharpness" (bias strength). The bar shows approximate KS entropy (computed as Shannon entropy over next-step probabilities, approximating the rate for this partition).
 
-:::{code-cell} python
+```{code-cell} python
 :tags: [thebe]
 
 import numpy as np
@@ -116,7 +114,7 @@ def plot_ks_scenario(scenario='Flat Field', sharpness=0.8):
     ax.set_title(f'{scenario}: KS Entropy ≈ {entropy:.2f} bits/step')
     plt.xticks(rotation=45)
     plt.show()
-:::
+```
 
 Observe: In the flat field, uniform probabilities yield high entropy (~3 bits, log2(8)). In the sharp well, increasing sharpness concentrates probability, reducing entropy toward 0 (deterministic path).
 

@@ -89,7 +89,6 @@ def plot_row_picture(row1, row2):
     ax.set_title('Row Picture: Intersection of Lines')
     ax.legend()
     plt.show()
-    display(Markdown(matrix_md))
 
 # Call the function with the defined rows
 plot_row_picture(row1, row2)
@@ -167,7 +166,6 @@ def plot_column_picture(col1, col2, b_vec):
     ax.set_title('Column Picture: Linear Combination of Columns')
     ax.legend()
     plt.show()
-    display(Markdown(matrix_md))
 
 # Call the function with the defined columns and target vector
 plot_column_picture(col1, col2, b_vec)
