@@ -39,8 +39,8 @@ import matplotlib.pyplot as plt
 from IPython.display import display, Markdown
 
 # Try changing these values!
-row1 = [1.0, .5, 2.0]  # [a1, b1, c1]
-row2 = [3.0, 2.0, 1.0]  # [a2, b2, c2]
+row1 = [1.0, .5, 2.0]  # [x1, y1, c1]
+row2 = [3.0, 2.0, 1.0]  # [x2, y2, c2]
 
 x = np.linspace(-5, 5, 200)
 
@@ -99,7 +99,6 @@ plot_row_picture(row1, row2)
 As a completely equivalent alternative, we can split the matrix into its column vectors. Our geometric intuition here is rather different. In this form, the solutions for x and y are the proper linear combination of column vectors that are equivalent to the desired solution vector. Again, each column vector represents a vector in the space; a solution to the problem is the right combination of the column vectors (e.g., you find a combination of x=.5 * vector 1 and y=2.75 * vector 2 are equivalent to the desired vector)
 
 > Question for understanding: if your column vectors are parallel or lie on the same line, can you compose a vector that is **off** that parallel line in terms of the given column vectors? Try it in the code below! How is this equivalent to our earlier question in row picture form?
-
 
 ```{code-cell} python
 :tags: [thebe]

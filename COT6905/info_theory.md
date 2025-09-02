@@ -1,3 +1,16 @@
+---
+jupytext:
+  formats: md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.10.3
+kernelspec:
+  name: python3
+  display_name: 'Python 3'
+---
+
 # Information Theory: Introduction to Shannon Entropy
 
 ## Overview
@@ -25,7 +38,19 @@ A coin flip may be low stakes (or not)
 
 no country for old men image
 
-We all might agree that predicting a winning lottery ticket would be tremendously valuable. Suppose a million unique lottery tickets are sold, and each has an equal probability of winning. If you know the winning ticket before the drawing occurs, how many more bits of information do you have than a passerby?
+We all might agree that predicting a winning lottery ticket would be tremendously valuable. Suppose a million unique lottery tickets are sold, and each has an equal probability of winning. If you know the winning ticket before the drawing occurs, how many more bits of information do you have than a ignorant citizen?
+
+```{code-cell} python
+import math
+
+# number of equally likely outcomes
+N = 1_000_000
+
+H_bits = math.log2(N)   # Shannon entropy in bits
+
+print(f"N = {N}")
+print(f"Entropy: {H_bits:.12f} bits")
+```
 
 ## Interactive Code
 Change the code to adjust $p$ and see how entropy changes.
