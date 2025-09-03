@@ -27,7 +27,7 @@ This lecture introduces linear algebra through the lens of solving systems of eq
 ## Key Concepts
 ### Row Picture
 Each row from the matrix form represents a line (in 2D) or plane (in 3D). Solutions occur at the intersections of these structures.
-Below is an interactive visualization of the row picture for a 2x2 system of equations (ax + by = c and dx + ey = f). Launch a live code session with Binder and change the coefficients to observe how the lines and their intersection point (solution) change!
+Below is an interactive visualization of the row picture for a 2x2 system of equations (ax + by = c and dx + ey = f). Launch a live code session (Rocket Icon->Live Code) and change the coefficients to observe how the lines and their intersection point (solution) change!
 
 > Question for understanding: will you be able to get a solution [X, Y] for **any point** in the plane, if the given rows are parallel lines? Hint: parallel lines don't intersect!
 
@@ -434,6 +434,147 @@ Notice the last row corresponds to \(0x + 0y + 0z = 1\), which is impossible.
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
 </iframe>
+
+### Five Ways to Look at Matrix Multiplication
+
+Matrix multiplication is a fundamental operation in linear algebra. There are a number of equivalent ways to think about this operation, and for developing intuition and solving problems in the field, you should know them all.  
+
+First, review some basics:  
+Consider the matrix product $AB = C$  
+Let's say matrix A has m rows and n columns; $m \times n$  
+Matrix B has n rows and p columns $ n \times p $  
+Their product C is a matrix with m rows and p colums, $m \times p $. The number of columns in A must match the number of rows in B.  
+
+**Dot Product of Rows in A and Columns in B:**  
+
+Each element $c_{ij}$ in C is the dot product of the i-th row of A and the j-th column of B:  
+
+$$c_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj}$$
+
+This is the form most often taught to students.
+
+**Column Way (Linear Combinations of Columns):** 
+
+View B as a collection of column vectors $\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_p$. Then, the columns of C are given by matrix-vector multiplications:
+
+$$\mathbf{c}_j = A \mathbf{b}_j$$
+
+Each column of C is a linear combination of the columns of A, with coefficients from the corresponding column of B.  
+
+**Row Way (Linear Combinations of Rows):**  
+
+View A as a collection of row vectors $\mathbf{a}_1^T, \mathbf{a}_2^T, \dots, \mathbf{a}_m^T$. Then, the rows of C are given by:
+
+$$\mathbf{c}_i^T = \mathbf{a}_i^T B$$
+
+Each row of C is a linear combination of the rows of B, with coefficients from the corresponding row of A.
+
+4. Outer Product Way (Sum of Rank-1 Matrices)
+
+Decompose the multiplication as a sum of the outer products. Let the columns of A be $\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_n$ and the rows of B be $\mathbf{b}_1^T, \mathbf{b}_2^T, \dots, \mathbf{b}_n^T$ Then:
+
+$$C = \sum_{k=1}^{n} \mathbf{a}_k \mathbf{b}_k^T$$
+
+Each term $\mathbf{a}_k \mathbf{b}_k^T$ is a rank-1 matrix, and their sum gives C
+
+5. Bonus: Block Multiplication
+
+For large matrices, block multiplication can be efficient (e.g., in parallel computing like CUDA). Suppose A and B are both square matrices divided into four quadrants (blocks) each:  
+
+$$A = \begin{pmatrix} A_{11} & A_{12} \ A_{21} & A_{22} \end{pmatrix}, \quad B = \begin{pmatrix} B_{11} & B_{12} \ B_{21} & B_{22} \end{pmatrix}$$
+
+Then:
+
+$$AB = \begin{pmatrix} A_{11}B_{11} + A_{12}B_{21} & A_{11}B_{12} + A_{12}B_{22} \ A_{21}B_{11} + A_{22}B_{21} & A_{21}B_{12} + A_{22}B_{22} \end{pmatrix}$$  
+
+This relates to divide-and-conquer algorithms and optimized matrix operations in hardware like GPUs.  
+
+### Matrix Inverses
+
+Not all matrices have inverses. For a square matrix ( A ) (size ( n \times n )), the inverse ( A^{-1} ) (if it exists) satisfies:
+
+[ A^{-1} A = I_n = A A^{-1} ]
+
+where ( I_n ) is the ( n \times n ) identity matrix.
+
+Singular Matrices (No Inverse)
+
+A matrix ( A ) is singular (non-invertible) if:
+
+( \det(A) = 0 )
+
+The columns (or rows) of ( A ) are linearly dependent (e.g., one column is a scalar multiple of another).
+
+There exists a nonzero vector ( \mathbf{x} ) such that ( A \mathbf{x} = \mathbf{0} ) (null space is non-trivial).
+
+### Finding the Inverse via Systems of Equations
+
+The inverse can be found by solving ( A \mathbf{b}_j = \mathbf{e}_j ) for each column ( \mathbf{b}_j ) of ( B = A^{-1} ), where ( \mathbf{e}_j ) is the ( j )-th column of ( I_n ).
+
+**Gauss-Jordan Elimination**
+
+To compute the inverse practically, augment ( A ) with ( I_n ) to form ( [A \mid I_n] ), then perform row operations to reduce the left side to ( I_n ). The right side will become ( A^{-1} ):
+
+[ [A \mid I_n] \xrightarrow{\text{row operations}} [I_n \mid A^{-1}] ]
+
+If ( A ) is singular, the process will fail (e.g., a zero row on the left).
+
+Python Script for Gauss-Jordan Sample Problems
+
+Below is a Python script that generates Markdown-formatted sample problems for finding matrix inverses using Gauss-Jordan elimination. It uses NumPy to generate random invertible 2x2 or 3x3 matrices, computes the inverse (for the solution), and outputs the problem (augmented matrix) and solution in Markdown. Run this script to generate a few examples, solve them by hand on paper, and check against the provided solutions.
+
+```{code-cell} python
+import numpy as np
+import sys
+
+def generate_sample_problems(num_problems=3, size=2):
+    """
+    Generate Markdown sample problems and solutions for Gauss-Jordan matrix inverse.
+    
+    Args:
+    - num_problems: Number of problems to generate (default: 3).
+    - size: Matrix size (2 or 3; default: 2).
+    
+    Outputs Markdown to stdout.
+    """
+    if size not in [2, 3]:
+        raise ValueError("Size must be 2 or 3.")
+    
+    markdown = "# Gauss-Jordan Sample Problems\n\n"
+    for i in range(1, num_problems + 1):
+        # Generate random invertible integer matrix (entries -5 to 5, ensure det != 0)
+        while True:
+            A = np.random.randint(-5, 6, size=(size, size))
+            if np.linalg.det(A) != 0:
+                break
+        
+        # Compute inverse using NumPy (for solution)
+        A_inv = np.linalg.inv(A)
+        # Round to avoid floating-point issues, but since A is integer, inverse may not be
+        # For simplicity, we'll display as fractions if needed, but here we use floats rounded
+        A_inv_rounded = np.round(A_inv, decimals=2)
+        
+        # Augment A with I
+        I = np.eye(size, dtype=int)
+        augmented = np.hstack((A, I))
+        
+        # Format matrices as LaTeX for Markdown
+        def matrix_to_latex(M):
+            rows = [r" & ".join(map(str, row)) for row in M]
+            return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
+        
+        markdown += f"## Problem {i}: Find the inverse of the following matrix using Gauss-Jordan elimination.\n\n"
+        markdown += f"Matrix A:\n\n$$ {matrix_to_latex(A)} $$\n\n"
+        markdown += f"Augmented matrix [A | I]:\n\n$$ {matrix_to_latex(augmented)} $$\n\n"
+        markdown += "Perform row operations to reduce the left side to I.\n\n"
+        markdown += "## Solution\n\n"
+        markdown += f"Inverse A^{-1}:\n\n$$ {matrix_to_latex(A_inv_rounded)} $$\n\n"
+        markdown += "---\n\n"
+    
+    sys.stdout.write(markdown)
+
+generate_sample_problems()
+```
 
 ## Lecture 4: Factorization into A = LU
 

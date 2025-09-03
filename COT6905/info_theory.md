@@ -46,7 +46,8 @@ import math
 # number of equally likely outcomes
 N = 1_000_000
 
-H_bits = math.log2(N)   # Shannon entropy in bits
+H_bits = math.log2(N)   # Shannon entropy in bits. See that the sum over N terms cancels out with p_i = 1/N coefficient in front of each term
+#See that Shannon Entropy of a uniform probability distribution scales with the log number of outcomes!
 
 print(f"N = {N}")
 print(f"Entropy: {H_bits:.12f} bits")
@@ -62,7 +63,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math  # For log, but we'll use np for safety
 
-def plot_entropy(p=0.5):
+def plot_entropy(p):
     if p == 0 or p == 1:
         entropy = 0.0
     else:
@@ -74,6 +75,8 @@ def plot_entropy(p=0.5):
     ax.set_ylabel('Bits')
     ax.set_title(f'Shannon Entropy: {entropy:.2f} bits')
     plt.show()
+
+plot_entropy(p=.5) #change this p value to weight your coin outcome!
 ```
 
 Experiment: change p toward 0 or 1: what happens to Shannon entropy?
