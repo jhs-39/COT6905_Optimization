@@ -445,81 +445,303 @@ Let's say matrix A has m rows and n columns; $m \times n$
 Matrix B has n rows and p columns $ n \times p $  
 Their product C is a matrix with m rows and p colums, $m \times p $. The number of columns in A must match the number of rows in B.  
 
-**Dot Product of Rows in A and Columns in B:**  
+### Dot Product of Rows in A and Columns in B:
 
 Each element $c_{ij}$ in C is the dot product of the i-th row of A and the j-th column of B:  
 
-$$c_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj}$$
+$$c_{ij} = \sum_{k=1}^{m} a_{ik} b_{kj}$$
 
-This is the form most often taught to students.
+This is the form most often taught to students. Look at the highlights below:
 
-**Column Way (Linear Combinations of Columns):** 
+$\textbf{Matrix A (3x2):}$
+$
+A = \begin{bmatrix}
+{\color{red}{1}} & {\color{red}{2}} \\
+3 & 4 \\
+5 & 6
+\end{bmatrix}
+$
 
-View B as a collection of column vectors $\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_p$. Then, the columns of C are given by matrix-vector multiplications:
+First row highlighted.
 
-$$\mathbf{c}_j = A \mathbf{b}_j$$
+$\textbf{Matrix B (2x2):}$
+$
+B = \begin{bmatrix}
+{\color{orange}{7}} & 8 \\
+{\color{orange}{9}} & 10
+\end{bmatrix}
+$
 
-Each column of C is a linear combination of the columns of A, with coefficients from the corresponding column of B.  
+First column highlighted.
 
-**Row Way (Linear Combinations of Rows):**  
+Computing $c_{11}$ (first element of C):
 
-View A as a collection of row vectors $\mathbf{a}_1^T, \mathbf{a}_2^T, \dots, \mathbf{a}_m^T$. Then, the rows of C are given by:
+$
+c_{11} = {\color{red}{1}} \cdot {\color{orange}{7}} + {\color{red}{2}} \cdot {\color{orange}{9}} = 7 + 18 = 25
+$
 
-$$\mathbf{c}_i^T = \mathbf{a}_i^T B$$
+Resulting Matrix C (3x2, with element $C_{11}$ computed):
 
-Each row of C is a linear combination of the rows of B, with coefficients from the corresponding row of A.
+$
+C = \begin{bmatrix}
+25 & \_ \\
+\_ & \_ \\
+\_ & \_
+\end{bmatrix}
+$
 
-4. Outer Product Way (Sum of Rank-1 Matrices)
+Fill in the rest of the matrix by hand for practice! Can you compute the full first row or column following this example?
 
-Decompose the multiplication as a sum of the outer products. Let the columns of A be $\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_n$ and the rows of B be $\mathbf{b}_1^T, \mathbf{b}_2^T, \dots, \mathbf{b}_n^T$ Then:
+### Column Way (Linear Combinations of Columns):
 
-$$C = \sum_{k=1}^{n} \mathbf{a}_k \mathbf{b}_k^T$$
+View A as a collection of column vectors $\mathbf{A}_1, \mathbf{A}_2, \dots, \mathbf{A}_p$. Then, the columns of C are given by linear combinations of the column vectors of A with coefficients given by B:
 
-Each term $\mathbf{a}_k \mathbf{b}_k^T$ is a rank-1 matrix, and their sum gives C
+$$\mathbf{c}_j = \sum_{k=1}^{n} \mathbf{b}_{jk} A_j $$
 
-5. Bonus: Block Multiplication
+Each column of C is a linear combination of the columns of A, with coefficients from the corresponding column of B. Let's carry on the example from above and show the equivalence:
 
-For large matrices, block multiplication can be efficient (e.g., in parallel computing like CUDA). Suppose A and B are both square matrices divided into four quadrants (blocks) each:  
 
-$$A = \begin{pmatrix} A_{11} & A_{12} \ A_{21} & A_{22} \end{pmatrix}, \quad B = \begin{pmatrix} B_{11} & B_{12} \ B_{21} & B_{22} \end{pmatrix}$$
+$\textbf{Matrix A (3x2):}$
+$
+A = \begin{bmatrix}
+\color{red}{1} & \color{orange}{2} \\
+\color{red}{3} & \color{orange}{4} \\
+\color{red}{5} & \color{orange}{6}
+\end{bmatrix}
+$
+
+$\textbf{Matrix B (2x2):}$
+$
+B = \begin{bmatrix}
+\color{green}{7} & 8 \\
+\color{purple}{9} & 10
+\end{bmatrix}
+$
+
+Computing $c_1$ (first column of C):
+
+$
+\mathbf{c}_1 = {\color{green}{7}} \cdot \begin{bmatrix} \color{red}{1} \\ \color{red}{3} \\ \color{red}{5} \end{bmatrix} + {\color{purple}{9}} \cdot \begin{bmatrix} \color{orange}{2} \\ \color{orange}{4} \\ \color{orange}{6} \end{bmatrix} = \begin{bmatrix} 7 \\ 21 \\ 35 \end{bmatrix} + \begin{bmatrix} 18 \\ 36 \\ 54 \end{bmatrix} = \begin{bmatrix} 25 \\ 57 \\ 89 \end{bmatrix}
+$
+$\textbf{Resulting column of Matrix C:}$
+$
+C = \begin{bmatrix}
+25 & \_\_ \\
+57 & \_\_ \\
+89 & \_\_
+\end{bmatrix}
+$
+
+Can you complete the second column by hand, following this example?
+
+### Row Way (Linear Combinations of Rows):   
+
+View $B$ as a collection of row vectors $\mathbf{B}_1, \mathbf{B}_2, \dots, \mathbf{B}_m $. Then, the rows of $C$ are given by linear combinations of the row vectors of $ B $, with coefficients from the corresponding row of $A$:
+
+$$\mathbf{c}_i = \sum_{k=1}^{n} a_{ik} \mathbf{B}_k $$
+
+Each row of $C$ is a linear combination of the rows of $B$, with coefficients from the corresponding row of $A$.
+
+$\textbf{Matrix A (3x2):}$
+$A = \begin{bmatrix} {\color{red}{1}} & {\color{red}{2}} \\ 3 & 4 \\ 5 & 6 \end{bmatrix}$
+
+$\textbf{Matrix B (2x2):}$
+
+$B = \begin{bmatrix} {\color{green}{7}} & {\color{green}{8}} \\ {\color{purple}{9}} & {\color{purple}{10}} \end{bmatrix}$
+
+Computing $\mathbf{c}_1$ (first row of C):
+
+$\mathbf{c}_1 = {\color{red}{1}} \cdot \begin{bmatrix} {\color{green}{7}} & {\color{green}{8}} \end{bmatrix} + {\color{red}{2}} \cdot \begin{bmatrix} {\color{purple}{9}} & {\color{purple}{10}} \end{bmatrix} = \begin{bmatrix} 7 & 8 \end{bmatrix} + \begin{bmatrix} 18 & 20 \end{bmatrix} = \begin{bmatrix} 25 & 28 \end{bmatrix}$
+
+Resulting row of Matrix C:
+$C = \begin{bmatrix} 25 & 28 \\ \_ & \_ \\ \_ & \_ \end{bmatrix}$
+
+Can you complete the other two rows by hand?
+
+### Outer Product Way (Sum of Rank-1 Matrices):
+
+Matrix multiplication $ C = A \cdot B $ can be expressed as a sum of outer products, where each outer product is formed by multiplying a column of $ A $ by a row of $ B $. Here, $B_k^T$ are the row vectors of B (e.g., the column vectors of the transpose matrix $B^T$). The resulting matrix $ C $ is: 
+
+$ C = \sum_{k=1}^{n} \mathbf{A}_k \cdot \mathbf{B}_k^T $
+
+where $ \mathbf{A}_k $ is the k-th column of $ A $, and $ \mathbf{B}_k^T $ is the k-th row of $ B $. 
+ 
+$\textbf{Matrix A (3x2):}$
+
+$ A = \begin{bmatrix} \color{red}{1} & \color{orange}{2} \\ \color{red}{3} & \color{orange}{4} \\ \color{red}{5} & \color{orange}{6} \end{bmatrix} $
+
+$\textbf{Matrix B (2x2):}$
+
+$ B = \begin{bmatrix} \color{green}{7} & \color{green}{8} \\ \color{purple}{9} & \color{purple}{10} \end{bmatrix} $
+
+Computing the first outer product (k=1):
+
+$ \mathbf{A}_1 \cdot \mathbf{B}_1^T = \begin{bmatrix} \color{red}{1} \\ \color{red}{3} \\ \color{red}{5} \end{bmatrix} \cdot \begin{bmatrix} \color{green}{7} & \color{green}{8} \end{bmatrix} = \begin{bmatrix} 1 \cdot 7 & 1 \cdot 8 \\ 3 \cdot 7 & 3 \cdot 8 \\ 5 \cdot 7 & 5 \cdot 8 \end{bmatrix} = \begin{bmatrix} 7 & 8 \\ 21 & 24 \\ 35 & 40 \end{bmatrix} $
+
+Computing the second outer product (k=2):
+
+$ \mathbf{A}_2 \cdot \mathbf{B}_2^T = \begin{bmatrix} \color{orange}{2} \\ \color{orange}{4} \\ \color{orange}{6} \end{bmatrix} \cdot \begin{bmatrix} \color{purple}{9} & \color{purple}{10} \end{bmatrix} = \begin{bmatrix} 2 \cdot 9 & 2 \cdot 10 \\ 4 \cdot 9 & 4 \cdot 10 \\ 6 \cdot 9 & 6 \cdot 10 \end{bmatrix} = \begin{bmatrix} 18 & 20 \\ 36 & 40 \\ 54 & 60 \end{bmatrix} $
+
+Adding the outer products:
+
+$ C = \begin{bmatrix} 7 & 8 \\ 21 & 24 \\ 35 & 40 \end{bmatrix} + \begin{bmatrix} 18 & 20 \\ 36 & 40 \\ 54 & 60 \end{bmatrix} = \begin{bmatrix} 7 + 18 & 8 + 20 \\ 21 + 36 & 24 + 40 \\ 35 + 54 & 40 + 60 \end{bmatrix} = \begin{bmatrix} 25 & 28 \\ 57 & 64 \\ 89 & 100 \end{bmatrix} $
+
+The complete matrix $ C $ is:
+
+$ C = \begin{bmatrix} 25 & 28 \\ 57 & 64 \\ 89 & 100 \end{bmatrix} $
+
+### Bonus: Block Multiplication
+
+For large matrices, block multiplication can be efficient (e.g., in parallel computing like CUDA). This becomes extraordinarily important in deep neural nets, where large matrices are multiplied on GPU and these operations need to be broken down into efficient sub-computations. Suppose A and B are both square matrices divided into four quadrants (blocks) each:
+
+$A = \begin{pmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{pmatrix}, \quad B = \begin{pmatrix} B_{11} & B_{12} \\ B_{21} & B_{22} \end{pmatrix}$
 
 Then:
 
-$$AB = \begin{pmatrix} A_{11}B_{11} + A_{12}B_{21} & A_{11}B_{12} + A_{12}B_{22} \ A_{21}B_{11} + A_{22}B_{21} & A_{21}B_{12} + A_{22}B_{22} \end{pmatrix}$$  
-
-This relates to divide-and-conquer algorithms and optimized matrix operations in hardware like GPUs.  
+$AB = \begin{pmatrix} A_{11}B_{11} + A_{12}B_{21} & A_{11}B_{12} + A_{12}B_{22} \\ A_{21}B_{11} + A_{22}B_{21} & A_{21}B_{12} + A_{22}B_{22} \end{pmatrix}$
 
 ### Matrix Inverses
 
-Not all matrices have inverses. For a square matrix ( A ) (size ( n \times n )), the inverse ( A^{-1} ) (if it exists) satisfies:
+Not all matrices have inverses. For a square matrix $A$ of size $n \times n $, the inverse $ A^{-1} $ (if it exists) satisfies:
 
-[ A^{-1} A = I_n = A A^{-1} ]
+$A^{-1} A = I_n = A A^{-1}$
 
-where ( I_n ) is the ( n \times n ) identity matrix.
+where $I_n$ is the $n \times n$ identity matrix
 
-Singular Matrices (No Inverse)
+Example:
 
-A matrix ( A ) is singular (non-invertible) if:
+$
+A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix} 
+$
 
-( \det(A) = 0 )
+$
+A^{-1} = \begin{bmatrix} -2 & 1 \\ \frac{3}{2} & -\frac{1}{2} \end{bmatrix}
+$
 
-The columns (or rows) of ( A ) are linearly dependent (e.g., one column is a scalar multiple of another).
+$
+A A^{-1} = \begin{bmatrix} -2+3 & 1-1 \\ -6+6 & 3-2 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+$
 
-There exists a nonzero vector ( \mathbf{x} ) such that ( A \mathbf{x} = \mathbf{0} ) (null space is non-trivial).
+
+### Singular Matrices (No Inverse)
+
+Let's examine Singular Matrices (those without inverses) from three equivalent perspectives (there are others we will get to with spaces later!) 
+A matrix $A$ is singular (non-invertible) if:
+-> The determinant $\det(A) = 0$
+-> The columns (or rows) of $A$ are linearly dependent (e.g., one column or row is a scalar multiple of another)
+-> There exists a nonzero vector $\mathbf{x}$ such that $A \mathbf{x} = \mathbf{0}$
+
+All of these reduce to the same idea/concept -- let's work an example to see why
+
+Example:
+Let's start with noticing something by multipling Ax=0 by A inverse on both sides:
+
+$
+A^{-1} A x = A^{-1} 0
+$
+
+This gives us the result:\
+$
+x = 0
+$
+\
+Which can only be true if the only vector x that makes Ax=0 is the 0 vector. Let's plug in some numbers and demonstrate.
+
+Let's pick a matrix with columns that are scalar multiples of each other so we can guarantee the matrix is singular:
+
+$
+A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}
+$
+
+See the second column is just the first column times 2? What are the downstream effects of this choice? Let's find a vector x such that Ax = 0
+
+$
+Ax = 0
+$
+
+$
+\begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix} * \begin{bmatrix} a \\ b \end{bmatrix} = 
+\begin{bmatrix} 0 \\ 0 \end{bmatrix} \\
+$
+\
+$
+a + 2b = 0
+$
+\
+$
+2a + 4b = 0
+$
+
+Notice that the equations reduce to the same $a +2b = 0$ since they lie on the same line. Any multiple of $x = \begin{bmatrix} -2 \\ 1 \end{bmatrix} $ will cause Ax=0
+
+Plugging in the previous result, we see the resulting nonsense:\
+$
+\begin{bmatrix} -2 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}
+$
+
+Which can't be true. This is why if you can find any nonzero vector $x$ for $Ax=0$, the matrix $A$ is singular.
 
 ### Finding the Inverse via Systems of Equations
 
-The inverse can be found by solving ( A \mathbf{b}_j = \mathbf{e}_j ) for each column ( \mathbf{b}_j ) of ( B = A^{-1} ), where ( \mathbf{e}_j ) is the ( j )-th column of ( I_n ).
-
 **Gauss-Jordan Elimination**
 
-To compute the inverse practically, augment ( A ) with ( I_n ) to form ( [A \mid I_n] ), then perform row operations to reduce the left side to ( I_n ). The right side will become ( A^{-1} ):
+To compute the inverse of a square matrix $A$, augment $A$ with the $n \times n$ identity matrix $I_n$ to form $A \mid I_n$. Perform row operations to reduce the left side to $I_n$; the right side will then be $A^{-1}$:
 
-[ [A \mid I_n] \xrightarrow{\text{row operations}} [I_n \mid A^{-1}] ]
+$A \mid I_n \xrightarrow{\text{row operations}} I_n \mid A^{-1}$
 
-If ( A ) is singular, the process will fail (e.g., a zero row on the left).
+If a zero appears on the diagonal and cannot be fixed by row swaps, the matrix is singular and has no inverse.
 
-Python Script for Gauss-Jordan Sample Problems
+Example:
+
+Consider the 2x2 matrix:
+
+$ A = \begin{pmatrix} 1 & 2 \\ 3 & 5 \end{pmatrix} $
+
+Augment with the 2x2 identity matrix:
+
+$ A \mid I = \begin{pmatrix} 1 & 2 & \mid & 1 & 0 \\ 3 & 5 & \mid & 0 & 1 \end{pmatrix} $
+
+Perform row operations to transform the left side into the identity matrix:
+
+Eliminate below the first pivot (1):
+
+$ R_2 \leftarrow R_2 - 3R_1 $
+
+$ \begin{pmatrix} 1 & 2 & \mid & 1 & 0 \\ 3 & 5 & \mid & 0 & 1 \end{pmatrix} \rightarrow \begin{pmatrix} 1 & 2 & \mid & 1 & 0 \\ 0 & -1 & \mid & -3 & 1 \end{pmatrix} $
+
+Calculation: Row 2 becomes $3 - 3 \cdot 1, 5 - 3 \cdot 2 \mid 0 - 3 \cdot 1, 1 - 3 \cdot 0 = 0, -1 \mid -3, 1$
+
+Scale row 2 to make the pivot 1:
+
+$R_2 \leftarrow -R_2$
+
+$ \begin{pmatrix} 1 & 2 & \mid & 1 & 0 \\ 0 & -1 & \mid & -3 & 1 \end{pmatrix} \rightarrow \begin{pmatrix} 1 & 2 & \mid & 1 & 0 \\ 0 & 1 & \mid & 3 & -1 \end{pmatrix} $
+
+Calculation: Row 2 becomes $0, -(-1) \mid -(-3), -1 = 0, 1 \mid 3, -1$$
+
+Eliminate above the second pivot (1):
+
+$ R_1 \leftarrow R_1 - 2R_2 $
+
+$\begin{pmatrix} 1 & 2 & \mid & 1 & 0 \\ 0 & 1 & \mid & 3 & -1 \end{pmatrix} \rightarrow \begin{pmatrix} 1 & 0 & \mid & -5 & 2 \\ 0 & 1 & \mid & 3 & -1 \end{pmatrix} $
+
+Calculation: Row 1 becomes $1 - 2 \cdot 0, 2 - 2 \cdot 1 \mid 1 - 2 \cdot 3, 0 - 2 \cdot (-1) = 1, 0 \mid -5, 2$
+
+The left side is now the identity matrix, so the right side is the inverse:
+
+$A^{-1} = \begin{pmatrix} -5 & 2 \\ 3 & -1 \end{pmatrix}$
+
+Verification:
+
+To confirm, compute $A A^{-1}$:
+
+$A A^{-1} = \begin{pmatrix} 1 & 2 \\ 3 & 5 \end{pmatrix} \begin{pmatrix} -5 & 2 \\ 3 & -1 \end{pmatrix} = \begin{pmatrix} 1 \cdot (-5) + 2 \cdot 3 & 1 \cdot 2 + 2 \cdot (-1) \\ 3 \cdot (-5) + 5 \cdot 3 & 3 \cdot 2 + 5 \cdot (-1) \end{pmatrix} = \begin{pmatrix} -5 + 6 & 2 - 2 \\ -15 + 15 & 6 - 5 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$
+
+This is the 2x2 identity matrix, confirming the inverse is correct.
+
+If $A$ is singular, then elimination will fail (e.g., a zero row on the left).
+
+**Python Script for Gauss-Jordan Sample Problems**
 
 Below is a Python script that generates Markdown-formatted sample problems for finding matrix inverses using Gauss-Jordan elimination. It uses NumPy to generate random invertible 2x2 or 3x3 matrices, computes the inverse (for the solution), and outputs the problem (augmented matrix) and solution in Markdown. Run this script to generate a few examples, solve them by hand on paper, and check against the provided solutions.
 
