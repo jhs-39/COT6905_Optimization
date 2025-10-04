@@ -205,6 +205,7 @@ def generate_matrix(case='full_rank'):
 def plot_column_space(A):
     """
     Plot the column vectors and column space of a 3x2 matrix in 3D.
+    Returns the LaTeX string for the matrix.
     """
     v1 = A[:, 0]
     v2 = A[:, 1]
@@ -232,7 +233,6 @@ def plot_column_space(A):
                 Y[i, j] = point[1]
         ax.plot_surface(X, Y, Z, color='green', alpha=0.5, label='Column Space (Plane)')
     elif rank == 1:
-        # Plot line for rank 1
         t = np.linspace(-1, 1, 20)
         line_x = t * v1[0]
         line_y = t * v1[1]
@@ -251,8 +251,18 @@ def plot_column_space(A):
     
     plt.title('Column Vectors and Column Space of A')
     plt.show()
+    
+    # Return LaTeX string for the matrix
+    def matrix_to_latex(M):
+        rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+        return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
+    
+    return matrix_to_latex(A)
 
 def reveal_dimensions(A):
+    """
+    Reveal the dimensions of C(A) and N(A).
+    """
     rank = np.linalg.matrix_rank(A)
     dim_c = rank
     dim_n = A.shape[1] - rank
@@ -260,19 +270,19 @@ def reveal_dimensions(A):
     markdown += f"**Dimension of N(A)**: {dim_n}\n\n"
     display(Markdown(markdown))
 
-# Generate and plot a full rank matrix
+# Generate and display a full rank matrix
 A_full = generate_matrix('full_rank')
 display(Markdown("**Problem 1: Full Rank Matrix**"))
-plot_column_space(A_full)
-display(Markdown("Predict the dimensions of C(A) and N(A), then run reveal_dimensions(A_full) to check."))
+display(Markdown(f"**Matrix A**:\n\n$$ {plot_column_space(A_full)} $$\n\n"))
+display(Markdown("Predict the dimensions of C(A) and N(A), then uncomment reveal_dimensions(A_full) to check."))
 
-# Generate and plot a dependent matrix
+# Generate and display a dependent matrix
 A_dep = generate_matrix('dependent')
 display(Markdown("**Problem 2: Dependent Columns Matrix**"))
-plot_column_space(A_dep)
-display(Markdown("Predict the dimensions of C(A) and N(A), then run reveal_dimensions(A_dep) to check."))
+display(Markdown(f"**Matrix A**:\n\n$$ {plot_column_space(A_dep)} $$\n\n"))
+display(Markdown("Predict the dimensions of C(A) and N(A), then uncomment reveal_dimensions(A_dep) to check."))
 
-# To reveal answers (students run this after predicting)
+# To reveal answers (students uncomment after predicting)
 # reveal_dimensions(A_full)
 # reveal_dimensions(A_dep)
 ```
