@@ -993,11 +993,9 @@ def lu_factorization_demo(A=None, use_pivoting=True):
     Demonstrate LU factorization with optional pivoting.
     Displays A, P, L, U, and verifies PA = LU.
     """
-    if A is None:
-        A = np.array([[2, 1, 1], [4, -6, 0], [-2, 7, 2]], dtype=float)
     
-    # Perform LU factorization
-    P, L, U = lu(A) if use_pivoting else (np.eye(A.shape[0]), *lu(A, permute_l=True))
+    P, L, U = lu(A)  # SciPy returns P, L, U where PA = LU
+
     
     # Format matrices as LaTeX
     def matrix_to_latex(M):
@@ -1016,7 +1014,7 @@ def lu_factorization_demo(A=None, use_pivoting=True):
     markdown += f"L (Lower triangular):\n\n$$ {matrix_to_latex(L)} $$\n\n"
     markdown += f"U (Upper triangular):\n\n$$ {matrix_to_latex(U)} $$\n\n"
     markdown += f"Verification (PA ≈ LU): {'Correct' if verification else 'Incorrect'}\n\n"
-    markdown += "Try editing the matrix A or toggling use_pivoting (True/False) to explore!\n\n"
+    markdown += "Try editing the matrix A or toggling use_pivoting (True/False).\n\n"
     
     display(Markdown(markdown))
 
@@ -1026,5 +1024,5 @@ lu_factorization_demo(A, use_pivoting=False)
 
 # Try a matrix requiring pivoting
 A_pivot = np.array([[0, 1, 2], [1, 2, 3], [2, 5, 2]], dtype=float)
-# lu_factorization_demo(A_pivot, use_pivoting=True)
+lu_factorization_demo(A_pivot, use_pivoting=True)
 ```
