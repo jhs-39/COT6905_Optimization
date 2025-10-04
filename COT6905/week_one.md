@@ -748,6 +748,7 @@ Below is a Python script that generates Markdown-formatted sample problems for f
 ```{code-cell} python
 import numpy as np
 import sys
+from IPython.display import Markdown, display
 
 def generate_sample_problems(num_problems=3, size=2):
     """
@@ -793,7 +794,7 @@ def generate_sample_problems(num_problems=3, size=2):
         markdown += f"Inverse A^{-1}:\n\n$$ {matrix_to_latex(A_inv_rounded)} $$\n\n"
         markdown += "---\n\n"
     
-    sys.stdout.write(markdown)
+    display(Markdown(markdown))
 
 generate_sample_problems()
 ```
@@ -806,3 +807,224 @@ generate_sample_problems()
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
 </iframe>
+
+This lecture introduces LU factorization, a method to decompose a matrix into simpler triangular forms, along with the inverse of matrix products and permutation matrices. These concepts streamline solving linear systems and enhance our understanding of matrix operations You’ll learn why LU factorization is efficient, how permutations handle row swaps, and get hands-on with an interactive tool to explore these ideas.
+
+### Inverse of Matrix Products
+
+For two invertible matrices $A$ and $B$, the inverse of their product $AB$ is:
+
+$
+(AB)^{-1} = B^{-1} A^{-1}
+$
+
+This holds because:
+
+$
+(AB)(B^{-1} A^{-1}) = A (B B^{-1}) A^{-1} = A I A^{-1} = I
+$
+
+The order of inverses reverses, which is crucial when rearranging matrix equations.
+Additionally, if $A$ is invertible, the inverse of its transpose is:
+
+$
+(A^T)^{-1} = (A^{-1})^T
+$
+
+These properties help us manipulate matrix equations, especially in LU factorization.
+
+### LU Factorization: Decomposing Matrices
+
+LU factorization breaks a square matrix $A$ into:
+
+$L$: A lower triangular matrix with 1s on the diagonal and zeros above.
+
+$U$: An upper triangular matrix with zeros below the diagonal; our row-reduced matrix we found in the last lecture
+
+We write:
+
+$ 
+A = LU 
+$
+
+This is useful for solving systems $Ax = b$. Gaussian elimination transforms $A$ into an upper triangular $U$ using elimination matrices $E_{ij}$:
+
+$ 
+E_{32} E_{31} E_{21} A = U 
+$
+
+Each $E_{ij}$ eliminates an entry in row $i$, column $j$ below the pivot by subtracting a multiple of row $j$. To express $A$, we rearrange:
+
+$ 
+A = (E_{32} E_{31} E_{21})^{-1} U 
+$
+
+Using the inverse of products rule:
+
+$
+(E_{32} E_{31} E_{21})^{-1} = E_{21}^{-1} E_{31}^{-1} E_{32}^{-1}
+$
+
+This product of inverse elimination matrices forms $L$. If $E_{ij}$ subtracts $c \cdot \text{row } j$ from row $i$ (i.e., $E_{ij} = I - c e_i e_j^T$ ), its inverse $E_{ij}^{-1}$ adds $c$, placing $c$ in $L$’s $(i,j)$ position below the diagonal.
+
+Why Use LU Factorization?
+
+**Efficiency:** Solving $Ax = b$ via Gaussian elimination takes $\frac{1}{3}n^3$ operations for an $n \times n$ matrix (each of $n$ pivots requires $O(n^2)$ work). With LU factorization:
+
+Compute $L$ and $U$ once $( \frac{1}{3}n^3 )$.
+
+Solve $Ly = b$ (forward substitution) and $Ux = y$ (backward substitution), each in $\frac{1}{2}n^2$
+
+For $k$ different $b$ vectors, total cost is $\frac{1}{3}n^3 + k n^2 $, versus $k \cdot \frac{1}{3}n^3$ without LU. This is a huge win for multiple solves.
+
+**Simplicity:** $L$ collects the multipliers from elimination, making the process systematic. If no row swaps occur, $L$’s subdiagonal entries are exactly these multipliers.
+
+**Flexibility:** LU factorization works for any invertible matrix (with pivoting, if needed), simplifying computations like inverses or determinants.
+
+Example: LU Factorization by Hand
+
+Let’s factorize:
+
+$$ A = \begin{pmatrix} 2 & 1 & 1 \\ 4 & -6 & 0 \\ -2 & 7 & 2 \end{pmatrix} $$
+
+Step 1: Gaussian Elimination to Get $U$
+
+Column 1: Pivot is $A_{11} = 2$
+
+Eliminate $A_{21} = 4$: Multiplier $\frac{4}{2} = 2$. Operation: $R_2 \leftarrow R_2 - 2 R_1$. 
+$
+[4, -6, 0] - 2 \cdot [2, 1, 1] = [4 - 4, -6 - 2, 0 - 2] = [0, -8, -2] 
+$
+
+Eliminate $A_{31} = -2$: Multiplier $\frac{-2}{2} = -1 $. Operation: $R_3 \leftarrow R_3 + R_1$. 
+$
+[-2, 7, 2] + [2, 1, 1] = [0, 7 + 1, 2 + 1] = [0, 8, 3]
+$ 
+New matrix: 
+$
+\begin{pmatrix} 2 & 1 & 1 \\ 0 & -8 & -2 \\ 0 & 8 & 3 \end{pmatrix} 
+$
+
+Column 2: Pivot is $A_{22} = -8$.
+
+Eliminate $A_{32} = 8$: Multiplier $\frac{8}{-8} = -1$. Operation: $R_3 \leftarrow R_3 + R_2$. 
+$
+[0, 8, 3] + [0, -8, -2] = [0, 8 - 8, 3 - 2] = [0, 0, 1] 
+$
+Result (upper triangular $U$): 
+
+$
+U = \begin{pmatrix} 2 & 1 & 1 \\ 0 & -8 & -2 \\ 0 & 0 & 1 \end{pmatrix}
+$
+
+Step 2: Construct $L$
+
+The multipliers form $L$:
+
+Column 1: $L_{21} = 2$, $L_{31} = -1$
+
+Column 2: $L_{32} = -1$
+
+Diagonal: 1s.
+
+$ 
+L = \begin{pmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ -1 & -1 & 1 \end{pmatrix}
+$
+
+Step 3: Verify
+
+Compute $LU$:
+
+$
+LU = \begin{pmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ -1 & -1 & 1 \end{pmatrix} \begin{pmatrix} 2 & 1 & 1 \\ 0 & -8 & -2 \\ 0 & 0 & 1 \end{pmatrix}
+$
+
+Row 1: $[1 \cdot 2, 1 \cdot 1 + 0 \cdot (-8), 1 \cdot 1 + 0 \cdot (-2) + 0 \cdot 1] = [2, 1, 1]$
+
+Row 2: $[2 \cdot 2, 2 \cdot 1 + 1 \cdot (-8), 2 \cdot 1 + 1 \cdot (-2) + 0 \cdot 1] = [4, 2 - 8, 2 - 2] = [4, -6, 0]$
+
+Row 3: $[-1 \cdot 2, -1 \cdot 1 + (-1) \cdot (-8), -1 \cdot 1 + (-1) \cdot (-2) + 1 \cdot 1] = [-2, -1 + 8, -1 + 2 + 1] = [-2, 7, 2]$
+
+$ 
+LU = \begin{pmatrix} 2 & 1 & 1 \\ 4 & -6 & 0 \\ -2 & 7 & 2 \end{pmatrix} = A 
+$
+
+**Permutation Matrices:**
+
+If a pivot is zero during elimination, we swap rows to find a non-zero pivot. This is done with a permutation matrix $P$, which reorders rows. For a 3x3 matrix, swapping rows 1 and 2:
+
+$
+P = \begin{pmatrix} 0 & 1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix} 
+$
+
+Applying $P$ to $A$ (i.e., $PA$) swaps rows 1 and 2. Permutation matrices have special properties:
+
+Group Structure: The product of two permutation matrices is another permutation matrix, and every permutation has an inverse (another permutation in the group).
+
+Inverse = Transpose: For any permutation matrix $P$, $P^T P = I$, so $P^{-1} = P^T$. For example:
+
+$
+P = \begin{pmatrix} 0 & 1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}, \quad P^T = \begin{pmatrix} 0 & 1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix} = P 
+$
+
+$
+P P^T = \begin{pmatrix} 0 & 1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix} \begin{pmatrix} 0 & 1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix} = I 
+$
+
+In LU factorization, if row swaps are needed, we factorize:
+
+$
+PA = LU 
+$
+
+where $P$ is the product of permutation matrices ensuring non-zero pivots.
+
+**Interactive LU Factorization Demo**
+
+Try the code below to factorize a matrix into $L$ and $U$, with or without pivoting. Modify the matrix or toggle pivoting to see how results change!
+
+```{code-cell} python
+import numpy as np
+from scipy.linalg import lu
+from IPython.display import Markdown, display
+
+def lu_factorization_demo(A=None, use_pivoting=True):
+    """
+    Demonstrate LU factorization with optional pivoting.
+    Displays A, P, L, U, and verifies PA = LU.
+    """
+    if A is None:
+        A = np.array([[2, 1, 1], [4, -6, 0], [-2, 7, 2]], dtype=float)
+    
+    # Perform LU factorization
+    P, L, U = lu(A) if use_pivoting else (np.eye(A.shape[0]), *lu(A, permute_l=True))
+    
+    # Format matrices as LaTeX
+    def matrix_to_latex(M):
+        rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+        return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
+    
+    # Verify PA = LU
+    PA = np.dot(P, A)
+    LU = np.dot(L, U)
+    verification = np.allclose(PA, LU)
+    
+    markdown = f"## LU Factorization Demo\n\n"
+    markdown += f"Matrix A:\n\n$$ {matrix_to_latex(A)} $$\n\n"
+    if use_pivoting:
+        markdown += f"Permutation Matrix P:\n\n$$ {matrix_to_latex(P)} $$\n\n"
+    markdown += f"L (Lower triangular):\n\n$$ {matrix_to_latex(L)} $$\n\n"
+    markdown += f"U (Upper triangular):\n\n$$ {matrix_to_latex(U)} $$\n\n"
+    markdown += f"Verification (PA ≈ LU): {'Correct' if verification else 'Incorrect'}\n\n"
+    markdown += "Try editing the matrix A or toggling use_pivoting (True/False) to explore!\n\n"
+    
+    display(Markdown(markdown))
+
+# Example matrix
+A = np.array([[2, 1, 1], [4, -6, 0], [-2, 7, 2]], dtype=float)
+lu_factorization_demo(A, use_pivoting=False)
+
+# Try a matrix requiring pivoting
+A_pivot = np.array([[0, 1, 2], [1, 2, 3], [2, 5, 2]], dtype=float)
+# lu_factorization_demo(A_pivot, use_pivoting=True)
+```
