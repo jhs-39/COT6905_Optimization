@@ -159,16 +159,18 @@ In $R^3$, a plane through the origin would be a subspace.
 
 The union of two spaces is not necessarily a space. The intersection of two spaces is a space.
 
-The column space and nullspace are fundamental subspaces of a matrix A (m x n):
+The column space and nullspace are two of the fundamental subspaces of a matrix A (m x n):
 
-- **Column Space C(A)**: The set of all linear combinations of the columns of A, i.e., the span of the columns. It is a subspace of R^m. The equation Ax = b has a solution if and only if b is in C(A).
+- **Column Space C(A)**: The set of all linear combinations of the columns of A, i.e., the span of the columns. It is a subspace of R^m. The equation $Ax = b$ has a solution if and only if $b$ is in $C(A)$.
   - Dimension: The rank of A (number of linearly independent columns).
-  - Example: For $A = \begin{pmatrix} 1 & 3 \\ 2 & 1 \\ 4 & 1 \end{pmatrix}$, the columns are $[1,2,4]^T$ and $[3,1,1]^T$ -> C(A) is a plane in R^3.
+  - Example: For $A = \begin{pmatrix} 1 & 3 \\ 2 & 1 \\ 4 & 1 \end{pmatrix}$, the columns are $[1,2,4]^T$ and $[3,1,1]^T$ -> $C(A)$ is a plane in $R^3$.
 
-- **Nullspace N(A)**: The set of all x in R^n such that Ax = 0. It is a subspace of R^n.
-  - Dimension: n - rank(A) (from the rank-nullity theorem).
-  - Example: For the same A, solve $Ax = 0$. If $rank(A) = 2$, N(A) is a line in R^2.
+- **Nullspace N(A)**: The set of all vectors x in $R^n$ such that $Ax = 0$. It is a subspace of $R^n$.
+  - Dimension: $n - rank(A)$ (from the rank-nullity theorem).
+  - Example: For the same A, solve $Ax = 0$. If $rank(A) = 2$, $N(A)$ is a line in $R^2$
 
+
+To practice, use this problem generator to create random matrices and determine the dimensions of the column space C(A) and nullspace N(A). For a 3x2 matrix:
 
 ```{code-cell} python
 import numpy as np
@@ -176,36 +178,48 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from IPython.display import Markdown, display
 
-def plot_column_space(A=None):
+def generate_matrix(case='full_rank'):
+    """
+    Generate a random 3x2 matrix for the specified case.
+    """
+    if case == 'full_rank':
+        # Linearly independent columns
+        v1 = np.random.randint(-5, 6, 3)
+        v2 = np.random.randint(-5, 6, 3)
+        while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+            v2 = np.random.randint(-5, 6, 3)
+        A = np.column_stack((v1, v2))
+    elif case == 'dependent':
+        # Dependent columns (v2 = scalar * v1)
+        v1 = np.random.randint(-5, 6, 3)
+        while np.all(v1 == 0):
+            v1 = np.random.randint(-5, 6, 3)
+        scalar = np.random.choice([-2, -1, 2, 3])  # Avoid zero or 1 for obviousness
+        v2 = scalar * v1
+        A = np.column_stack((v1, v2))
+    else:
+        raise ValueError("Case must be 'full_rank' or 'dependent'")
+    
+    return A
+
+def plot_column_space(A):
     """
     Plot the column vectors and column space of a 3x2 matrix in 3D.
     """
-    if A is None:
-        A = np.array([[1, 3], [2, 1], [4, 1]], dtype=float)
-    
-    # Extract column vectors
     v1 = A[:, 0]
     v2 = A[:, 1]
     
-    # Check rank
     rank = np.linalg.matrix_rank(A)
-    if rank != 2:
-        display(Markdown(f"**Warning**: Matrix rank is {rank}. Column space is {'a line' if rank == 1 else 'degenerate'}. Expected rank 2 for a plane."))
     
-    # Create figure
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
     
-    # Plot origin
     ax.scatter([0], [0], [0], color='black', s=50, label='Origin')
     
-    # Plot column vectors as arrows
     ax.quiver(0, 0, 0, v1[0], v1[1], v1[2], color='blue', label='Column 1', linewidth=2)
     ax.quiver(0, 0, 0, v2[0], v2[1], v2[2], color='red', label='Column 2', linewidth=2)
     
-    # Plot column space (plane) if rank is 2
     if rank == 2:
-        # Generate points for the plane: x*v1 + y*v2
         x = np.linspace(-1, 1, 20)
         y = np.linspace(-1, 1, 20)
         X, Y = np.meshgrid(x, y)
@@ -217,8 +231,14 @@ def plot_column_space(A=None):
                 X[i, j] = point[0]
                 Y[i, j] = point[1]
         ax.plot_surface(X, Y, Z, color='green', alpha=0.5, label='Column Space (Plane)')
+    elif rank == 1:
+        # Plot line for rank 1
+        t = np.linspace(-1, 1, 20)
+        line_x = t * v1[0]
+        line_y = t * v1[1]
+        line_z = t * v1[2]
+        ax.plot(line_x, line_y, line_z, color='green', label='Column Space (Line)', linewidth=2)
     
-    # Set labels and limits
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
@@ -227,28 +247,34 @@ def plot_column_space(A=None):
     ax.set_ylim(-max_range, max_range)
     ax.set_zlim(-max_range, max_range)
     
-    # Add legend
     ax.legend()
     
     plt.title('Column Vectors and Column Space of A')
     plt.show()
-    
-    # Display matrix and rank
-    def matrix_to_latex(M):
-        rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-        return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
-    
-    markdown = f"**Matrix A**:\n\n$$   {matrix_to_latex(A)}   $$\n\n"
-    markdown += f"**Column Space Rank**: {rank}\n\n"
+
+def reveal_dimensions(A):
+    rank = np.linalg.matrix_rank(A)
+    dim_c = rank
+    dim_n = A.shape[1] - rank
+    markdown = f"**Dimension of C(A)**: {dim_c}\n\n"
+    markdown += f"**Dimension of N(A)**: {dim_n}\n\n"
     display(Markdown(markdown))
 
-# Example matrix from the section
-A = np.array([[1, 3], [2, 1], [4, 1]], dtype=float)
-plot_column_space(A)
+# Generate and plot a full rank matrix
+A_full = generate_matrix('full_rank')
+display(Markdown("**Problem 1: Full Rank Matrix**"))
+plot_column_space(A_full)
+display(Markdown("Predict the dimensions of C(A) and N(A), then run reveal_dimensions(A_full) to check."))
 
-# Try a rank 1 matrix
-A_rank1 = np.array([[1, 2], [2, 4], [3, 6]], dtype=float)  # Columns are multiples
-# plot_column_space(A_rank1)
+# Generate and plot a dependent matrix
+A_dep = generate_matrix('dependent')
+display(Markdown("**Problem 2: Dependent Columns Matrix**"))
+plot_column_space(A_dep)
+display(Markdown("Predict the dimensions of C(A) and N(A), then run reveal_dimensions(A_dep) to check."))
+
+# To reveal answers (students run this after predicting)
+# reveal_dimensions(A_full)
+# reveal_dimensions(A_dep)
 ```
 
 
