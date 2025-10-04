@@ -15,28 +15,46 @@ kernelspec:
 
 ## Lecture 5: Transposes, permutations, spaces R^n
 
-:::{iframe} https://www.youtube.com/embed/JibVXBElKL0
-:width: 100%
-Lecture 5
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/JibVXBElKL0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+
+### Summary
+
 
 ## Lecture 6: Column space and nullspace
 
-:::{iframe} https://www.youtube.com/embed/8o5Cmfpeo6g
-:width: 100%
-Lecture 6
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/8o5Cmfpeo6g"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+
+### Summary
 
 ## Lecture 7: Solving Ax = 0: pivot variables, special solutions
 
-:::{iframe} https://www.youtube.com/embed/VqP2tREMvt0
-:width: 100%
-Lecture 7
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/VqP2tREMvt0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+
+### Summary
 
 ## Lecture 8: Solving Ax = b: row reduced form R
 
-:::{iframe} https://www.youtube.com/embed/9Q1q7s1jTzU
-:width: 100%
-Lecture 8
-:::
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/9Q1q7s1jTzU"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+
+### Summary
+
