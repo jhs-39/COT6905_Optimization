@@ -314,3 +314,134 @@ display(Markdown(markdown))
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
 </iframe>
+
+In this lecture we explore projection matrices and least-squares problems, focusing on projecting vectors onto subspaces and finding approximate solutions to $Ax = b$. It builds on Lecture 15’s projection concepts, and we can start to connect these concepts in linear algebra back to model fitting and optimization.
+
+### Key Definitions and Geometric Intuitions
+**Projection Matrix**: \
+Definition: For $C(A)$ spanned by columns of $A$ (m x n, full column rank), the projection matrix is $P = A (A^T A)^{-1} A^T$. \
+Geometric Intuition: $P b$ projects $b$ onto $C(A)$, the closest point in the subspace. $P4 is symmetric $( P^T = P )$ and idempotent $( P^2 = P )$, acting like a “flattening” operation onto $C(A)$. \
+
+**Least-Squares Problem**: \
+Definition: Minimize $| Ax - b |_2 $ when $ b \notin C(A)$. Solution: $\hat{x} = (A^T A)^{-1} A^T b $, with projection $ p = A \hat{x} $. \
+Geometric Intuition: $p$ is the closest point in $C(A)$ to $b$, with error $e = b - p \perp C(A)$, lying in $N(A^T)$. \
+
+**Orthogonality**: \
+Definition: The error $e = b - A \hat{x}$ satisfies $A^T e = 0 $. \
+Geometric Intuition: The error is perpendicular to $C(A)$, ensuring the shortest distance to $b$. \
+
+Applications:
+1. Least-squares solutions for data fitting (e.g., linear regression).
+2. Optimization problems where exact solutions are not feasible.
+
+Example
+For $A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}$, $b = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}$: \
+Projection matrix: $ P = A A^T = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}$. \
+Projection: $ p = P b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} $. \
+Least-squares: $ \hat{x} = (A^T A)^{-1} A^T b = \begin{pmatrix} 1 \\ 2 \end{pmatrix} $, so $ A \hat{x} = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$ .\
+Error: $e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix}$, orthogonal to $C(A)$. \
+
+Interactive Problem Generator
+
+This code generates a random 3x2 matrix A (rank 2) and vector b, computes the projection matrix P, projects b onto C(A), and finds the least-squares solution $\hat{x}$. It visualizes b, p, and e in 3D. Predict the projection, least-squares solution, and verify orthogonality, then check the output.
+
+```{code-cell} python
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+
+def generate_matrix_and_b():
+    """
+    Generate a random 3x2 matrix with rank 2 and a random b.
+    """
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    A = np.column_stack((v1, v2))
+    b = np.random.randint(-5, 6, 3)
+    return A, b
+
+def compute_projection(A, b):
+    """
+    Compute projection matrix, projection of b onto C(A), and least-squares solution.
+    """
+    P = np.dot(A, np.dot(np.linalg.inv(np.dot(A.T, A)), A.T))
+    x_hat = np.dot(np.linalg.inv(np.dot(A.T, A)), np.dot(A.T, b))
+    p = np.dot(A, x_hat)
+    e = b - p
+    return P, x_hat, p, e
+
+def matrix_to_latex(M):
+    rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+
+def plot_projection(A, b, p, e):
+    """
+    Plot b, p, and e in 3D.
+    """
+    Q = np.linalg.qr(A)[0]  # Orthonormal basis for C(A)
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # Plot origin
+    ax.scatter([0], [0], [0], color='black', s=50, label='Origin')
+    
+    # Plot b, p, e as vectors
+    ax.quiver(0, 0, 0, b[0], b[1], b[2], color='blue', label='b', linewidth=2)
+    ax.quiver(0, 0, 0, p[0], p[1], p[2], color='green', label='Projection p', linewidth=2)
+    ax.quiver(p[0], p[1], p[2], e[0], e[1], e[2], color='red', label='Error e', linewidth=2)
+    
+    # Plot column space plane
+    x = np.linspace(-1, 1, 20)
+    y = np.linspace(-1, 1, 20)
+    X, Y = np.meshgrid(x, y)
+    Z = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            point = X[i, j] * Q[:, 0] + Y[i, j] * Q[:, 1]
+            Z[i, j] = point[2]
+            X[i, j] = point[0]
+            Y[i, j] = point[1]
+    ax.plot_surface(X, Y, Z, color='cyan', alpha=0.3, label='C(A)')
+    
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    max_range = np.max(np.abs(np.concatenate([b, p, e]))) * 1.5
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    ax.legend()
+    plt.title('Least-Squares Projection of b onto C(A)')
+    plt.show()
+
+# Generate matrix and vector
+A, b = generate_matrix_and_b()
+P, x_hat, p, e = compute_projection(A, b)
+
+# Verify properties
+symmetric = np.allclose(P, P.T)
+idempotent = np.allclose(np.dot(P, P), P)
+ortho_check = np.allclose(np.dot(A.T, e), 0)
+
+# Display results
+markdown = f"**Matrix A**:\n$$\n{matrix_to_latex(A)}\n$$\n\n"
+markdown += f"**Vector b**:\n$$\n{matrix_to_latex(b.reshape(-1, 1))}\n$$\n\n"
+display(Markdown(markdown))
+plot_projection(A, b, p, e)
+markdown = f"Predict:\n- Least-squares solution x̂.\n- Projection p = A x̂.\n- Error e = b - p.\n- Is P symmetric and idempotent?\n- Is e ⊥ C(A)?\n\n"
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f"**Answers**:\n"
+# markdown += f"- Least-squares solution x̂:\n$$\n{matrix_to_latex(x_hat.reshape(-1, 1))}\n$$\n"
+# markdown += f"- Projection p:\n$$\n{matrix_to_latex(p.reshape(-1, 1))}\n$$\n"
+# markdown += f"- Error e:\n$$\n{matrix_to_latex(e.reshape(-1, 1))}\n$$\n"
+# markdown += f"- P is symmetric: {'True' if symmetric else 'False'}.\n"
+# markdown += f"- P is idempotent: {'True' if idempotent else 'False'}.\n"
+# markdown += f"- e ⊥ C(A): {'True' if ortho_check else 'False'}.\n\n"
+# display(Markdown(markdown))
+```
