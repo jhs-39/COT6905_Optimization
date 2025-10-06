@@ -364,7 +364,7 @@ Set $ x_2 = 1 $, $x_3 = 0$: $x_1 + 2x_2 = x_1 + 2 = 0 $, so $x_1 = -2 $. Solutio
 
 Set $ x_2 = 0 $, $ x_3 = 1 $: $ x_1 + 3x_3 = x_1 + 3 = 0 $, so $x_1 = -3$. Solution: $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$
 
-Nullspace basis: $\left{ \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$, $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}}$
+Nullspace basis: $\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$, $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$
 
 Interactive Problem Generator
 
@@ -491,7 +491,7 @@ RREF: $[R | c] = \begin{pmatrix} 1 & 2 & 0 & -1 \\ 0 & 0 & 1 & 3 \end{pmatrix}$ 
 Pivot columns: 1, 3. Free column: 2. \
 Particular solution: Set $x_2 = 0$, so $x_1 = -1$, $x_3 = 3$: $x_p = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix}$
 Nullspace: Solve $Rx = 0$. Free variable $x_2$. From $x_1 + 2x_2 = 0 $, $x_1 = -2x_2$ Special solution: $x_2 = 1 $, $ x_1 = -2 $, $x_3 = 0 $: $ \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix} $ \
-Complete solution: $x = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix} + s \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$ \
+Complete solution: $x = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix} + s \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$
 
 
 ### Interactive Problem Generator
