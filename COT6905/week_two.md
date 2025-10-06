@@ -202,16 +202,17 @@ def generate_matrix(case='full_rank'):
     
     return A
 
-def plot_column_space(A):
+def plot_column_space_and_nullspace(A):
     """
-    Plot the column vectors and column space of a 3x2 matrix in 3D.
-    Returns the LaTeX string for the matrix.
+    Plot the column vectors and column space in 3D, and nullspace in 2D (if applicable).
+    Returns the LaTeX string for the matrix and nullspace basis.
     """
     v1 = A[:, 0]
     v2 = A[:, 1]
     
     rank = np.linalg.matrix_rank(A)
     
+    # 3D plot for column space
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
     
@@ -252,12 +253,42 @@ def plot_column_space(A):
     plt.title('Column Vectors and Column Space of A')
     plt.show()
     
-    # Return LaTeX string for the matrix
+    # Compute nullspace basis using SVD
+    U, S, Vt = np.linalg.svd(A, full_matrices=True)
+    rank = np.sum(S > 1e-10)
+    nullspace_basis = Vt[rank:, :].T  # Basis vectors for N(A)
+    
+    # 2D plot for nullspace (if non-trivial)
+    nullspace_latex = ""
+    if rank == 1:
+        fig2, ax2 = plt.subplots(figsize=(6, 6))
+        n1 = nullspace_basis[:, 0]
+        t = np.linspace(-2, 2, 20)
+        line_x = t * n1[0]
+        line_y = t * n1[1]
+        ax2.plot(line_x, line_y, color='purple', label='Nullspace (Line)', linewidth=2)
+        ax2.scatter([0], [0], color='black', s=50, label='Origin')
+        ax2.set_xlabel('x_1')
+        ax2.set_ylabel('x_2')
+        max_range = np.max(np.abs(n1)) * 2.5
+        ax2.set_xlim(-max_range, max_range)
+        ax2.set_ylim(-max_range, max_range)
+        ax2.grid(True)
+        ax2.legend()
+        plt.title('Nullspace of A in R^2')
+        plt.show()
+        
+        # Format nullspace basis
+        def vector_to_latex(v):
+            return r"\begin{pmatrix} " + r" \\ ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in v]) + r" \end{pmatrix}"
+        nullspace_latex = f"\n\n**Nullspace Basis**:\n\n$$ {vector_to_latex(n1)} $$"
+    
+    # Format matrix
     def matrix_to_latex(M):
         rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
         return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
     
-    return matrix_to_latex(A)
+    return matrix_to_latex(A), nullspace_latex
 
 def reveal_dimensions(A):
     """
@@ -273,14 +304,16 @@ def reveal_dimensions(A):
 # Generate and display a full rank matrix
 A_full = generate_matrix('full_rank')
 display(Markdown("**Problem 1: Full Rank Matrix**"))
-display(Markdown(f"**Matrix A**:\n\n$$ {plot_column_space(A_full)} $$\n\n"))
-display(Markdown("Predict the dimensions of C(A) and N(A), then uncomment reveal_dimensions(A_full) to check."))
+matrix_latex, nullspace_latex = plot_column_space_and_nullspace(A_full)
+display(Markdown(f"**Matrix A**:\n\n$$ {matrix_latex} $$\n\n{nullspace_latex}\n\n"))
+display(Markdown("Predict the dimensions of C(A) and N(A). Since rank is 2, expect a plane for C(A) and trivial N(A). Uncomment reveal_dimensions(A_full) to check."))
 
 # Generate and display a dependent matrix
 A_dep = generate_matrix('dependent')
 display(Markdown("**Problem 2: Dependent Columns Matrix**"))
-display(Markdown(f"**Matrix A**:\n\n$$ {plot_column_space(A_dep)} $$\n\n"))
-display(Markdown("Predict the dimensions of C(A) and N(A), then uncomment reveal_dimensions(A_dep) to check."))
+matrix_latex, nullspace_latex = plot_column_space_and_nullspace(A_dep)
+display(Markdown(f"**Matrix A**:\n\n$$ {matrix_latex} $$\n\n{nullspace_latex}\n\n"))
+display(Markdown("Predict the dimensions of C(A) and N(A). Since rank is 1, expect a line for C(A) and a line for N(A). Uncomment reveal_dimensions(A_dep) to check."))
 
 # To reveal answers (students uncomment after predicting)
 # reveal_dimensions(A_full)
@@ -297,7 +330,142 @@ display(Markdown("Predict the dimensions of C(A) and N(A), then uncomment reveal
     allowfullscreen>
 </iframe>
 
-### Summary
+Lecture 7: Solving ( Ax = 0 ): Pivot Variables and Special Solutions
+
+We explore solving the homogeneous system $Ax = 0$ to find the nullspace $N(A)$. We introduce pivot variables, free variables, and special solutions to describe the structure of the nullspace, using the row reduced echelon form (RREF).
+
+### Key Definitions
+
+**Nullspace** $N(A)$: All $x \in \mathbb{R}^n$ such that $Ax = 0$, a subspace of $\mathbb{R}^n$. Dimension: $n - \text{rank}(A)$
+
+**Row Reduced Echelon Form** (RREF): Obtained via Gaussian elimination. Contains:
+
+1. **Pivot columns**: Have the first non-zero entry (usually 1) in each non-zero row.
+
+2. **Free columns**: A column that does not have a pivot.
+
+3. **Pivot Variables**: Correspond to pivot columns, determined by the system.
+
+4. **Free Variables**: Correspond to free columns, assigned arbitrary values.
+
+5. **Special Solutions**: For each free variable, set it to 1 (others 0) and solve for pivot variables. These form a basis for $N(A)$
+
+Example
+
+For $A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \end{pmatrix}$:
+
+RREF: $\begin{pmatrix} 1 & 2 & 3 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+Pivot column: 1. Free columns: 2, 3.
+
+Pivot variable: $x_1$. Free variables: $x_2$, $x_3$.
+
+Special solutions:
+
+Set $ x_2 = 1 $, $x_3 = 0$: $x_1 + 2x_2 = x_1 + 2 = 0 $, so $x_1 = -2 $. Solution: $\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$
+
+Set $ x_2 = 0 $, $ x_3 = 1 $: $ x_1 + 3x_3 = x_1 + 3 = 0 $, so $x_1 = -3$. Solution: $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$
+
+Nullspace basis: $ \left{ \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$, $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix} \right}$
+
+Interactive Problem Generator
+
+Use this code to generate a random 3x3 matrix with rank 2 (one free variable). It computes the RREF, identifies pivot and free variables, and finds special solutions. Predict the pivot/free variables and nullspace basis, then check the output.
+
+```{code-cell} python
+import numpy as np
+from IPython.display import Markdown, display
+
+def generate_matrix():
+    """
+    Generate a random 3x3 matrix with rank 2.
+    """
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    # Make third column a linear combination
+    coeffs = np.random.randint(-2, 3, 2)
+    v3 = coeffs[0] * v1 + coeffs[1] * v2
+    A = np.column_stack((v1, v2, v3))
+    return A
+
+def rref(A):
+    """
+    Compute RREF of A (simplified for clarity).
+    """
+    A = A.astype(float)
+    m, n = A.shape
+    R = A.copy()
+    pivot_cols = []
+    row = 0
+    for col in range(n):
+        if row >= m:
+            break
+        pivot_row = row
+        while pivot_row < m and abs(R[pivot_row, col]) < 1e-10:
+            pivot_row += 1
+        if pivot_row < m:
+            # Swap rows if needed
+            if pivot_row != row:
+                R[[row, pivot_row]] = R[[pivot_row, row]]
+            # Scale pivot to 1
+            R[row] /= R[row, col]
+            # Eliminate above and below
+            for i in range(m):
+                if i != row:
+                    R[i] -= R[i, col] * R[row]
+            pivot_cols.append(col)
+            row += 1
+    return R, pivot_cols
+
+def find_special_solutions(A):
+    """
+    Find special solutions for N(A) using RREF.
+    """
+    R, pivot_cols = rref(A)
+    m, n = A.shape
+    free_cols = [i for i in range(n) if i not in pivot_cols]
+    special_solutions = []
+    
+    for free_col in free_cols:
+        x = np.zeros(n)
+        x[free_col] = 1
+        for pivot_col, row in zip(pivot_cols, range(len(pivot_cols))):
+            x[pivot_col] = -R[row, free_col]
+        special_solutions.append(x)
+    
+    return R, pivot_cols, free_cols, special_solutions
+
+def matrix_to_latex(M):
+    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+
+# Generate and analyze matrix
+A = generate_matrix()
+R, pivot_cols, free_cols, special_solutions = find_special_solutions(A)
+
+# Display results
+markdown = f"**Matrix A**:\n$ {matrix_to_latex(A)} $\n\n"
+markdown += f"**RREF of A**:\n$ {matrix_to_latex(R)} $\n\n"
+markdown += f"**Pivot Columns**: {[i+1 for i in pivot_cols]} (1-based indexing)\n\n"
+markdown += f"**Free Columns**: {[i+1 for i in free_cols]} (1-based indexing)\n\n"
+if special_solutions:
+    markdown += "**Special Solutions (Nullspace Basis)**:\n\n"
+    for i, sol in enumerate(special_solutions, 1):
+        markdown += f"Solution {i}:\n$ {matrix_to_latex(sol.reshape(-1, 1))} $\n\n"
+else:
+    markdown += "**Nullspace**: Trivial (only the zero vector)\n\n"
+
+display(Markdown(markdown))
+
+# Verify solutions
+for i, sol in enumerate(special_solutions, 1):
+    if np.allclose(np.dot(A, sol), 0):
+        display(Markdown(f"**Verification**: Solution {i} satisfies Ax = 0"))
+    else:
+        display(Markdown(f"**Error**: Solution {i} does not satisfy Ax = 0"))
+```
 
 ## Lecture 8: Solving Ax = b: row reduced form R
 
@@ -308,5 +476,150 @@ display(Markdown("Predict the dimensions of C(A) and N(A), then uncomment reveal
     allowfullscreen>
 </iframe>
 
-### Summary
+We explore solving the non-homogeneous (e.g., has nonzero solutions b) system $Ax = b$, where $A$ is an $m \times n$ matrix and $b \in \mathbb{R}^m$. Using the row reduced echelon form (RREF), we determine if solutions exist and find the complete solution: a particular solution plus the nullspace.
+
+### Key Definitions
+
+System $Ax = b$: Find $ x \in \mathbb{R}^n$ such that $Ax = b$. Solvable if $b \in C(A)$.
+
+Row Reduced Echelon Form (RREF): From Gaussian elimination on $[A | b]$, yields $[R | c]$
+Complete Solution: $x = x_p + x_n $, where $x_p$ is a particular solution and $x_n \in N(A)$
+
+### Example
+
+For $A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 4 & 5 \end{pmatrix}$, $b = \begin{pmatrix} 4 \\ 5 \end{pmatrix} $:
+Augmented matrix: $ [A | b] = \begin{pmatrix} 1 & 2 & 3 & 4 \\ 2 & 4 & 5 & 5 \end{pmatrix}$
+RREF: $[R | c] = \begin{pmatrix} 1 & 2 & 0 & -1 \\ 0 & 0 & 1 & 3 \end{pmatrix}$
+Pivot columns: 1, 3. Free column: 2.
+Particular solution: Set $x_2 = 0$, so $x_1 = -1$, $x_3 = 3$: $x_p = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix}$
+Nullspace: Solve $Rx = 0$. Free variable $x_2$. From $x_1 + 2x_2 = 0 $, $x_1 = -2x_2$ Special solution: $x_2 = 1 $, $ x_1 = -2 $, $x_3 = 0 $: $ \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix} $
+Complete solution: $x = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix} + s \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$
+
+
+### Interactive Problem Generator
+
+This code generates a random 3x3 matrix with rank 2 and a random $b$. It computes the RREF of $[A | b]$, checks solvability, and finds the particular and nullspace solutions. Predict if the system is consistent and describe the solution, then check the output.
+
+```{code-cell} python
+import numpy as np
+from IPython.display import Markdown, display
+
+def generate_matrix_and_b():
+    """
+    Generate a random 3x3 matrix with rank 2 and a random b.
+    """
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    coeffs = np.random.randint(-2, 3, 2)
+    v3 = coeffs[0] * v1 + coeffs[1] * v2
+    A = np.column_stack((v1, v2, v3))
+    b = np.random.randint(-5, 6, 3)
+    return A, b
+
+def rref(A, b=None):
+    """
+    Compute RREF of A or [A | b].
+    """
+    if b is not None:
+        A = np.column_stack((A, b))
+    A = A.astype(float)
+    m, n = A.shape
+    R = A.copy()
+    pivot_cols = []
+    row = 0
+    for col in range(n if b is None else n-1):
+        if row >= m:
+            break
+        pivot_row = row
+        while pivot_row < m and abs(R[pivot_row, col]) < 1e-10:
+            pivot_row += 1
+        if pivot_row < m:
+            if pivot_row != row:
+                R[[row, pivot_row]] = R[[pivot_row, row]]
+            R[row] /= R[row, col]
+            for i in range(m):
+                if i != row:
+                    R[i] -= R[i, col] * R[row]
+            pivot_cols.append(col)
+            row += 1
+    return R, pivot_cols
+
+def solve_ax_b(A, b):
+    """
+    Solve Ax = b, returning particular solution and nullspace basis.
+    """
+    # RREF of augmented matrix
+    R, pivot_cols = rref(A, b)
+    m, n = R.shape
+    free_cols = [i for i in range(n-1) if i not in pivot_cols]
+    
+    # Check consistency
+    consistent = True
+    for i in range(m):
+        if np.allclose(R[i, :-1], 0) and abs(R[i, -1]) > 1e-10:
+            consistent = False
+            break
+    
+    particular = None
+    special_solutions = []
+    if consistent:
+        # Particular solution: set free variables to 0
+        particular = np.zeros(n-1)
+        for pivot_col, row in zip(pivot_cols, range(len(pivot_cols))):
+            particular[pivot_col] = R[row, -1]
+        
+        # Nullspace solutions
+        R_A, pivot_cols_A = rref(A)
+        for free_col in free_cols:
+            x = np.zeros(n-1)
+            x[free_col] = 1
+            for pivot_col, row in zip(pivot_cols_A, range(len(pivot_cols_A))):
+                x[pivot_col] = -R_A[row, free_col]
+            special_solutions.append(x)
+    
+    return R, pivot_cols, free_cols, particular, special_solutions, consistent
+
+def matrix_to_latex(M):
+    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+
+# Generate and solve
+A, b = generate_matrix_and_b()
+R, pivot_cols, free_cols, particular, special_solutions, consistent = solve_ax_b(A, b)
+
+# Display results
+markdown = f"**Matrix A**:\n$ {matrix_to_latex(A)} $\n\n"
+markdown += f"**Vector b**:\n$ {matrix_to_latex(b.reshape(-1, 1))} $\n\n"
+markdown += f"**RREF of [A | b]**:\n$ {matrix_to_latex(R)} $\n\n"
+markdown += f"**Pivot Columns**: {[i+1 for i in pivot_cols]} (1-based indexing)\n\n"
+markdown += f"**Free Columns**: {[i+1 for i in free_cols]} (1-based indexing)\n\n"
+if consistent:
+    markdown += "**System is Consistent**\n\n"
+    if particular is not None:
+        markdown += f"**Particular Solution**:\n$ {matrix_to_latex(particular.reshape(-1, 1))} $\n\n"
+    if special_solutions:
+        markdown += "**Nullspace Basis (Special Solutions)**:\n\n"
+        for i, sol in enumerate(special_solutions, 1):
+            markdown += f"Solution {i}:\n$ {matrix_to_latex(sol.reshape(-1, 1))} $\n\n"
+    else:
+        markdown += "**Nullspace**: Trivial (only the zero vector)\n\n"
+else:
+    markdown += "**System is Inconsistent**: No solutions\n\n"
+
+display(Markdown(markdown))
+
+# Verify solutions
+if consistent and particular is not None:
+    if np.allclose(np.dot(A, particular), b):
+        display(Markdown("**Verification**: Particular solution satisfies Ax = b"))
+    else:
+        display(Markdown("**Error**: Particular solution does not satisfy Ax = b"))
+    for i, sol in enumerate(special_solutions, 1):
+        if np.allclose(np.dot(A, sol), 0):
+            display(Markdown(f"**Verification**: Nullspace solution {i} satisfies Ax = 0"))
+        else:
+            display(Markdown(f"**Error**: Nullspace solution {i} does not satisfy Ax = 0"))
+```
 
