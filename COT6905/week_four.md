@@ -336,12 +336,14 @@ Applications:
 1. Least-squares solutions for data fitting (e.g., linear regression).
 2. Optimization problems where exact solutions are not feasible.
 
-Example
+Example from last lecture:
 For $A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}$, $b = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}$: \
 Projection matrix: $ P = A A^T = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}$. \
 Projection: $ p = P b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} $. \
 Least-squares: $ \hat{x} = (A^T A)^{-1} A^T b = \begin{pmatrix} 1 \\ 2 \end{pmatrix} $, so $ A \hat{x} = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$ .\
 Error: $e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix}$, orthogonal to $C(A)$.
+
+We can now ask the question: which choice of A in $R^(m \cross n)$ minimizes the error?
 
 Interactive Problem Generator
 
