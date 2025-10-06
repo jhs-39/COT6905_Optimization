@@ -36,13 +36,13 @@ $\dim(N(A)) = n - \text{rank}(A)$
 
 Example
 
-For $A = \begin{pmatrix} 1 & 2 & 2 \\ 3 & 4 & 6 \\ 5 & 6 & 10 \end{pmatrix} $: \
+For $A = \begin{pmatrix} 1 & 2 & 2 \\ 3 & 4 & 6 \\ 5 & 6 & 10 \end{pmatrix} $:
 
 RREF: $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & 1 \\ 0 & 0 & 0 \end{pmatrix}$\
 Rank: 2 (two pivot columns). \
 Columns 1 and 2 are independent (pivot columns). Column 3 is dependent (e.g., $2 v_1 + v_2 - v_3 = 0 $) \
 Basis for $C(A)$: $\begin{pmatrix} 1 \\ 3 \\ 5 \end{pmatrix}, \begin{pmatrix} 2 \\ 4 \\ 6 \end{pmatrix} $ \
-Dimensions: $\dim(C(A)) = 2 $, $ \dim(N(A)) = 3 - 2 = 1 $ \
+Dimensions: $\dim(C(A)) = 2 $, $ \dim(N(A)) = 3 - 2 = 1 $
 
 Interactive Problem Generator
 
@@ -185,7 +185,7 @@ RREF: $\begin{pmatrix} 1 & 2 & 3 \\ 0 & 0 & 0 \end{pmatrix} ) $ \
 Column Space: $C(A) = \text{span}{ \begin{pmatrix} 1 \\ 2 \end{pmatrix} }$, dim = 1 \
 Nullspace: Basis $\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$, $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$, $dim = 3 - 1 = 2 $ \
 Row Space: $C(A^T) = \text{span}{ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }$, $dim = 1$ \
-Left Nullspace: Basis $\begin{pmatrix} -2 \\ 1 \end{pmatrix}$, $dim = 2 - 1 = 1$ \
+Left Nullspace: Basis $\begin{pmatrix} -2 \\ 1 \end{pmatrix}$, $dim = 2 - 1 = 1$
 
 
 ```{code-cell} python
@@ -323,7 +323,7 @@ Small World Graphs: Graphs where nodes are connected by short paths. Adjacency m
 
 Example
 
-Rank-1 Matrix: $A = \begin{pmatrix} 1 \\ 2 \end{pmatrix} \begin{pmatrix} 3 & 4 \end{pmatrix} = \begin{pmatrix} 3 & 4 \ 6 & 8 \end{pmatrix} $. Rank = 1, rows are multiples of $\begin{pmatrix} 3 & 4 \end{pmatrix}$ \
+Rank-1 Matrix: $A = \begin{pmatrix} 1 \\ 2 \end{pmatrix} \begin{pmatrix} 3 & 4 \end{pmatrix} = \begin{pmatrix} 3 & 4 \\ 6 & 8 \end{pmatrix} $. Rank = 1, rows are multiples of $\begin{pmatrix} 3 & 4 \end{pmatrix}$ \
 
 Matrix Space: For 2x2 matrices, basis is $\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}, \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$, $\begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}, \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} $, $dim = 4$ \
 
@@ -417,29 +417,29 @@ Each column represents an edge $i \to j$: -1 at row $i$ (outgoing), +1 at row $j
 
 Subspaces:
 
-Column Space $C(A)$:
+**Column Space** $C(A)$:
 Definition: Subspace of $\mathbb{R}^n$ ($n$ = number of nodes), spanned by the columns of $A$, each representing the effect of an edge on node potentials.\
 Dimension: $\dim(C(A)) = \text{rank}(A)$. For a connected graph, $\text{rank}(A) = n - 1$, as the rows of $A$ sum to zero (linear dependence). \
 Geometric Intuition: Represents potential differences across nodes due to edge flows. Each column (e.g., $\begin{pmatrix} -1 \\ 1 \\ 0 \\ \vdots \\ 0 \end{pmatrix}$) shows a unit flow from node $i$ to $j$, affecting their potentials. $C(A)$ is a hyperplane in $\mathbb{R}^n$ (dim $n - 1$ for connected graphs), capturing all possible node potential differences induced by edge flows, like voltage drops in a circuit. \
-Nullspace $N(A)$: \
+**Nullspace** $N(A)$: \
 Definition: Subspace of $\mathbb{R}^m$ ($m$ = number of edges), all vectors $x \in \mathbb{R}^m$ such that $Ax = 0$, assigning weights to edges. \
 Dimension: $\dim(N(A)) = m - \text{rank}(A)$. For a connected graph, $m - (n - 1)$. \
 Geometric Intuition: Represents flows around cycles. If $Ax = 0$, the net flow into and out of each node is zero (Kirchhoff’s current law for potentials). In $\mathbb{R}^m$, $x$ assigns weights to edges forming closed loops (cycles), like a current circulating in a triangle 1→2→3→1. The dimension reflects the number of independent cycles (graph’s cycle rank). \
-Row Space $C(A^T)$: \
+**Row Space** $C(A^T)$: \
 Definition: Subspace of $\mathbb{R}^m$, spanned by the rows of $A$ (columns of $A^T$), each corresponding to a node’s edge connections. \
 Dimension: $\dim(C(A^T)) = \text{rank}(A) = n - 1$ for a connected graph. \
 Geometric Intuition: Represents edge flow patterns respecting node connectivity. Each row (e.g., $\begin{pmatrix} -1 & 0 & 1 & 0 \end{pmatrix}$) encodes edges incident to a node. $C(A^T)$ is a subspace of $\mathbb{R}^m$, orthogonal to $N(A)$, capturing flow patterns that align with node incidences, such as current distributions in a network. \
-Left Nullspace $N(A^T)$: \
+**Left Nullspace** $N(A^T)$: \
 Definition: Subspace of $\mathbb{R}^n$, all vectors $y \in \mathbb{R}^n$ such that $A^T y = 0$. \
 Dimension: $\dim(N(A^T)) = n - \text{rank}(A) = n - (n - 1) = 1$ for a connected graph. \
 Geometric Intuition: Represents equal potentials across nodes. If $A^T y = 0$, $y$ assigns the same potential to all nodes in a connected graph (Kirchhoff’s voltage law). In $\mathbb{R}^n$, $N(A^T)$ is a line spanned by $\begin{pmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{pmatrix}$, reflecting nodes at the same potential (e.g., ground voltage in a circuit). \
 Rank: For a connected graph, $\text{rank}(A) = n - 1$. \
-Orthogonality: $C(A) \perp N(A^T)$ in $\mathbb{R}^n$, $C(A^T) \perp N(A)$ in $\mathbb{R}^m$. \
+Orthogonality: $C(A) \perp N(A^T)$ in $\mathbb{R}^n$, $C(A^T) \perp N(A)$ in $\mathbb{R}^m$. 
 
-Example
+**Example**
 
 For a directed graph with 4 nodes, edges $0 \to 1$, $1 \to 2$, $2 \to 3$, $3 \to 1$, $0 \to 2$:
-Incidence matrix: $ A = \begin{pmatrix} 0 & 0 & -1 & 0 & -1 \\ 1 & 0 & -1 & 0 & 1 \\ 1 & 1 & 0 & -1 & 1 \\ 0 & -1 & 1 & 0 & 0 \end{pmatrix} $
+Incidence matrix: $ A = \begin{pmatrix} 0 & -1 & -1 & 0 & -1 \\ 1 & 0 & -1 & 0 & 1 \\ 1 & 1 & 0 & -1 & 1 \\ 0 & -1 & 1 & 0 & 0 \end{pmatrix} $
 Rank: 3 ($n = 4$, connected).
 
 $C(A)$: Dim = 3, basis: first 3 columns. Represents potential differences.

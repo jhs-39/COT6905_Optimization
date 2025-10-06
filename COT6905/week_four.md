@@ -38,15 +38,17 @@ We introduce orthogonal vectors, orthogonal subspaces, and orthogonal bases, key
 ### Key Definitions and Geometric Intuitions
 **Orthogonal Vectors**:
 Definition: Vectors $u, v \in \mathbb{R}^n$ are orthogonal if $u^T v = 0$.
-Geometric Intuition: Orthogonal vectors are perpendicular (90° angle), like axes in a coordinate system. This simplifies projections, as components along orthogonal directions are independent.
+Geometric Intuition: Orthogonal vectors are perpendicular (90° angle), like axes in a coordinate system. This simplifies projections, as components along orthogonal directions are independent. \
+
 **Orthogonal Subspaces**:
 Definition: Subspaces $S, T \subset \mathbb{R}^n$ are orthogonal if $u^T v = 0$ for all $u \in S$, $v \in T$.
-Geometric Intuition: Subspaces that are perpendicular, decomposing $\mathbb{R}^n$ into complementary parts. For a matrix $A$ (m x n), $C(A) \perp N(A^T)$ in $\mathbb{R}^m$, $C(A^T) \perp N(A)$ in $\mathbb{R}^n$, splitting the space into orthogonal components (e.g., potential differences vs. equal potentials in graphs).
+Geometric Intuition: Subspaces that are perpendicular, decomposing $\mathbb{R}^n$ into complementary parts. For a matrix $A$ (m x n), $C(A) \perp N(A^T)$ in $\mathbb{R}^m$, $C(A^T) \perp N(A)$ in $\mathbb{R}^n$, splitting the space into orthogonal components (e.g., potential differences vs. equal potentials in graphs). \ 
+
 **Orthogonal Basis**:
 
 Definition: A basis for a subspace where vectors are pairwise orthogonal: $u_i^T u_j = 0$ for $i \neq j$. If normalized ($|u_i| = 1$), it’s orthonormal.
 
-Geometric Intuition: An orthogonal basis forms a “perpendicular coordinate system” for the subspace, making vector expansions straightforward (e.g., coordinates are dot products).
+Geometric Intuition: An orthogonal basis forms a “perpendicular coordinate system” for the subspace, making vector expansions straightforward (e.g., coordinates are dot products). \
 
 **Orthogonal Complement**:
 
@@ -54,19 +56,19 @@ Definition: For a subspace $S \subset \mathbb{R}^n$, $S^\perp = { v \in \mathbb{
 
 Geometric Intuition: $S^\perp$ is the subspace of all vectors perpendicular to $S$, forming a complementary space (e.g., $N(A^T) = C(A)^\perp$).
 
-Example
+**Example**
 
 For $A = \begin{pmatrix} 1 & 2 \ 2 & 4 \ 0 & 1 \end{pmatrix}$ (rank 2):
 
-Column Space $C(A)$: Dim = 2. Basis: $\left{ \begin{pmatrix} 1 \ 2 \ 0 \end{pmatrix}, \begin{pmatrix} 2 \ 4 \ 1 \end{pmatrix} \right}$.
+Column Space $C(A)$: Dim = 2. Basis: $\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}, \begin{pmatrix} 2 \\ 4 \\ 1 \end{pmatrix}$.
 
 Orthogonal Basis: Apply Gram-Schmidt:
 
-$u_1 = \begin{pmatrix} 1 \ 2 \ 0 \end{pmatrix}$, normalize: $q_1 = \frac{u_1}{|u_1|} = \frac{1}{\sqrt{5}} \begin{pmatrix} 1 \ 2 \ 0 \end{pmatrix}$.
+$u_1 = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$, normalize: $q_1 = \frac{u_1}{|u_1|} = \frac{1}{\sqrt{5}} \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$.
 
-$u_2 = \begin{pmatrix} 2 \ 4 \ 1 \end{pmatrix} - \text{proj}_{u_1} \begin{pmatrix} 2 \ 4 \ 1 \end{pmatrix}$, then normalize.
+$u_2 = \begin{pmatrix} 2 \\ 4 \\ 1 \end{pmatrix} - \text{proj}_{u_1} \begin{pmatrix} 2 \\ 4 \\ 1 \end{pmatrix}$, then normalize.
 
-Left Nullspace $N(A^T)$: Dim = 3 - 2 = 1. Basis: $\begin{pmatrix} 2 \ -1 \ 0 \end{pmatrix}$. Verify: $u_1^T \begin{pmatrix} 2 \ -1 \ 0 \end{pmatrix} = 0$, confirming $C(A) \perp N(A^T)$.
+Left Nullspace $N(A^T)$: Dim = 3 - 2 = 1. Basis: $\begin{pmatrix} 2 \\ -1 \\ 0 \end{pmatrix}$. Verify: $u_1^T \begin{pmatrix} 2 \\ -1 \\ 0 \end{pmatrix} = 0$, confirming $C(A) \perp N(A^T)$.
 
 ```{code-cell} python
 import numpy as np
@@ -320,7 +322,7 @@ In this lecture we explore projection matrices and least-squares problems, focus
 ### Key Definitions and Geometric Intuitions
 **Projection Matrix**: \
 Definition: For $C(A)$ spanned by columns of $A$ (m x n, full column rank), the projection matrix is $P = A (A^T A)^{-1} A^T$. \
-Geometric Intuition: $P b$ projects $b$ onto $C(A)$, the closest point in the subspace. $P4 is symmetric $( P^T = P )$ and idempotent $( P^2 = P )$, acting like a “flattening” operation onto $C(A)$. \
+Geometric Intuition: $P b$ projects $b$ onto $C(A)$, the closest point in the subspace. P4 is symmetric $( P^T = P )$ and idempotent $( P^2 = P )$, acting like a “flattening” operation onto $C(A)$.
 
 **Least-Squares Problem**: \
 Definition: Minimize $| Ax - b |_2 $ when $ b \notin C(A)$. Solution: $\hat{x} = (A^T A)^{-1} A^T b $, with projection $ p = A \hat{x} $. \
@@ -339,7 +341,7 @@ For $A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}$, $b = \begin{pma
 Projection matrix: $ P = A A^T = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}$. \
 Projection: $ p = P b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} $. \
 Least-squares: $ \hat{x} = (A^T A)^{-1} A^T b = \begin{pmatrix} 1 \\ 2 \end{pmatrix} $, so $ A \hat{x} = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$ .\
-Error: $e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix}$, orthogonal to $C(A)$. \
+Error: $e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix}$, orthogonal to $C(A)$.
 
 Interactive Problem Generator
 
