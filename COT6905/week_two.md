@@ -173,12 +173,6 @@ The column space and nullspace are two of the fundamental subspaces of a matrix 
 To practice, use this problem generator to create random matrices and determine the dimensions of the column space C(A) and nullspace N(A). For a 3x2 matrix:
 
 ```{code-cell} python
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from IPython.display import Markdown, display
-from sympy import Matrix
-
 def generate_matrix(case='full_rank'):
     """
     Generate a random 3x2 matrix for the specified case.
@@ -205,7 +199,7 @@ def generate_matrix(case='full_rank'):
 
 def plot_column_space_and_nullspace(A):
     """
-    Plot the column vectors and column space in 3D, and nullspace in 2D (if applicable).
+    Plot the column vectors, column space, and nullspace (if non-trivial) in 3D.
     Returns the LaTeX string for the matrix and nullspace basis.
     """
     v1 = A[:, 0]
@@ -213,15 +207,17 @@ def plot_column_space_and_nullspace(A):
     
     rank = np.linalg.matrix_rank(A)
     
-    # 3D plot for column space
+    # 3D plot for column space and nullspace
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
     
     ax.scatter([0], [0], [0], color='black', s=50, label='Origin')
     
+    # Plot column vectors
     ax.quiver(0, 0, 0, v1[0], v1[1], v1[2], color='blue', label='Column 1', linewidth=2)
     ax.quiver(0, 0, 0, v2[0], v2[1], v2[2], color='red', label='Column 2', linewidth=2)
     
+    # Plot column space
     if rank == 2:
         x = np.linspace(-1, 1, 20)
         y = np.linspace(-1, 1, 20)
@@ -241,19 +237,6 @@ def plot_column_space_and_nullspace(A):
         line_z = t * v1[2]
         ax.plot(line_x, line_y, line_z, color='green', label='Column Space (Line)', linewidth=2)
     
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    max_range = np.max(np.abs(A)) * 1.5
-    ax.set_xlim(-max_range, max_range)
-    ax.set_ylim(-max_range, max_range)
-    ax.set_zlim(-max_range, max_range)
-    
-    ax.legend()
-    
-    plt.title('Column Vectors and Column Space of A')
-    plt.show()
-    
     # Compute nullspace basis using SymPy
     A_sym = Matrix(A)
     nullspace_basis = A_sym.nullspace()
@@ -261,30 +244,34 @@ def plot_column_space_and_nullspace(A):
     # Convert SymPy vectors to NumPy for plotting
     nullspace_basis_np = [np.array(vec).astype(float).flatten() for vec in nullspace_basis]
     
-    # 2D plot for nullspace (if non-trivial)
+    # Plot nullspace in 3D (if non-trivial)
     nullspace_latex = ""
     if rank == 1:
-        fig2, ax2 = plt.subplots(figsize=(6, 6))
         n1 = nullspace_basis_np[0]
         t = np.linspace(-2, 2, 20)
+        # Nullspace vectors are in R^2, plot with z=0 in 3D
         line_x = t * n1[0]
         line_y = t * n1[1]
-        ax2.plot(line_x, line_y, color='purple', label='Nullspace (Line)', linewidth=2)
-        ax2.scatter([0], [0], color='black', s=50, label='Origin')
-        ax2.set_xlabel('x_1')
-        ax2.set_ylabel('x_2')
-        max_range = np.max(np.abs(n1)) * 2.5
-        ax2.set_xlim(-max_range, max_range)
-        ax2.set_ylim(-max_range, max_range)
-        ax2.grid(True)
-        ax2.legend()
-        plt.title('Nullspace of A in R^2')
-        plt.show()
+        line_z = np.zeros_like(t)  # z=0 for nullspace vectors
+        ax.plot(line_x, line_y, line_z, color='purple', label='Nullspace (Line in x1-x2 plane)', linewidth=2)
         
         # Format nullspace basis
         def vector_to_latex(v):
             return r"\begin{pmatrix} " + r" \\ ".join([str(x) for x in v]) + r" \end{pmatrix}"
         nullspace_latex = f"\n\n**Nullspace Basis**:\n\n$$ {vector_to_latex(nullspace_basis[0])} $$"
+    
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    max_range = max(np.max(np.abs(A)) * 1.5, np.max([np.abs(n1) for n1 in nullspace_basis_np] + [0]) * 2.5)
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    ax.legend()
+    
+    plt.title('Column Vectors, Column Space, and Nullspace of A in R^3')
+    plt.show()
     
     # Format matrix
     def matrix_to_latex(M):
@@ -316,7 +303,7 @@ A_dep = generate_matrix('dependent')
 display(Markdown("**Problem 2: Dependent Columns Matrix**"))
 matrix_latex, nullspace_latex = plot_column_space_and_nullspace(A_dep)
 display(Markdown(f"**Matrix A**:\n\n$$ {matrix_latex} $$\n\n{nullspace_latex}\n\n"))
-display(Markdown("Predict the dimensions of C(A) and N(A). Since rank is 1, expect a line for C(A) and a line for N(A). Uncomment reveal_dimensions(A_dep) to check."))
+display(Markdown("Predict the dimensions of C(A) and N(A). Since rank is 1, expect a line for C(A) and a line for N(A) in the x1-x2 plane at z=0. Uncomment reveal_dimensions(A_dep) to check."))
 
 # To reveal answers (students uncomment after predicting)
 # reveal_dimensions(A_full)
