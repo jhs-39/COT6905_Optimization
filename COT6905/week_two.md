@@ -184,14 +184,12 @@ def generate_matrix(case='full_rank'):
     Generate a random 3x2 matrix for the specified case.
     """
     if case == 'full_rank':
-        # Linearly independent columns
         v1 = np.random.randint(-5, 6, 3)
         v2 = np.random.randint(-5, 6, 3)
         while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
             v2 = np.random.randint(-5, 6, 3)
         A = np.column_stack((v1, v2))
     elif case == 'dependent':
-        # Dependent columns (v2 = scalar * v1)
         v1 = np.random.randint(-5, 6, 3)
         while np.all(v1 == 0):
             v1 = np.random.randint(-5, 6, 3)
@@ -255,7 +253,6 @@ def plot_column_space_and_nullspace(A):
     if rank == 1:
         n1 = nullspace_basis_np[0]
         t = np.linspace(-2, 2, 20)
-        # Nullspace vectors are in R^2, plot with z=0 in 3D
         line_x = t * n1[0]
         line_y = t * n1[1]
         line_z = np.zeros_like(t)  # z=0 for nullspace vectors
@@ -266,14 +263,17 @@ def plot_column_space_and_nullspace(A):
             return r"\begin{pmatrix} " + r" \\ ".join([str(x) for x in v]) + r" \end{pmatrix}"
         nullspace_latex = f"\n\n**Nullspace Basis**:\n\n$$ {vector_to_latex(nullspace_basis[0])} $$"
     
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    max_range = max(np.max(np.abs(A)) * 1.5, np.max([np.abs(n1) for n1 in nullspace_basis_np] + [0]) * 2.5)
+    # Set axis limits
+    A_max = np.max(np.abs(A)) * 1.5
+    null_max = np.max([np.max(np.abs(n1)) for n1 in nullspace_basis_np] + [0]) * 2.5 if nullspace_basis_np else 0
+    max_range = max(A_max, null_max)
     ax.set_xlim(-max_range, max_range)
     ax.set_ylim(-max_range, max_range)
     ax.set_zlim(-max_range, max_range)
     
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
     ax.legend()
     
     plt.title('Column Vectors, Column Space, and Nullspace of A in R^3')
@@ -476,6 +476,7 @@ This code generates a random 3x3 matrix with rank 2 and a random $b$. It compute
 
 ```{code-cell} python
 import numpy as np
+from sympy import Matrix
 from IPython.display import Markdown, display
 
 def generate_matrix_and_b():
@@ -494,62 +495,47 @@ def generate_matrix_and_b():
     b = scalars[0] * v1 + scalars[1] * v2 + scalars[2] * v3
     return A, b
 
-def rref(A, b=None):
-    """
-    Compute RREF of A or [A | b].
-    """
-    if b is not None:
-        A = np.column_stack((A, b))
-    A = A.astype(float)
-    m, n = A.shape
-    R = A.copy()
-    pivot_cols = []
-    row = 0
-    for col in range(n if b is None else n-1):
-        if row >= m:
-            break
-        pivot_row = row
-        while pivot_row < m and abs(R[pivot_row, col]) < 1e-10:
-            pivot_row += 1
-        if pivot_row < m:
-            if pivot_row != row:
-                R[[row, pivot_row]] = R[[pivot_row, row]]
-            R[row] /= R[row, col]
-            for i in range(m):
-                if i != row:
-                    R[i] -= R[i, col] * R[row]
-            pivot_cols.append(col)
-            row += 1
-    return R, pivot_cols
-
 def solve_ax_b(A, b):
     """
-    Solve Ax = b, returning particular solution and nullspace basis.
+    Solve Ax = b, returning particular solution and nullspace basis using SymPy.
     """
-    R, pivot_cols = rref(A, b)
-    m, n = R.shape
+    # Convert to SymPy Matrix
+    A_sym = Matrix(A)
+    b_sym = Matrix(b)
+    # Create augmented matrix [A | b]
+    aug = A_sym.row_join(b_sym)
+    
+    # Compute RREF of [A | b]
+    R, pivot_cols = aug.rref()
+    R_np = np.array(R).astype(float)
+    
+    m, n = R_np.shape
     free_cols = [i for i in range(n-1) if i not in pivot_cols]
     
+    # Check consistency (last column should not have a pivot)
+    if len(pivot_cols) == m and pivot_cols[-1] == n-1:
+        return None, pivot_cols, free_cols, None, []  # Inconsistent
+    
     # Particular solution: set free variables to 0
-    particular = np.zeros(n-1)
+    particular = np.zeros(n-1, dtype=float)
     for pivot_col, row in zip(pivot_cols, range(len(pivot_cols))):
-        particular[pivot_col] = R[row, -1]
+        particular[pivot_col] = float(R[row, -1])
     
-    # Nullspace solutions
-    R_A, pivot_cols_A = rref(A)
-    special_solutions = []
-    for free_col in free_cols:
-        x = np.zeros(n-1)
-        x[free_col] = 1
-        for pivot_col, row in zip(pivot_cols_A, range(len(pivot_cols_A))):
-            x[pivot_col] = -R_A[row, free_col]
-        special_solutions.append(x)
+    # Nullspace basis using SymPy
+    nullspace_basis = A_sym.nullspace()
+    special_solutions = [np.array(vec).astype(float).flatten() for vec in nullspace_basis]
     
-    return R, pivot_cols, free_cols, particular, special_solutions
+    return R_np, pivot_cols, free_cols, particular, special_solutions
 
 def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+    """
+    Convert matrix or vector to LaTeX, handling SymPy rationals or NumPy floats.
+    """
+    if isinstance(M, Matrix):
+        rows = [r" & ".join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in np.atleast_2d(M)]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
 
 # Generate and solve
 A, b = generate_matrix_and_b()
@@ -561,16 +547,17 @@ markdown += f"**Vector b**:\n$ {matrix_to_latex(b.reshape(-1, 1))} $\n\n"
 markdown += f"**RREF of [A | b]**:\n$ {matrix_to_latex(R)} $\n\n"
 markdown += f"**Pivot Columns**: {[i+1 for i in pivot_cols]} (1-based indexing)\n\n"
 markdown += f"**Free Columns**: {[i+1 for i in free_cols]} (1-based indexing)\n\n"
-markdown += "**System is Consistent** (b is in C(A))\n\n"
 if particular is not None:
+    markdown += "**System is Consistent** (b is in C(A))\n\n"
     markdown += f"**Particular Solution**:\n$ {matrix_to_latex(particular.reshape(-1, 1))} $\n\n"
+else:
+    markdown += "**System is Inconsistent** (b not in C(A))\n\n"
 if special_solutions:
     markdown += "**Nullspace Basis (Special Solutions)**:\n\n"
     for i, sol in enumerate(special_solutions, 1):
         markdown += f"Solution {i}:\n$ {matrix_to_latex(sol.reshape(-1, 1))} $\n\n"
 else:
     markdown += "**Nullspace**: Trivial (only the zero vector)\n\n"
-
 display(Markdown(markdown))
 
 # Verify solutions

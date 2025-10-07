@@ -29,14 +29,14 @@ This lecture introduces linear independence, basis, and dimension, key concepts 
 
 **Basis**: A set of linearly independent vectors that spans a vector space (every vector in the space is a unique linear combination of the basis).
 
-**Dimension**: The number of vectors in a basis. For a matrix $A$ (m x n):
+**Dimension**: The number of vectors in a basis. For a matrix $A$ (m x n): \
 $\dim(C(A)) = \text{rank}(A)$ \
 $\dim(N(A)) = n - \text{rank}(A)$ \
-**Rank-Nullity Theorem**: $\text{rank}(A) + \dim(N(A)) = n $
+We call this relationship the **Rank-Nullity Theorem**: $\text{rank}(A) + \dim(N(A)) = n $
 
 **Example**
 
-For $A = \begin{pmatrix} 1 & 2 & 2 \\ 3 & 4 & 6 \\ 5 & 6 & 10 \end{pmatrix} $\
+For $A = \begin{pmatrix} 1 & 2 & 2 \\ 3 & 4 & 6 \\ 5 & 6 & 10 \end{pmatrix} $
 
 RREF: $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}$\
 Rank: 2 (two pivot columns). \
@@ -60,6 +60,7 @@ What are $\dim(C(A))$ and $\dim(N(A))$? Check the output to verify.
 
 ```{code-cell} python
 import numpy as np
+from sympy import Matrix
 from IPython.display import Markdown, display
 
 def generate_matrix(case='rank2'):
@@ -88,41 +89,26 @@ def generate_matrix(case='rank2'):
         raise ValueError("Case must be 'rank2' or 'rank1'")
     return A
 
-def rref(A):
-    """
-    Compute RREF of A.
-    """
-    A = A.astype(float)
-    m, n = A.shape
-    R = A.copy()
-    pivot_cols = []
-    row = 0
-    for col in range(n):
-        if row >= m:
-            break
-        pivot_row = row
-        while pivot_row < m and abs(R[pivot_row, col]) < 1e-10:
-            pivot_row += 1
-        if pivot_row < m:
-            if pivot_row != row:
-                R[[row, pivot_row]] = R[[pivot_row, row]]
-            R[row] /= R[row, col]
-            for i in range(m):
-                if i != row:
-                    R[i] -= R[i, col] * R[row]
-            pivot_cols.append(col)
-            row += 1
-    return R, pivot_cols
-
 def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+    """
+    Convert matrix to LaTeX, handling SymPy rationals or NumPy floats.
+    """
+    if isinstance(M, Matrix):
+        rows = [r" & ".join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
 
 # Generate and analyze matrices
 A_rank2 = generate_matrix('rank2')
-R_rank2, pivot_cols_rank2 = rref(A_rank2)
+A_rank2_sym = Matrix(A_rank2)
+R_rank2, pivot_cols_rank2 = A_rank2_sym.rref()
+R_rank2_np = np.array(R_rank2).astype(float)
+
 A_rank1 = generate_matrix('rank1')
-R_rank1, pivot_cols_rank1 = rref(A_rank1)
+A_rank1_sym = Matrix(A_rank1)
+R_rank1, pivot_cols_rank1 = A_rank1_sym.rref()
+R_rank1_np = np.array(R_rank1).astype(float)
 
 # Display Problem 1: Rank 2
 markdown = f"**Problem 1: Rank 2 Matrix**\n\n"
@@ -130,7 +116,6 @@ markdown += f"**Matrix A**:\n$ {matrix_to_latex(A_rank2)} $\n\n"
 markdown += f"**RREF of A**:\n$ {matrix_to_latex(R_rank2)} $\n\n"
 markdown += f"**Pivot Columns**: {[i+1 for i in pivot_cols_rank2]} (1-based indexing)\n\n"
 markdown += f"Predict:\n- Are the columns linearly independent?\n- Basis for C(A)?\n- Dimensions: dim(C(A)), dim(N(A))?\n\n"
-
 display(Markdown(markdown))
 
 # Display Problem 2: Rank 1
@@ -139,18 +124,17 @@ markdown += f"**Matrix A**:\n$ {matrix_to_latex(A_rank1)} $\n\n"
 markdown += f"**RREF of A**:\n$ {matrix_to_latex(R_rank1)} $\n\n"
 markdown += f"**Pivot Columns**: {[i+1 for i in pivot_cols_rank1]} (1-based indexing)\n\n"
 markdown += f"Predict:\n- Are the columns linearly independent?\n- Basis for C(A)?\n- Dimensions: dim(C(A)), dim(N(A))?\n\n"
-
 display(Markdown(markdown))
 
 # Reveal answers (students uncomment after predicting)
-# rank = np.linalg.matrix_rank(A_rank2)
+# rank = A_rank2_sym.rank()
 # markdown = f"**Answers for Problem 1**:\n"
-# markdown += f"- Linear Independence: Columns {pivot_cols_rank2} are independent; others dependent.\n"
+# markdown += f"- Linear Independence: Columns {[i+1 for i in pivot_cols_rank2]} are independent; others dependent.\n"
 # markdown += f"- Basis for C(A): Columns {[i+1 for i in pivot_cols_rank2]} of A.\n"
 # markdown += f"- dim(C(A)) = {rank}, dim(N(A)) = {A_rank2.shape[1] - rank}.\n\n"
 # display(Markdown(markdown))
 #
-# rank = np.linalg.matrix_rank(A_rank1)
+# rank = A_rank1_sym.rank()
 # markdown = f"**Answers for Problem 2**:\n"
 # markdown += f"- Linear Independence: Columns are dependent (rank 1).\n"
 # markdown += f"- Basis for C(A): Column {[pivot_cols_rank1[0]+1 if pivot_cols_rank1 else 'none']} of A.\n"
