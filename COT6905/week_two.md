@@ -173,6 +173,12 @@ The column space and nullspace are two of the fundamental subspaces of a matrix 
 To practice, use this problem generator to create random matrices and determine the dimensions of the column space C(A) and nullspace N(A). For a 3x2 matrix:
 
 ```{code-cell} python
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+from sympy import Matrix
+
 def generate_matrix(case='full_rank'):
     """
     Generate a random 3x2 matrix for the specified case.
@@ -309,7 +315,6 @@ display(Markdown("Predict the dimensions of C(A) and N(A). Since rank is 1, expe
 # reveal_dimensions(A_full)
 # reveal_dimensions(A_dep)
 ```
-
 
 ## Lecture 7: Solving Ax = 0: pivot variables, special solutions
 
