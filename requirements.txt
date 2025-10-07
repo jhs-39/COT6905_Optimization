@@ -10,3 +10,4 @@ jupyterlab_widgets
 plotly
 anywidget
 networkx
+sympy

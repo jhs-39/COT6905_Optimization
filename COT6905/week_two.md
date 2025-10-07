@@ -372,6 +372,7 @@ Use this code to generate a random 3x3 matrix with rank 2 (one free variable). I
 
 ```{code-cell} python
 import numpy as np
+from sympy import Matrix
 from IPython.display import Markdown, display
 
 def generate_matrix():
@@ -388,56 +389,37 @@ def generate_matrix():
     A = np.column_stack((v1, v2, v3))
     return A
 
-def rref(A):
-    """
-    Compute RREF of A (simplified for clarity).
-    """
-    A = A.astype(float)
-    m, n = A.shape
-    R = A.copy()
-    pivot_cols = []
-    row = 0
-    for col in range(n):
-        if row >= m:
-            break
-        pivot_row = row
-        while pivot_row < m and abs(R[pivot_row, col]) < 1e-10:
-            pivot_row += 1
-        if pivot_row < m:
-            # Swap rows if needed
-            if pivot_row != row:
-                R[[row, pivot_row]] = R[[pivot_row, row]]
-            # Scale pivot to 1
-            R[row] /= R[row, col]
-            # Eliminate above and below
-            for i in range(m):
-                if i != row:
-                    R[i] -= R[i, col] * R[row]
-            pivot_cols.append(col)
-            row += 1
-    return R, pivot_cols
-
 def find_special_solutions(A):
     """
-    Find special solutions for N(A) using RREF.
+    Find special solutions for N(A) using SymPy's RREF.
     """
-    R, pivot_cols = rref(A)
+    # Convert to SymPy Matrix
+    A_sym = Matrix(A)
+    # Compute RREF and pivot columns
+    R, pivot_cols = A_sym.rref()
+    R = np.array(R).astype(float)  # Convert back to NumPy for display
     m, n = A.shape
     free_cols = [i for i in range(n) if i not in pivot_cols]
     special_solutions = []
     
     for free_col in free_cols:
-        x = np.zeros(n)
+        x = np.zeros(n, dtype=float)
         x[free_col] = 1
         for pivot_col, row in zip(pivot_cols, range(len(pivot_cols))):
-            x[pivot_col] = -R[row, free_col]
+            x[pivot_col] = -float(R[row, free_col])
         special_solutions.append(x)
     
     return R, pivot_cols, free_cols, special_solutions
 
 def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+    """
+    Convert matrix to LaTeX, handling SymPy rationals or NumPy floats.
+    """
+    if isinstance(M, Matrix):
+        rows = [r" & ".join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
 
 # Generate and analyze matrix
 A = generate_matrix()
@@ -454,7 +436,6 @@ if special_solutions:
         markdown += f"Solution {i}:\n$ {matrix_to_latex(sol.reshape(-1, 1))} $\n\n"
 else:
     markdown += "**Nullspace**: Trivial (only the zero vector)\n\n"
-
 display(Markdown(markdown))
 
 # Verify solutions

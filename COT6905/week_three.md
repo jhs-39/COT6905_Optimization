@@ -29,16 +29,16 @@ This lecture introduces linear independence, basis, and dimension, key concepts 
 
 **Basis**: A set of linearly independent vectors that spans a vector space (every vector in the space is a unique linear combination of the basis).
 
-**Dimension**: The number of vectors in a basis. For a matrix ( A ) (m x n):
-$\dim(C(A)) = \text{rank}(A)$
-$\dim(N(A)) = n - \text{rank}(A)$
+**Dimension**: The number of vectors in a basis. For a matrix $A$ (m x n):
+$\dim(C(A)) = \text{rank}(A)$ \
+$\dim(N(A)) = n - \text{rank}(A)$ \
 **Rank-Nullity Theorem**: $\text{rank}(A) + \dim(N(A)) = n $
 
-Example
+**Example**
 
-For $A = \begin{pmatrix} 1 & 2 & 2 \\ 3 & 4 & 6 \\ 5 & 6 & 10 \end{pmatrix} $:
+For $A = \begin{pmatrix} 1 & 2 & 2 \\ 3 & 4 & 6 \\ 5 & 6 & 10 \end{pmatrix} $\
 
-RREF: $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & 1 \\ 0 & 0 & 0 \end{pmatrix}$\
+RREF: $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}$\
 Rank: 2 (two pivot columns). \
 Columns 1 and 2 are independent (pivot columns). Column 3 is dependent (e.g., $2 v_1 + v_2 - v_3 = 0 $) \
 Basis for $C(A)$: $\begin{pmatrix} 1 \\ 3 \\ 5 \end{pmatrix}, \begin{pmatrix} 2 \\ 4 \\ 6 \end{pmatrix} $ \
