@@ -174,6 +174,7 @@ Left Nullspace: Basis $\begin{pmatrix} -2 \\ 1 \end{pmatrix}$, $dim = 2 - 1 = 1$
 
 ```{code-cell} python
 import numpy as np
+from sympy import Matrix
 from IPython.display import Markdown, display
 
 def generate_matrix(case='rank2'):
@@ -200,54 +201,36 @@ def generate_matrix(case='rank2'):
         raise ValueError("Case must be 'rank2' or 'rank1'")
     return A
 
-def rref(A):
-    """
-    Compute RREF of A and return pivot columns.
-    """
-    A = A.astype(float)
-    m, n = A.shape
-    R = A.copy()
-    pivot_cols = []
-    row = 0
-    for col in range(n):
-        if row >= m:
-            break
-        pivot_row = row
-        while pivot_row < m and abs(R[pivot_row, col]) < 1e-10:
-            pivot_row += 1
-        if pivot_row < m:
-            if pivot_row != row:
-                R[[row, pivot_row]] = R[[pivot_row, row]]
-            R[row] /= R[row, col]
-            for i in range(m):
-                if i != row:
-                    R[i] -= R[i, col] * R[row]
-            pivot_cols.append(col)
-            row += 1
-    return R, pivot_cols
-
 def find_subspaces(A):
     """
-    Compute bases for C(A), N(A), C(A^T), N(A^T).
+    Compute bases for C(A), N(A), C(A^T), N(A^T) using SymPy.
     """
+    # Convert to SymPy Matrix
+    A_sym = Matrix(A)
+    A_t_sym = Matrix(A.T)
+    
     # Column space and nullspace of A
-    R, pivot_cols = rref(A)
+    R, pivot_cols = A_sym.rref()
     rank = len(pivot_cols)
     c_a_basis = A[:, pivot_cols]  # Pivot columns of A
-    U, S, Vt = np.linalg.svd(A, full_matrices=True)
-    n_a_basis = Vt[rank:, :].T  # Nullspace basis
+    n_a_basis = [np.array(vec).astype(float).flatten() for vec in A_sym.nullspace()]
     
     # Row space and left nullspace (from A^T)
-    R_at, pivot_cols_at = rref(A.T)
+    R_at, pivot_cols_at = A_t_sym.rref()
     c_at_basis = A.T[:, pivot_cols_at]  # Pivot columns of A^T (rows of A)
-    U_at, S_at, Vt_at = np.linalg.svd(A.T, full_matrices=True)
-    n_at_basis = Vt_at[rank:, :].T  # Left nullspace basis
+    n_at_basis = [np.array(vec).astype(float).flatten() for vec in A_t_sym.nullspace()]
     
     return rank, c_a_basis, n_a_basis, c_at_basis, n_at_basis
 
 def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+    """
+    Convert matrix to LaTeX, handling SymPy rationals or NumPy floats.
+    """
+    if isinstance(M, Matrix):
+        rows = [r" & ".join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in np.atleast_2d(M)]
+    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r" \end{pmatrix}"
 
 # Generate and analyze matrices
 A_rank2 = generate_matrix('rank2')
@@ -259,31 +242,31 @@ rank1, c_a_basis1, n_a_basis1, c_at_basis1, n_at_basis1 = find_subspaces(A_rank1
 markdown = f"**Problem 1: Rank 2 Matrix**\n\n"
 markdown += f"**Matrix A**:\n$ {matrix_to_latex(A_rank2)} $\n\n"
 markdown += f"Predict:\n- dim(C(A)), dim(N(A)), dim(C(A^T)), dim(N(A^T))?\n- Basis for each subspace?\n\n"
-
 display(Markdown(markdown))
 
 # Display Problem 2: Rank 1
 markdown = f"**Problem 2: Rank 1 Matrix**\n\n"
 markdown += f"**Matrix A**:\n$ {matrix_to_latex(A_rank1)} $\n\n"
 markdown += f"Predict:\n- dim(C(A)), dim(N(A)), dim(C(A^T)), dim(N(A^T))?\n- Basis for each subspace?\n\n"
-
 display(Markdown(markdown))
 
 # Reveal answers (students uncomment after predicting)
+# rank = rank2
 # markdown = f"**Answers for Problem 1**:\n"
-# markdown += f"- dim(C(A)) = {rank2}, dim(N(A)) = {3 - rank2}, dim(C(A^T)) = {rank2}, dim(N(A^T)) = {3 - rank2}\n"
+# markdown += f"- dim(C(A)) = {rank}, dim(N(A)) = {3 - rank}, dim(C(A^T)) = {rank}, dim(N(A^T)) = {3 - rank}\n"
 # markdown += f"- C(A) Basis:\n$ {matrix_to_latex(c_a_basis2)} $\n"
-# markdown += f"- N(A) Basis:\n$ {matrix_to_latex(n_a_basis2)} $\n"
+# markdown += f"- N(A) Basis:\n$ {matrix_to_latex(np.array(n_a_basis2).T)} $\n"
 # markdown += f"- C(A^T) Basis:\n$ {matrix_to_latex(c_at_basis2)} $\n"
-# markdown += f"- N(A^T) Basis:\n$ {matrix_to_latex(n_at_basis2)} $\n\n"
+# markdown += f"- N(A^T) Basis:\n$ {matrix_to_latex(np.array(n_at_basis2).T)} $\n\n"
 # display(Markdown(markdown))
 #
+# rank = rank1
 # markdown = f"**Answers for Problem 2**:\n"
-# markdown += f"- dim(C(A)) = {rank1}, dim(N(A)) = {3 - rank1}, dim(C(A^T)) = {rank1}, dim(N(A^T)) = {3 - rank1}\n"
+# markdown += f"- dim(C(A)) = {rank}, dim(N(A)) = {3 - rank}, dim(C(A^T)) = {rank}, dim(N(A^T)) = {3 - rank}\n"
 # markdown += f"- C(A) Basis:\n$ {matrix_to_latex(c_a_basis1)} $\n"
-# markdown += f"- N(A) Basis:\n$ {matrix_to_latex(n_a_basis1)} $\n"
+# markdown += f"- N(A) Basis:\n$ {matrix_to_latex(np.array(n_a_basis1).T)} $\n"
 # markdown += f"- C(A^T) Basis:\n$ {matrix_to_latex(c_at_basis1)} $\n"
-# markdown += f"- N(A^T) Basis:\n$ {matrix_to_latex(n_at_basis1)} $\n\n"
+# markdown += f"- N(A^T) Basis:\n$ {matrix_to_latex(np.array(n_at_basis1).T)} $\n\n"
 # display(Markdown(markdown))
 ```
 
