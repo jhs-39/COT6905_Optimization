@@ -177,6 +177,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from IPython.display import Markdown, display
+from sympy import Matrix
 
 def generate_matrix(case='full_rank'):
     """
@@ -194,7 +195,7 @@ def generate_matrix(case='full_rank'):
         v1 = np.random.randint(-5, 6, 3)
         while np.all(v1 == 0):
             v1 = np.random.randint(-5, 6, 3)
-        scalar = np.random.choice([-2, -1, 2, 3])  # Avoid zero or 1 for obviousness
+        scalar = np.random.choice([-2, -1, 2, 3])
         v2 = scalar * v1
         A = np.column_stack((v1, v2))
     else:
@@ -253,16 +254,18 @@ def plot_column_space_and_nullspace(A):
     plt.title('Column Vectors and Column Space of A')
     plt.show()
     
-    # Compute nullspace basis using SVD
-    U, S, Vt = np.linalg.svd(A, full_matrices=True)
-    rank = np.sum(S > 1e-10)
-    nullspace_basis = Vt[rank:, :].T  # Basis vectors for N(A)
+    # Compute nullspace basis using SymPy
+    A_sym = Matrix(A)
+    nullspace_basis = A_sym.nullspace()
+    
+    # Convert SymPy vectors to NumPy for plotting
+    nullspace_basis_np = [np.array(vec).astype(float).flatten() for vec in nullspace_basis]
     
     # 2D plot for nullspace (if non-trivial)
     nullspace_latex = ""
     if rank == 1:
         fig2, ax2 = plt.subplots(figsize=(6, 6))
-        n1 = nullspace_basis[:, 0]
+        n1 = nullspace_basis_np[0]
         t = np.linspace(-2, 2, 20)
         line_x = t * n1[0]
         line_y = t * n1[1]
@@ -280,8 +283,8 @@ def plot_column_space_and_nullspace(A):
         
         # Format nullspace basis
         def vector_to_latex(v):
-            return r"\begin{pmatrix} " + r" \\ ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in v]) + r" \end{pmatrix}"
-        nullspace_latex = f"\n\n**Nullspace Basis**:\n\n$$ {vector_to_latex(n1)} $$"
+            return r"\begin{pmatrix} " + r" \\ ".join([str(x) for x in v]) + r" \end{pmatrix}"
+        nullspace_latex = f"\n\n**Nullspace Basis**:\n\n$$ {vector_to_latex(nullspace_basis[0])} $$"
     
     # Format matrix
     def matrix_to_latex(M):
