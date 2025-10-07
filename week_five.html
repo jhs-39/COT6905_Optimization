@@ -1,0 +1,893 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 5: Determinants &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_five';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 6:" href="week_six.html" />
+    <link rel="prev" title="Week 4: Orthogonal Basis and Projection" href="week_four.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="info_theory.html">Information Theory: Introduction to Shannon Entropy</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_five.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_five.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_five.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_five.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 5: Determinants</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-17-orthogonal-matrices-and-gram-schmidt">Lecture 17: Orthogonal matrices and Gram-Schmidt</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-definitions-and-geometric-intuitions">Key Definitions and Geometric Intuitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-problem-generator">Interactive Problem Generator</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-18-properties-of-determinants">Lecture 18: Properties of determinants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Key Definitions and Geometric Intuitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-19-determinant-formulas-and-cofactors">Lecture 19: Determinant formulas and cofactors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-20-cramer-s-rule-inverse-matrix-and-volume">Lecture 20: Cramer’s rule, inverse matrix, and volume</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-5-determinants">
+<h1>Week 5: Determinants<a class="headerlink" href="#week-5-determinants" title="Permalink to this heading">#</a></h1>
+<section id="lecture-17-orthogonal-matrices-and-gram-schmidt">
+<h2>Lecture 17: Orthogonal matrices and Gram-Schmidt<a class="headerlink" href="#lecture-17-orthogonal-matrices-and-gram-schmidt" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/0MtwqhIwdrI"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>This lecture (inspired by Gilbert Strang’s MIT 18.06 Lecture 17) introduces orthogonal matrices and the Gram-Schmidt process, key for creating orthonormal bases and simplifying computations. It builds on Lecture 14’s orthogonality and Lecture 15’s projections, connecting to optimization in your syllabus.</p>
+<section id="key-definitions-and-geometric-intuitions">
+<h3>Key Definitions and Geometric Intuitions<a class="headerlink" href="#key-definitions-and-geometric-intuitions" title="Permalink to this heading">#</a></h3>
+<p>Orthogonal Matrix:</p>
+<p>Definition: A square matrix ( Q ) (n x n) with orthonormal columns: ( Q^T Q = I ), so ( Q^{-1} = Q^T ).</p>
+<p>Geometric Intuition: Represents rotations or reflections, preserving lengths (( |Qx| = |x| )) and angles. Columns form an orthonormal coordinate system in ( \mathbb{R}^n ).</p>
+<p>Gram-Schmidt Process:</p>
+<p>Definition: Transforms a basis ( {v_1, \ldots, v_k} ) into an orthonormal basis ( {q_1, \ldots, q_k} ):
+( u_1 = v_1 ), ( q_1 = \frac{u_1}{|u_1|} ).
+( u_i = v_i - \sum_{j=1}^{i-1} (q_j^T v_i) q_j ), ( q_i = \frac{u_i}{|u_i|} ).
+Geometric Intuition: Orthogonalizes vectors by subtracting projections onto previous vectors, creating a perpendicular basis. Normalization ensures unit lengths.
+Applications:
+Simplifies projections: ( p = \sum (q_i^T b) q_i ).
+Enables QR factorization: ( A = QR ), where ( Q ) is orthogonal.
+Example
+For ( A = \begin{pmatrix} 1 &amp; 0 \ 1 &amp; 1 \ 0 &amp; 1 \end{pmatrix} ):
+Gram-Schmidt on columns ( v_1 = \begin{pmatrix} 1 \ 1 \ 0 \end{pmatrix} ), ( v_2 = \begin{pmatrix} 0 \ 1 \ 1 \end{pmatrix} ):
+( q_1 = \frac{v_1}{|v_1|} = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \ 1 \ 0 \end{pmatrix} ).
+( u_2 = v_2 - (q_1^T v_2) q_1 = \begin{pmatrix} 0 \ 1 \ 1 \end{pmatrix} - \frac{1}{\sqrt{2}} \cdot \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \ 1 \ 0 \end{pmatrix} = \begin{pmatrix} -0.5 \ 0.5 \ 1 \end{pmatrix} ), ( q_2 = \frac{u_2}{|u_2|} ).
+Orthogonal matrix: ( Q = \begin{pmatrix} \frac{1}{\sqrt{2}} &amp; \frac{-1}{\sqrt{6}} \ \frac{1}{\sqrt{2}} &amp; \frac{1}{\sqrt{6}} \ 0 &amp; \frac{2}{\sqrt{6}} \end{pmatrix} ).</p>
+</section>
+<section id="interactive-problem-generator">
+<h3>Interactive Problem Generator<a class="headerlink" href="#interactive-problem-generator" title="Permalink to this heading">#</a></h3>
+<p>This code generates a random 3x2 matrix ( A ) (rank 2), applies Gram-Schmidt to find an orthonormal basis for ( C(A) ), and forms an orthogonal matrix ( Q ). It visualizes the original and orthonormal basis vectors in 3D. Predict the orthonormal basis and verify orthogonality, then check the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+
+def generate_matrix():
+    &quot;&quot;&quot;
+    Generate a random 3x2 matrix with rank 2.
+    &quot;&quot;&quot;
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    A = np.column_stack((v1, v2))
+    return A
+
+def gram_schmidt(A):
+    &quot;&quot;&quot;
+    Apply Gram-Schmidt to columns of A to get an orthonormal basis.
+    &quot;&quot;&quot;
+    A = A.astype(float)
+    n, k = A.shape
+    U = np.zeros((n, k))
+    U[:, 0] = A[:, 0]
+    for i in range(1, k):
+        u = A[:, i]
+        for j in range(i):
+            u = u - (np.dot(A[:, i], U[:, j]) / np.dot(U[:, j], U[:, j])) * U[:, j]
+        U[:, i] = u
+    Q = np.zeros((n, k))
+    for i in range(k):
+        if np.linalg.norm(U[:, i]) &gt; 1e-10:
+            Q[:, i] = U[:, i] / np.linalg.norm(U[:, i])
+    return Q
+
+def matrix_to_latex(M):
+    rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot;\end{pmatrix}&quot;
+
+def plot_vectors(A, Q):
+    &quot;&quot;&quot;
+    Plot original and orthonormal basis vectors in 3D.
+    &quot;&quot;&quot;
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+    
+    # Plot origin
+    ax.scatter([0], [0], [0], color=&#39;black&#39;, s=50, label=&#39;Origin&#39;)
+    
+    # Plot original basis
+    ax.quiver(0, 0, 0, A[0, 0], A[1, 0], A[2, 0], color=&#39;blue&#39;, label=&#39;Original v1&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, A[0, 1], A[1, 1], A[2, 1], color=&#39;red&#39;, label=&#39;Original v2&#39;, linewidth=2)
+    
+    # Plot orthonormal basis
+    ax.quiver(0, 0, 0, Q[0, 0], Q[1, 0], Q[2, 0], color=&#39;green&#39;, label=&#39;Orthonormal q1&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, Q[0, 1], Q[1, 1], Q[2, 1], color=&#39;purple&#39;, label=&#39;Orthonormal q2&#39;, linewidth=2)
+    
+    ax.set_xlabel(&#39;X&#39;)
+    ax.set_ylabel(&#39;Y&#39;)
+    ax.set_zlabel(&#39;Z&#39;)
+    max_range = np.max(np.abs(np.concatenate([A, Q], axis=1))) * 1.5
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    ax.legend()
+    plt.title(&#39;Original and Orthonormal Basis for C(A)&#39;)
+    plt.show()
+
+# Generate matrix
+A = generate_matrix()
+Q = gram_schmidt(A)
+
+# Verify orthogonality
+ortho_check = np.allclose(np.dot(Q.T, Q), np.eye(Q.shape[1]))
+length_check = np.allclose(np.linalg.norm(Q, axis=0), 1)
+
+# Display results
+markdown = f&quot;**Matrix A (basis for C(A))**:\n$$\n{matrix_to_latex(A)}\n$$\n\n&quot;
+display(Markdown(markdown))
+plot_vectors(A, Q)
+markdown = f&quot;Predict:\n- Orthonormal basis for C(A) using Gram-Schmidt.\n- Is Q^T Q = I?\n- Are columns of Q unit length?\n\n&quot;
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f&quot;**Answers**:\n&quot;
+# markdown += f&quot;- Orthonormal Basis Q:\n$$\n{matrix_to_latex(Q)}\n$$\n&quot;
+# markdown += f&quot;- Q^T Q = I: {&#39;True&#39; if ortho_check else &#39;False&#39;}.\n&quot;
+# markdown += f&quot;- Columns unit length: {&#39;True&#39; if length_check else &#39;False&#39;}.\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-18-properties-of-determinants">
+<h2>Lecture 18: Properties of determinants<a class="headerlink" href="#lecture-18-properties-of-determinants" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/srxexLishgY"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>This lecture explores the determinant of a square matrix, its properties, and its geometric interpretation as a volume scaling factor. It builds on matrix theory concepts, connecting to invertibility and linear systems.</p>
+<section id="id1">
+<h3>Key Definitions and Geometric Intuitions<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>Determinant:</p>
+<p>Definition: For an ( n \times n ) matrix ( A ), ( \det(A) ) is a scalar indicating invertibility and volume scaling.</p>
+<p>Geometric Intuition: ( |\det(A)| ) is the volume of the parallelepiped formed by ( A )’s columns. If ( \det(A) = 0 ), the columns are linearly dependent, collapsing the space.</p>
+<p>Properties:</p>
+<p>Invertibility: ( A ) is invertible if ( \det(A) \neq 0 ).</p>
+<p>Row Operations:</p>
+<p>Swap rows: ( \det(A’) = -\det(A) ).</p>
+<p>Multiply row by ( k ): ( \det(A’) = k \det(A) ).</p>
+<p>Add multiple of one row to another: ( \det(A’) = \det(A) ).</p>
+<p>Multiplicative: ( \det(AB) = \det(A) \det(B) ).</p>
+<p>Transpose: ( \det(A^T) = \det(A) ).</p>
+<p>Triangular: ( \det(A) = \text{product of diagonal entries} ).</p>
+<p>Zero/Dependent Rows: ( \det(A) = 0 ).</p>
+<p>Applications:
+Test invertibility.</p>
+<p>Compute volumes in geometry.</p>
+<p>Solve systems via Cramer’s rule.</p>
+<p>Example</p>
+<p>For ( A = \begin{pmatrix} 1 &amp; 2 &amp; 0 \ 0 &amp; 3 &amp; 1 \ 2 &amp; 0 &amp; 4 \end{pmatrix} ):</p>
+<p>Determinant: ( \det(A) = 1 \cdot (3 \cdot 4 - 1 \cdot 0) - 2 \cdot (0 \cdot 4 - 1 \cdot 2) + 0 \cdot (0 \cdot 0 - 3 \cdot 2) = 12 + 4 = 16 ).</p>
+<p>Row swap (rows 1 and 2): ( A’ = \begin{pmatrix} 0 &amp; 3 &amp; 1 \ 1 &amp; 2 &amp; 0 \ 2 &amp; 0 &amp; 4 \end{pmatrix} ), ( \det(A’) = -16 ).</p>
+<p>Multiply row 1 by 2: ( A’’ = \begin{pmatrix} 2 &amp; 4 &amp; 0 \ 0 &amp; 3 &amp; 1 \ 2 &amp; 0 &amp; 4 \end{pmatrix} ), ( \det(A’’) = 2 \cdot 16 = 32 ).</p>
+<p>Interactive Problem Generator</p>
+<p>This code generates a random 3x3 matrix, computes its determinant, and applies row operations (swap, scale, add). It visualizes the parallelepiped formed by the columns in 3D to show the volume. Predict the determinant and effects of row operations, then check the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+
+def generate_matrix():
+    &quot;&quot;&quot;
+    Generate a random 3x3 matrix with integer entries.
+    &quot;&quot;&quot;
+    A = np.random.randint(-5, 6, (3, 3))
+    while np.abs(np.linalg.det(A)) &lt; 1e-10:  # Avoid singular matrices
+        A = np.random.randint(-5, 6, (3, 3))
+    return A
+
+def apply_row_operations(A):
+    &quot;&quot;&quot;
+    Apply row operations: swap, scale, add.
+    Return modified matrices and determinants.
+    &quot;&quot;&quot;
+    # Swap rows 0 and 1
+    A_swap = A.copy()
+    A_swap[[0, 1]] = A_swap[[1, 0]]
+    
+    # Scale row 0 by 2
+    A_scale = A.copy()
+    A_scale[0] *= 2
+    
+    # Add 2 * row 1 to row 2
+    A_add = A.copy()
+    A_add[2] += 2 * A_add[1]
+    
+    return A_swap, A_scale, A_add
+
+def matrix_to_latex(M):
+    rows = [r&quot; &amp; &quot;.join([f&quot;{x:.0f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot;\end{pmatrix}&quot;
+
+def plot_parallelepiped(A):
+    &quot;&quot;&quot;
+    Plot the parallelepiped formed by A’s columns in 3D.
+    &quot;&quot;&quot;
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+    
+    # Origin
+    ax.scatter([0], [0], [0], color=&#39;black&#39;, s=50, label=&#39;Origin&#39;)
+    
+    # Column vectors
+    v1, v2, v3 = A[:, 0], A[:, 1], A[:, 2]
+    ax.quiver(0, 0, 0, v1[0], v1[1], v1[2], color=&#39;blue&#39;, label=&#39;Column 1&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, v2[0], v2[1], v2[2], color=&#39;red&#39;, label=&#39;Column 2&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, v3[0], v3[1], v3[2], color=&#39;green&#39;, label=&#39;Column 3&#39;, linewidth=2)
+    
+    # Parallelepiped edges
+    points = np.array([
+        [0, 0, 0], v1, v2, v3,
+        v1 + v2, v1 + v3, v2 + v3, v1 + v2 + v3
+    ])
+    edges = [
+        (0, 1), (0, 2), (0, 3),
+        (1, 4), (2, 4), (2, 6),
+        (3, 5), (3, 6), (1, 5),
+        (4, 7), (5, 7), (6, 7)
+    ]
+    for edge in edges:
+        ax.plot(points[edge, 0], points[edge, 1], points[edge, 2], &#39;k-&#39;)
+    
+    ax.set_xlabel(&#39;X&#39;)
+    ax.set_ylabel(&#39;Y&#39;)
+    ax.set_zlabel(&#39;Z&#39;)
+    max_range = np.max(np.abs(A)) * 1.5
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    ax.legend()
+    plt.title(&#39;Parallelepiped Formed by Columns of A&#39;)
+    plt.show()
+
+# Generate matrix and apply operations
+A = generate_matrix()
+A_swap, A_scale, A_add = apply_row_operations(A)
+det_A = np.linalg.det(A)
+det_swap = np.linalg.det(A_swap)
+det_scale = np.linalg.det(A_scale)
+det_add = np.linalg.det(A_add)
+
+# Display results
+markdown = f&quot;**Matrix A**:\n$$\n{matrix_to_latex(A)}\n$$\n\n&quot;
+display(Markdown(markdown))
+plot_parallelepiped(A)
+markdown = f&quot;Predict:\n- det(A).\n- det(A) after swapping rows 0 and 1.\n- det(A) after scaling row 0 by 2.\n- det(A) after adding 2 * row 1 to row 2.\n- Is A invertible?\n\n&quot;
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f&quot;**Answers**:\n&quot;
+# markdown += f&quot;- det(A): {det_A:.2f}\n&quot;
+# markdown += f&quot;- det after swap: {det_swap:.2f} (should be -det(A))\n&quot;
+# markdown += f&quot;- det after scale: {det_scale:.2f} (should be 2 * det(A))\n&quot;
+# markdown += f&quot;- det after add: {det_add:.2f} (should equal det(A))\n&quot;
+# markdown += f&quot;- A invertible: {&#39;Yes&#39; if abs(det_A) &gt; 1e-10 else &#39;No&#39;}.\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-19-determinant-formulas-and-cofactors">
+<h2>Lecture 19: Determinant formulas and cofactors<a class="headerlink" href="#lecture-19-determinant-formulas-and-cofactors" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/23LLB9mNJvc"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+</section>
+<section id="lecture-20-cramer-s-rule-inverse-matrix-and-volume">
+<h2>Lecture 20: Cramer’s rule, inverse matrix, and volume<a class="headerlink" href="#lecture-20-cramer-s-rule-inverse-matrix-and-volume" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/QNpj-gOXW9M"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_four.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 4: Orthogonal Basis and Projection</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week_six.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 6:</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-17-orthogonal-matrices-and-gram-schmidt">Lecture 17: Orthogonal matrices and Gram-Schmidt</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-definitions-and-geometric-intuitions">Key Definitions and Geometric Intuitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-problem-generator">Interactive Problem Generator</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-18-properties-of-determinants">Lecture 18: Properties of determinants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Key Definitions and Geometric Intuitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-19-determinant-formulas-and-cofactors">Lecture 19: Determinant formulas and cofactors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-20-cramer-s-rule-inverse-matrix-and-volume">Lecture 20: Cramer’s rule, inverse matrix, and volume</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
