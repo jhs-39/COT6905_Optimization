@@ -158,7 +158,7 @@ We guide this discussion with the 2nd law of thermodynamics; in a closed system,
 
 Suppose I have $n$ parameters in a neural net, and initialize at a point $\theta_0$ in the parameter space. After SGD at learning rate R over batch 1, the model has moved to point $\theta_1$ in parameter space. Can we express the number of possible states of $\theta_1$ as the surface area of the high dimensional shell, divided by the spherical cap area given by quantization? Under the (unlikely) case that all model variables were independent, this would be the upper bound of the information transferred.
 
-Area of the d-Dimensional Hypersphere
+Surface Area of the d-Dimensional Hypersphere
 $$
 A = \frac{2 pi ^ d/2 r^d-1}{\gamma(d/2)} 
 $$
@@ -175,19 +175,23 @@ $$
 
 Plugging in numbers for a 1-billion-parameter model with fp16 quantum:
 
+$
+
+$
+
 Yikes! That's a large number. Imagine transferring gigabytes of information per update!
 
-However, in real life, gradient updates are much lower rank; the parameters are far, far from independence. IBM's work shows that 99% of the variance in a layer's gradients is captured by a rank-40 matrix. Indeed, LoRA in the fine-tuning community can be incredibly useful with ranks below 128. In that case, we see: 
+However, in real life, gradient updates are much lower rank; the parameters are far, far from independence. IBM's work shows that 99% of the variance in a layer's gradients is captured by a rank-40 matrix. Indeed, LoRA in the fine-tuning community can be incredibly useful with ranks below 128. In that case, let's take a numerical example with IBM's rank 40 matrix: 
 
 $$
 
 $$
 
-Several hundred bits. A much more reasonable upper bound.
+Several hundred bits. A much more reasonable upper bound on information in parameter space.
 
 Finally, let's consider temperature. IBM's definition of temperature is actually anisotropic; the noise on the loss landscape actually varies with the direction you consider. There are high-noise directions that greatly vary from batch to batch (primarily the direction of the principal singular value), and low-noise directions that are the same batch-to-batch.
 
 We can consider a Helmholtz free energy equivalent to see how temperature affects learning. 
 F = U - TS
 
-Recall Helmholtz free energy describes the amount of energy available to do work. In our case, we are drawing the parallel to information available to do useful work. If we learn a great deal about a particular batch (and overfit) 
+Recall Helmholtz free energy describes the amount of energy available to do work. In our case, we are drawing the parallel to information available to do useful work. If we learn a great deal about a particular batch (and overfit) this inflates the TS term.
