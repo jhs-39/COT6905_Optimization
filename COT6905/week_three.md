@@ -166,11 +166,11 @@ This lecture introduces the four fundamental subspaces of an $m \times n$ matrix
 
 For $A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \\ 3 & 6 & 9 \end{pmatrix} $ (rank 1): \
 RREF: $\begin{pmatrix} 1 & 2 & 3 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} $ \
-Column Space: $C(A) = \text{span}{ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }$, dim = 1 \
-Nullspace: Basis $\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$, $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$, $dim = 3 - 1 = 2 $ \
-Row Space: $C(A^T) = \text{span}{ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }$, $dim = 1$ \
-Left Nullspace: Basis $\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$, $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$, $dim = 2 - 1 = 1$
-
+Column Space: $C(A) = a { \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }$, dim = 1 \
+Nullspace: $N(A) = a \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$ + b$\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$, $dim = 3 - 1 = 2 $ \
+Row Space: $C(A^T) = a { \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }$, $dim = 1$ \
+Left Nullspace: Basis $N(A^T) = a \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}$ + b $\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}$, $dim = 3 - 1 = 2$
+where $a, b \in \mathbb{R} $
 
 ```{code-cell} python
 import numpy as np
@@ -197,13 +197,24 @@ def find_subspaces(A):
 
 # 3x3 rank-1 matrix
 A = np.array([[1, 2, 3],
-              [2, 4, 6],
-              [3, 6, 9]])
+              [-3, -6, -9],
+              [4, 8, 12]])
 rank, c_a_basis, n_a_basis, c_at_basis, n_at_basis = find_subspaces(A)
+
+#Matrix Parsing for Markdown
+def latex_matrix(M):
+    rows = []
+    for row in M:
+        entries = [f"{x:.0f}" if x == int(x) else f"{x}" for x in row]
+        rows.append(" & ".join(entries))
+    return r"\begin{pmatrix} " + " \\\\\n".join(rows) + r" \end{pmatrix}"
+
+def vec_str(v):
+    return r"\begin{pmatrix} " + r" \\ ".join(f"{x:.0f}" for x in v) + r" \end{pmatrix}"
 
 # Display summary
 markdown = f"**Matrix A (Rank {rank}):**\n\n"
-markdown += r"$ A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \\ 3 & 6 & 9 \end{pmatrix} $\n\n"
+markdown += f"$ A = {latex_matrix(A)} $\n\n"
 markdown += f"- dim(C(A)) = {rank}, Basis: `{c_a_basis[0]}`\n"
 markdown += f"- dim(N(A)) = {3 - rank}, Basis: `{n_a_basis[0]}`, `{n_a_basis[1]}`\n"
 markdown += f"- dim(C(Aᵀ)) = {rank}, Basis: `{c_at_basis[0]}`\n"
@@ -258,17 +269,6 @@ plt.show()
 ```
 
 ## Lecture 11: Matrix spaces; rank 1; small world graphs
-
-<iframe width="560" height="315"
-    src="https://www.youtube.com/embed/2IdtqGM6KWU"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-</iframe>
-
-This lecture explores matrix spaces as vector spaces, the structure of rank-1 matrices, and small world graphs via adjacency matrices. These concepts extend our understanding of subspaces and apply linear algebra to networks.
-
-## Lecture 11: Matrix spaces; rank 1; small world graphs
 <iframe width="560" height="315"
     src="https://www.youtube.com/embed/2IdtqGM6KWU"
     frameborder="0"
@@ -296,58 +296,10 @@ Matrices $A \in M_{n \times n}$ with $A_{ij}=0$ whenever $i\neq j$.
 $A = u v^T$ for column vectors $u \in \mathbb{R}^m$, $v \in \mathbb{R}^n$ (both non-zero).  
 All rows of $A$ are scalar multiples of $v^T$; all columns are scalar multiples of $u$.
 
-**Adjacency Matrix** of a graph:  
-For a graph with $n$ nodes, the $n \times n$ matrix $A$ where  
-\[
-A_{ij}=
-\begin{cases}
-1 & \text{if nodes $i$ and $j$ are connected},\\
-0 & \text{otherwise}.
-\end{cases}
-\]
-The entry $(A^k)_{ij}$ counts walks of length $k$ from node $i$ to node $j$.
-
-**Small-World Graph**:  
-A graph in which the typical shortest path between nodes is short (often logarithmic in the number of nodes), e.g., the "six degrees of separation" phenomenon.
-
-### Subspaces of $M_{n \times n}$
-
-| Set | Subspace? | Reason | Dimension (for $n=3$) |
-|-----|-----------|--------|-----------------------|
-| Symmetric $\mathcal{S}_3$ | Yes | Closed under addition & scalar multiplication | $6$ |
-| Upper-triangular $\mathcal{U}_3$ | Yes | Same closure properties | $6$ |
-| Diagonal $\mathcal{D}_3$ | Yes | Intersection $\mathcal{S}_3 \cap \mathcal{U}_3$ | $3$ |
-| Union $\mathcal{S}_3 \cup \mathcal{U}_3$ | No | Not closed under addition | — |
-| Span $\mathcal{S}_3 + \mathcal{U}_3$ | Yes | Spans all of $M_{3 \times 3}$ | $9$ |
-
-**Proof sketch for symmetric matrices**  
-If $A = A^T$ and $B = B^T$, then $(A+B)^T = A^T + B^T = A + B$ and $(\lambda A)^T = \lambda A^T = \lambda A$. Hence $\mathcal{S}_n$ is a subspace.
-
-**Proof sketch for upper-triangular**  
-If $A_{ij}=0$ for $i>j$ and same for $B$, then $(A+B)_{ij}=0$ for $i>j$ and $(\lambda A)_{ij}=0$ for $i>j$.
-
-**Intersection = diagonal**  
+**Intersection of Upper Triangular and Symmetric is Diagonal**  
 A matrix that is both symmetric and upper-triangular must have zeros below *and* above the diagonal, leaving only the diagonal entries free.
 
-**Union is not a subspace**  
-Counter-example:  
-\[
-\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} \in \mathcal{S}_2,
-\qquad
-\begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} \in \mathcal{U}_2,
-\]
-but their sum
-\[
-\begin{pmatrix} 2 & 2 \\ 1 & 0 \end{pmatrix}
-\]
-is neither symmetric nor upper-triangular.
-
 **Span of symmetric + upper-triangular = all matrices**  
-Any matrix $M$ can be decomposed as  
-\[
-M = \frac{M+M^T}{2} + \left(M - \frac{M+M^T}{2}\right),
-\]
-where the first term is symmetric and the second is upper-triangular (its lower part cancels). Thus the span is $M_{n \times n}$.
 
 ### Rank-1 Matrices
 
@@ -356,46 +308,43 @@ A matrix $A \in M_{m \times n}$ has rank 1 **iff** it can be written $A = u v^T$
 *Row space* = $\operatorname{span}\{v\}$, dimension 1.
 
 **Example**  
-\[
+$
 u = \begin{pmatrix} 1 \\ 2 \end{pmatrix},\;
 v = \begin{pmatrix} 3 \\ 4 \end{pmatrix}
 \;\Rightarrow\;
 A = u v^T = \begin{pmatrix} 3 & 4 \\ 6 & 8 \end{pmatrix}.
-\]
+$
 
 **Sum of rank-1 matrices**  
-Every matrix of rank $r$ is a sum of (at most) $r$ rank-1 matrices (outer-product form of the SVD).
-
-**Counter-example for rank addition**  
-In $M_{5 \times 17}$, let $A$ and $B$ each have rank 4. Their sum can have rank as low as 0 (if $B = -A$) or up to 8, but **not guaranteed** to be 4.
+Every matrix of rank $r$ is a sum of (at most) $r$ rank-1 matrices.
 
 ### Subspace of Vectors Summing to Zero
 
 Consider $\mathbb{R}^4$ and the hyperplane  
-\[
+$
 S = \{v = (v_1,v_2,v_3,v_4) \mid v_1+v_2+v_3+v_4 = 0\}.
-\]
+$
 This is the **null space** of the row vector $a^T = [1\;1\;1\;1]$, i.e., $S = N(A)$ where  
-\[
+$
 A = \begin{pmatrix} 1 & 1 & 1 & 1 \end{pmatrix}.
-\]
+$
 Rank of $A$ is 1, so $\dim S = 4 - 1 = 3$.  
 
-A basis is  
-\[
-\{(-1,1,0,0),\; (-1,0,1,0),\; (-1,0,0,1)\}.
-\]
+A basis would therefore have 3 components, and is given by holding the pivot value to 1 while all but one free value are 0.  
+$
+\{(1,-1,0,0),\; (1,0,-1,0),\; (1,0,0,-1)\}.
+$
 
 ### Differential Equations as Vector Spaces
 
 The general solution to the linear ODE  
-\[
+$
 \frac{d^2 y}{dx^2} + y = 0
-\]
+$
 forms a 2-dimensional vector space. A basis is  
-\[
+$
 \{\cos x,\; \sin x\}.
-\]
+$
 Any solution is $c_1 \cos x + c_2 \sin x$.
 
 ### Small-World Graphs
@@ -403,19 +352,19 @@ Any solution is $c_1 \cos x + c_2 \sin x$.
 A **graph** $G = (V,E)$ consists of nodes $V$ and edges $E$.  
 The **adjacency matrix** $A \in M_{n \times n}$ (binary, undirected, no self-loops) encodes connectivity.  
 Powers of $A$ count walks:  
-\[
+$
 (A^k)_{ij} = \text{number of walks of length $k$ from node $i$ to node $j$}.
-\]
+$
 
-**Small-world property**:  
-Most pairs of nodes are connected by a short path (path length $\sim \log n$). Empirically observed as "six degrees of separation" in social networks.
+**Small-world property**
+Most pairs of nodes are connected by a short path path length $\sim \log n$. Empirically observed as "six degrees of separation" in social networks.
 
 **Linear-algebraic view**  
 The rank of $A$ reveals the number of connected components (for undirected graphs, rank = number of components if the graph is bipartite; otherwise related to the number of independent cycles). Low-rank approximations of $A$ capture dominant community structure.
 
 Interactive Problem Generator
 
-The following code generates: A 3x3 rank-1 matrix, verifying its rank and structure. Also, a 3x3 adjacency matrix for a simple small-world graph, computing 2-step paths. Predict the rank, basis for the matrix space, and number of 2-step paths between nodes, then check the output.
+The following code generates: A 3x3 rank-1 matrix, verifying its rank and structure. Predict the rank, basis for the matrix space.
 
 ```{code-cell} python
 import numpy as np
@@ -434,35 +383,17 @@ def generate_rank1_matrix(m=3, n=3):
     A = np.outer(u, v)
     return A, u, v
 
-def generate_adjacency_matrix(n=3):
-    """
-    Generate a random 3x3 adjacency matrix for a simple graph (no self-loops).
-    """
-    A = np.random.randint(0, 2, (n, n))
-    A = np.triu(A, 1) + np.triu(A, 1).T  # Symmetric, no diagonal
-    return A
-
 def matrix_to_latex(M):
     rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
     return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
 
-# Problem 1: Rank-1 Matrix
+# Problem: Rank-1 Matrix
 A_rank1, u, v = generate_rank1_matrix()
 rank = np.linalg.matrix_rank(A_rank1)
 
 markdown = f"**Problem 1: Rank-1 Matrix**\n\n"
 markdown += f"**Matrix A**:\n$ {matrix_to_latex(A_rank1)} $\n\n"
 markdown += f"Predict:\n- What is the rank of A?\n- Express A as u v^T (find u, v).\n- What is the dimension of the 3x3 matrix space M_{{3x3}}?\n\n"
-
-display(Markdown(markdown))
-
-# Problem 2: Adjacency Matrix
-A_adj = generate_adjacency_matrix()
-A_adj2 = np.dot(A_adj, A_adj)
-
-markdown = f"**Problem 2: Adjacency Matrix for a Graph**\n\n"
-markdown += f"**Adjacency Matrix A**:\n$ {matrix_to_latex(A_adj)} $\n\n"
-markdown += f"Predict:\n- How many 2-step paths exist between each pair of nodes (compute A^2)?\n- What does A^2’s diagonal represent?\n\n"
 
 display(Markdown(markdown))
 
@@ -473,13 +404,7 @@ display(Markdown(markdown))
 # markdown += f"  v^T =\n$ {matrix_to_latex(v.reshape(1, -1))} $\n"
 # markdown += f"- Dimension of M_{{3x3}}: 9\n\n"
 # display(Markdown(markdown))
-#
-# markdown = f"**Answers for Problem 2**:\n"
-# markdown += f"- A^2 (2-step paths):\n$ {matrix_to_latex(A_adj2)} $\n"
-# markdown += f"- Diagonal of A^2: Number of 2-step paths from each node to itself.\n\n"
-# display(Markdown(markdown))
 ```
-
 
 ## Lecture 12: Graphs, networks, incidence matrices
 
@@ -495,19 +420,19 @@ This lecture explores how linear algebra models graphs and networks using incide
 ### Key Definitions
 
 **Directed Graph**:  
-A set of **nodes** $V = \{1,\dots,n\}$ and **directed edges** $E = \{e_1,\dots,e_m\}$, where each edge $e_k$ goes from a **tail** node $t_k$ to a **head** node $h_k$.
+A set of **nodes** $V = \{1,\dots,n\}$ and **directed edges** $E = \{e_1,\dots,e_m\}$
 
 **Incidence Matrix** $A \in \mathbb{R}^{n \times m}$:  
 - **Rows** ↔ nodes, **columns** ↔ edges.  
 - For edge $e_k: t_k \to h_k$,  
-  \[
+  $
   A_{ik} =
   \begin{cases}
   -1 & \text{if node } i = t_k \text{ (outgoing)}, \\
   +1 & \text{if node } i = h_k \text{ (incoming)}, \\
   0  & \text{otherwise}.
   \end{cases}
-  \]
+  $
 
 **Column Space** $C(A) \subseteq \mathbb{R}^n$:  
 Spanned by the columns of $A$. Each column is a **unit flow** along one edge.  
@@ -541,29 +466,9 @@ A connected graph with no cycles.
 $\dim N(A) = m - (n - 1)$ = number of **independent cycles**.
 
 **Euler’s Formula** (planar graphs):  
-\[
-|V| - |E| + |F| = 2
-\quad\Rightarrow\quad
+$
 \text{#loops} = |E| - |V| + 1
-\]
-(for connected planar graphs; $F$ = faces including exterior).
-
----
-
-### Subspaces of the Incidence Matrix
-
-| Subspace | Location | Dimension (connected graph) | Interpretation |
-|--------|----------|-----------------------------|----------------|
-| $C(A)$ | $\mathbb{R}^n$ (nodes) | $n - 1$ | Potential differences (voltages) |
-| $N(A)$ | $\mathbb{R}^m$ (edges) | $m - (n - 1)$ | Cycle currents (conserved flows) |
-| $C(A^T)$ | $\mathbb{R}^m$ (edges) | $n - 1$ | Valid current patterns |
-| $N(A^T)$ | $\mathbb{R}^n$ (nodes) | $1$ | Constant potential (ground) |
-
-**Orthogonality**:  
-- $C(A) \perp N(A^T)$ in $\mathbb{R}^n$  
-- $C(A^T) \perp N(A)$ in $\mathbb{R}^m$
-
----
+$
 
 ### Example: Network with 4 Nodes, 5 Edges
 
@@ -573,7 +478,7 @@ Edges: $0\to1$, $1\to2$, $2\to3$, $3\to1$, $0\to2$
 
 **Incidence Matrix** $A$ (4×5):
 
-\[
+$
 A = 
 \begin{pmatrix}
 \color{blue}{-1} & 0 & 0 & 0 & \color{blue}{-1} \\
@@ -581,7 +486,7 @@ A =
 0 & \color{red}{+1} & \color{blue}{-1} & 0 & \color{red}{+1} \\
 0 & 0 & \color{red}{+1} & \color{blue}{-1} & 0
 \end{pmatrix}
-\]
+$
 
 **Rank**: $3$ ($\text{rank}(A) = n - 1 = 3$)
 
@@ -619,11 +524,11 @@ Then:
 1. **KCL**: $A x = f$  
 2. **Ohm**: $x = C A^T y$  
 3. Substitute:  
-   \[
+   $
    A (C A^T) y = f
    \quad\Rightarrow\quad
    \underbrace{A C A^T}_{\text{symmetric, positive semidefinite}} y = f
-   \]
+   $
 
 This is the **Laplacian system** of network theory.
 
@@ -634,7 +539,6 @@ This is the **Laplacian system** of network theory.
 | Field | Incidence Matrix Represents |
 |------|------------------------------|
 | **Chemistry** | Reaction stoichiometry (reagents consumed/produced) |
-| **Biology** | Gene regulation (up/down-regulation by pathogens) |
 | **Traffic** | Flow conservation at intersections |
 | **Hydraulics** | Pressure drops and flow balance |
 
