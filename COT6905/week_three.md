@@ -269,6 +269,7 @@ plt.show()
 ```
 
 ## Lecture 11: Matrix spaces; rank 1; small world graphs
+
 <iframe width="560" height="315"
     src="https://www.youtube.com/embed/2IdtqGM6KWU"
     frameborder="0"
@@ -332,7 +333,7 @@ Rank of $A$ is 1, so $\dim S = 4 - 1 = 3$.
 
 A basis would therefore have 3 components, and is given by holding the pivot value to 1 while all but one free value are 0.  
 $
-\{(1,-1,0,0),\; (1,0,-1,0),\; (1,0,0,-1)\}.
+\{(1,-1,0,0),\; (1,0,-1,0),\; (1,0,0,-1)\}
 $
 
 ### Differential Equations as Vector Spaces
@@ -351,10 +352,6 @@ Any solution is $c_1 \cos x + c_2 \sin x$.
 
 A **graph** $G = (V,E)$ consists of nodes $V$ and edges $E$.  
 The **adjacency matrix** $A \in M_{n \times n}$ (binary, undirected, no self-loops) encodes connectivity.  
-Powers of $A$ count walks:  
-$
-(A^k)_{ij} = \text{number of walks of length $k$ from node $i$ to node $j$}.
-$
 
 **Small-world property**
 Most pairs of nodes are connected by a short path path length $\sim \log n$. Empirically observed as "six degrees of separation" in social networks.
@@ -459,15 +456,11 @@ Sum of voltage drops around any loop is zero → $A^T y = 0$ for potential $y$.
 Thus, **consistent voltages live in $N(A^T)$**.
 
 **Tree**:  
-A connected graph with no cycles.  
-**Property**: Incidence matrix has full row rank: $\text{rank}(A) = n - 1$.
+A connected graph with no cycles
 
-**Cycle Rank (Cyclomatic Number)**:  
-$\dim N(A) = m - (n - 1)$ = number of **independent cycles**.
-
-**Euler’s Formula** (planar graphs):  
+**Euler’s Formula**:  
 $
-\text{#loops} = |E| - |V| + 1
+Nodes - Edges + Loops = 1
 $
 
 ### Example: Network with 4 Nodes, 5 Edges
@@ -541,17 +534,6 @@ This is the **Laplacian system** of network theory.
 | **Chemistry** | Reaction stoichiometry (reagents consumed/produced) |
 | **Traffic** | Flow conservation at intersections |
 | **Hydraulics** | Pressure drops and flow balance |
-
----
-
-### Summary Table
-
-| Concept | Matrix Equation | Physical Meaning |
-|-------|------------------|------------------|
-| **KCL** | $A x = 0$ | Current conservation at nodes |
-| **KVL** | $A^T y = 0$ | Voltage drop around loops = 0 |
-| **Ohm** | $x = C A^T y$ | Current ∝ conductance × voltage drop |
-| **Network Solve** | $A C A^T y = f$ | Solve for node voltages given sources |
 
 ---
 

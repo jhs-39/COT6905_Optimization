@@ -35,109 +35,85 @@ We've include this for your interest and completeness, but feel free to skip if 
 
 We introduce orthogonal vectors, orthogonal subspaces, and orthogonal bases, key for understanding geometric relationships in vector spaces and solving problems like projections. We connect these to the fundamental subspaces from Lecture 10.
 
-### Key Definitions and Geometric Intuitions
-**Orthogonal Vectors**:
-Definition: Vectors $u, v \in \mathbb{R}^n$ are orthogonal if $u^T v = 0$.
-Geometric Intuition: Orthogonal vectors are perpendicular (90° angle), like axes in a coordinate system. This simplifies projections, as components along orthogonal directions are independent. \
+We show **why** the row space is orthogonal to the null space, and the column space is orthogonal to the left-null space.  
+These two *orthogonal-complement* pairs completely carve $\mathbb{R}^n$ and $\mathbb{R}^m$ into perpendicular pieces.
 
-**Orthogonal Subspaces**:
-Definition: Subspaces $S, T \subset \mathbb{R}^n$ are orthogonal if $u^T v = 0$ for all $u \in S$, $v \in T$.
-Geometric Intuition: Subspaces that are perpendicular, decomposing $\mathbb{R}^n$ into complementary parts. For a matrix $A$ (m x n), $C(A) \perp N(A^T)$ in $\mathbb{R}^m$, $C(A^T) \perp N(A)$ in $\mathbb{R}^n$, splitting the space into orthogonal components (e.g., potential differences vs. equal potentials in graphs). \ 
+### 1. Orthogonal Vectors – the dot-product test
+Two vectors $u, v \in \mathbb{R}^k$ are **orthogonal** if  
+$$
+u^{T}v = 0 .
+$$
+Geometrically they are perpendicular (90°).  
+The Pythagorean theorem holds **only** when the vectors are orthogonal:
 
-**Orthogonal Basis**:
+$$
+\|u+v\|^{2}= (u+v)^{T}(u+v)= u^{T}u + 2u^{T}v + v^{T}v .
+\qquad \text{If } u^{T}v=0 \;\Rightarrow\; \|u+v\|^{2}= \|u\|^{2}+\|v\|^{2}.
+$$
 
-Definition: A basis for a subspace where vectors are pairwise orthogonal: $u_i^T u_j = 0$ for $i \neq j$. If normalized ($|u_i| = 1$), it’s orthonormal.
+### 2. Orthogonal Subspaces
+Subspaces $S, T \subset \mathbb{R}^k$ are **orthogonal** if **every** vector in $S$ is orthogonal to **every** vector in $T$.  
+Notation: $S \perp T$.
 
-Geometric Intuition: An orthogonal basis forms a “perpendicular coordinate system” for the subspace, making vector expansions straightforward (e.g., coordinates are dot products). \
+### 3. The Four Subspaces are Orthogonal Pairs  
 
-**Orthogonal Complement**:
+| Pair (in $\mathbb{R}^n$) | Pair (in $\mathbb{R}^m$) |
+|--------------------------|--------------------------|
+| **Row space** $C(A^{T})$ $\perp$ **Null space** $N(A)$ | **Column space** $C(A)$ $\perp$ **Left-null space** $N(A^{T})$ |
 
-Definition: For a subspace $S \subset \mathbb{R}^n$, $S^\perp = { v \in \mathbb{R}^n \mid v^T u = 0 \text{ for all } u \in S }$. Dimension: $\dim(S) + \dim(S^\perp) = n$.
+#### Why does $C(A^{T}) \perp N(A)$?
+* $x \in N(A)$ means $Ax = 0$.  
+* Write the equation row-by-row:  
+  $$
+  \text{(row}_i \text{ of }A) \cdot x = 0 \quad \text{for every } i.
+  $$
+* Every row of $A$ (i.e. every vector in the row space) is orthogonal to $x$.  
+* Because this holds for **all** $x\in N(A)$, the whole row space is orthogonal to the whole null space.
 
-Geometric Intuition: $S^\perp$ is the subspace of all vectors perpendicular to $S$, forming a complementary space (e.g., $N(A^T) = C(A)^\perp$).
+The same argument (applied to $A^{T}$) shows $C(A) \perp N(A^{T})$.
 
-**Example**
-
-For $A = \begin{pmatrix} 1 & 2 \ 2 & 4 \ 0 & 1 \end{pmatrix}$ (rank 2):
-
-Column Space $C(A)$: Dim = 2. Basis: $\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}, \begin{pmatrix} 2 \\ 4 \\ 1 \end{pmatrix}$.
-
-Orthogonal Basis: Apply Gram-Schmidt:
-
-$u_1 = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$, normalize: $q_1 = \frac{u_1}{|u_1|} = \frac{1}{\sqrt{5}} \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$.
-
-$u_2 = \begin{pmatrix} 2 \\ 4 \\ 1 \end{pmatrix} - \text{proj}_{u_1} \begin{pmatrix} 2 \\ 4 \\ 1 \end{pmatrix}$, then normalize.
-
-Left Nullspace $N(A^T)$: Dim = 3 - 2 = 1. Basis: $\begin{pmatrix} 2 \\ -1 \\ 0 \end{pmatrix}$. Verify: $u_1^T \begin{pmatrix} 2 \\ -1 \\ 0 \end{pmatrix} = 0$, confirming $C(A) \perp N(A^T)$.
+### 4. Orthogonal Complements  
+For a subspace $S\subset \mathbb{R}^k$ its **orthogonal complement** is  
+$$
+S^{\perp}= \{ v\in\mathbb{R}^k \mid v^{T}u=0 \;\forall u\in S\}.
+$$
+Key fact:  
+$$
+\dim S + \dim S^{\perp} = k.
+$$
 
 ```{code-cell} python
 import numpy as np
-from IPython.display import Markdown, display
+from numpy.linalg import svd
 
-def generate_matrix():
-    """
-    Generate a random 3x3 matrix with rank 2.
-    """
-    v1 = np.random.randint(-5, 6, 3)
-    v2 = np.random.randint(-5, 6, 3)
-    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
-        v2 = np.random.randint(-5, 6, 3)
-    coeffs = np.random.randint(-2, 3, 2)
-    v3 = coeffs[0] * v1 + coeffs[1] * v2
-    A = np.column_stack((v1, v2, v3))
-    return A
+# Example matrix A (not square)
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+], dtype=float)
 
-def gram_schmidt(V):
-    """
-    Apply Gram-Schmidt to columns of V to get an orthogonal basis.
-    """
-    V = V.astype(float)
-    n, k = V.shape
-    U = np.zeros((n, k))
-    U[:, 0] = V[:, 0]
-    for i in range(1, k):
-        u = V[:, i]
-        for j in range(i):
-            u = u - (np.dot(V[:, i], U[:, j]) / np.dot(U[:, j], U[:, j])) * U[:, j]
-        U[:, i] = u
-    # Normalize to orthonormal
-    Q = np.zeros((n, k))
-    for i in range(k):
-        if np.linalg.norm(U[:, i]) > 1e-10:
-            Q[:, i] = U[:, i] / np.linalg.norm(U[:, i])
-    return Q
+# --- Compute the four fundamental subspaces via SVD ---
+U, s, Vt = svd(A)
+r = np.sum(s > 1e-10)   # rank
 
-def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+# Bases for each subspace
+row_space = Vt[:r].T              # C(A^T)
+null_space = Vt[r:].T             # N(A)
+col_space = U[:, :r]              # C(A)
+left_null_space = U[:, r:]        # N(A^T)
 
-# Generate matrix and compute subspaces
-A = generate_matrix()
-R, pivot_cols = np.linalg.matrix_rank(A), [0, 1]  # Assume first two columns are independent
-c_a_basis = A[:, pivot_cols]
-U, S, Vt = np.linalg.svd(A.T, full_matrices=True)
-n_at_basis = Vt[rank:, :].T if rank < A.shape[0] else np.zeros((A.shape[0], 1))
+# --- Check orthogonality numerically ---
+def check_orthogonal(X, Y, nameX, nameY):
+    dot_product = X.T @ Y
+    print(f"{nameX} ⟂ {nameY}?  ||dot|| = {np.linalg.norm(dot_product):.2e}")
 
-# Apply Gram-Schmidt to C(A) basis
-ortho_basis = gram_schmidt(c_a_basis)
+check_orthogonal(row_space, null_space, "Row space", "Null space")
+check_orthogonal(col_space, left_null_space, "Column space", "Left-null space")
 
-# Verify orthogonality
-ortho_check = np.allclose(np.dot(ortho_basis[:, 0], ortho_basis[:, 1]), 0)
-c_a_n_at_ortho = all(np.allclose(np.dot(c_a_basis[:, i], n_at_basis[:, j]), 0) for i in range(c_a_basis.shape[1]) for j in range(n_at_basis.shape[1]) if n_at_basis.shape[1] > 0)
-
-# Display results
-markdown = f"**Matrix A**:\n$\n{matrix_to_latex(A)}\n$\n\n"
-markdown += f"**Column Space Basis**:\n$\n{matrix_to_latex(c_a_basis)}\n$\n\n"
-markdown += f"Predict:\n- Orthogonal basis for C(A) (apply Gram-Schmidt).\n- Is C(A) orthogonal to N(A^T)?\n- Dimensions: dim(C(A)), dim(N(A^T)).\n\n"
-display(Markdown(markdown))
-
-# Reveal answers (students uncomment after predicting)
-# markdown = f"**Answers**:\n"
-# markdown += f"- Orthogonal Basis for C(A):\n$\n{matrix_to_latex(ortho_basis)}\n$\n"
-# markdown += f"- Orthogonality Check: Columns are {'orthogonal' if ortho_check else 'not orthogonal'}.\n"
-# markdown += f"- C(A) ⊥ N(A^T): {'True' if c_a_n_at_ortho else 'False'}.\n"
-# markdown += f"- dim(C(A)) = {rank}, dim(N(A^T)) = {A.shape[0] - rank}.\n\n"
-# display(Markdown(markdown))
+# --- Dimensional sanity checks ---
+print("\nDimensional checks:")
+print(f"dim(Row space) + dim(Null space) = {row_space.shape[1]} + {null_space.shape[1]} = {A.shape[1]}")
+print(f"dim(Column space) + dim(Left-null space) = {col_space.shape[1]} + {left_null_space.shape[1]} = {A.shape[0]}")
 ```
 
 ## Lecture 15: Projections onto subspaces
