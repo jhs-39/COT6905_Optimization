@@ -439,35 +439,139 @@ display(Markdown(summary))
 
 In this lecture we explore projection matrices and least-squares problems, focusing on projecting vectors onto subspaces and finding approximate solutions to $Ax = b$. It builds on Lecture 15’s projection concepts, and we can start to connect these concepts in linear algebra back to model fitting and optimization.
 
-### Key Definitions and Geometric Intuitions
-**Projection Matrix**: \
-Definition: For $C(A)$ spanned by columns of $A$ (m x n, full column rank), the projection matrix is $P = A (A^T A)^{-1} A^T$. \
-Geometric Intuition: $P b$ projects $b$ onto $C(A)$, the closest point in the subspace. P4 is symmetric $( P^T = P )$ and idempotent $( P^2 = P )$, acting like a “flattening” operation onto $C(A)$.
+We now **use** the projection matrix to solve real problems:  
+**When $Ax = b$ has no solution, find the best possible $\hat{x}$.**
 
-**Least-Squares Problem**: \
-Definition: Minimize $| Ax - b |_2 $ when $ b \notin C(A)$. Solution: $\hat{x} = (A^T A)^{-1} A^T b $, with projection $ p = A \hat{x} $. \
-Geometric Intuition: $p$ is the closest point in $C(A)$ to $b$, with error $e = b - p \perp C(A)$, lying in $N(A^T)$. \
+### 1. Recall: The Projection Matrix
 
-**Orthogonality**: \
-Definition: The error $e = b - A \hat{x}$ satisfies $A^T e = 0 $. \
-Geometric Intuition: The error is perpendicular to $C(A)$, ensuring the shortest distance to $b$. \
+For any $m \times n$ matrix $A$ with **independent columns**,  
+$
+\boxed{P = A (A^T A)^{-1} A^T}
+$
+projects any $b \in \mathbb{R}^m$ onto $C(A)$.
 
-Applications:
-1. Least-squares solutions for data fitting (e.g., linear regression).
-2. Optimization problems where exact solutions are not feasible.
+| Case | Result |
+|------|--------|
+| $b \in C(A)$ | $Pb = b$ |
+| $b \perp C(A)$ | $Pb = 0$ |
+| Otherwise | $Pb = p \in C(A)$: closest point to $b$ |
 
-Example from last lecture:
-For $A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}$, $b = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}$: \
-Projection matrix: $ P = A A^T = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}$. \
-Projection: $ p = P b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} $. \
-Least-squares: $ \hat{x} = (A^T A)^{-1} A^T b = \begin{pmatrix} 1 \\ 2 \end{pmatrix} $, so $ A \hat{x} = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$ .\
-Error: $e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix}$, orthogonal to $C(A)$.
+---
 
-We can now ask the question: which choice of A in $R^(m \cross n)$ minimizes the error?
+### 2. Least Squares: Minimize the Error
 
-Interactive Problem Generator
+When $b \notin C(A)$, $Ax = b$ has **no solution**.  
+Instead, minimize the **squared error**:  
+$
+\min_x \|Ax - b\|^2 = \min_x \|e\|^2
+\quad \Rightarrow \quad
+\text{solve } A^T A \hat{x} = A^T b
+$
 
-This code generates a random 3x2 matrix A (rank 2) and vector b, computes the projection matrix P, projects b onto C(A), and finds the least-squares solution $\hat{x}$. It visualizes b, p, and e in 3D. Predict the projection, least-squares solution, and verify orthogonality, then check the output.
+If $A$ has independent columns, $A^T A$ is **invertible**, so  
+$
+\boxed{\hat{x} = (A^T A)^{-1} A^T b}, \quad
+p = A \hat{x} = P b
+$
+
+> **Key geometric fact**:  
+> $e = b - p \perp C(A)$ → $A^T e = 0$
+
+---
+
+### 3. Example: Fitting a Line to 3 Points
+
+We want to fit $y = C + D t$ to data:  
+$
+(t_1, b_1) = (1,1), \quad (2,2), \quad (3,1)
+$
+
+Form the system:  
+$
+A = \begin{pmatrix}
+1 & 1 \\
+1 & 2 \\
+1 & 3
+\end{pmatrix}, \quad
+b = \begin{pmatrix} 1 \\ 2 \\ 1 \end{pmatrix}
+$
+
+No exact solution — but we can find **best fit**.
+
+Compute:  
+$
+A^T A = \begin{pmatrix} 1&1&1 \\ 1&2&3 \end{pmatrix}
+\begin{pmatrix} 1&1 \\ 1&2 \\ 1&3 \end{pmatrix}
+= \begin{pmatrix} 3 & 6 \\ 6 & 14 \end{pmatrix}
+$
+$
+A^T b = \begin{pmatrix} 1&1&1 \\ 1&2&3 \end{pmatrix}
+\begin{pmatrix} 1 \\ 2 \\ 1 \end{pmatrix}
+= \begin{pmatrix} 4 \\ 9 \end{pmatrix}
+$
+
+Solve:  
+$
+\begin{pmatrix} 3 & 6 \\ 6 & 14 \end{pmatrix} \hat{x} = \begin{pmatrix} 4 \\ 9 \end{pmatrix}
+\quad \Rightarrow \quad
+\hat{x} = \begin{pmatrix} \hat{C} \\ \hat{D} \end{pmatrix}
+= \begin{pmatrix} \frac{2}{3} \\ \frac{1}{2} \end{pmatrix}
+$
+
+**Best-fit line**:  
+$
+\boxed{y = \frac{2}{3} + \frac{1}{2} t}
+$
+
+### 4. Verify: Projection $p = A \hat{x}$
+
+$
+p = A \hat{x} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}
+\begin{pmatrix} 2/3 \\ 1/2 \end{pmatrix}
+= \begin{pmatrix} 2/3 + 1/2 \\ 2/3 + 1 \\ 2/3 + 3/2 \end{pmatrix}
+= \begin{pmatrix} 7/6 \\ 4/3 \\ 13/6 \end{pmatrix}
+$
+
+Error:  
+$
+e = b - p = \begin{pmatrix} 1 - 7/6 \\ 2 - 4/3 \\ 1 - 13/6 \end{pmatrix}
+= \begin{pmatrix} -1/6 \\ 2/3 \\ -7/6 \end{pmatrix}
+$
+
+Check $e \perp C(A)$:  
+$
+A^T e = \begin{pmatrix} 1&1&1 \\ 1&2&3 \end{pmatrix}
+\begin{pmatrix} -1/6 \\ 2/3 \\ -7/6 \end{pmatrix}
+= \begin{pmatrix} 0 \\ 0 \end{pmatrix} \quad \checkmark
+$
+
+### 5. Why Is $A^T A$ Invertible?
+
+**Only if the columns of $A$ are linearly independent.**
+
+**Proof**:  
+Suppose $A^T A x = 0$. Then  
+$
+x^T (A^T A x) = 0 \quad \Rightarrow \quad (Ax)^T (Ax) = 0 \quad \Rightarrow \quad \|Ax\| = 0 \quad \Rightarrow \quad Ax = 0
+$
+If columns are independent → $N(A) = \{0\}$ → $x = 0$.  
+Thus $N(A^T A) = \{0\}$ → $A^T A$ is **invertible**.
+
+> **Insight**:  
+> Perpendicular (or orthonormal) columns make $A^T A = I$ — the **"best"** case — but **any independent columns work**.
+
+### 6. Summary: Least Squares in One Picture
+
+| Step | Formula |
+|------|--------|
+| Model | $Ax = b$ |
+| No solution? | Minimize $\|Ax - b\|^2$ |
+| Normal equations | $A^T A \hat{x} = A^T b$ |
+| Solution | $\hat{x} = (A^T A)^{-1} A^T b$ |
+| Projection | $p = A \hat{x} = P b$ |
+| Error | $e = b - p \perp C(A)$ |
+
+We provide visualization and practice problem below:
 
 ```{code-cell} python
 import numpy as np
