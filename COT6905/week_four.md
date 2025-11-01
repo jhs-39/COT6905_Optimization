@@ -40,9 +40,9 @@ These two *orthogonal-complement* pairs completely carve $\mathbb{R}^n$ and $\ma
 
 ### 1. Orthogonal Vectors – the dot-product test
 Two vectors $u, v \in \mathbb{R}^k$ are **orthogonal** if  
-$$
+$
 u^{T}v = 0 .
-$$
+$
 Geometrically they are perpendicular (90°).  
 The Pythagorean theorem holds **only** when the vectors are orthogonal:
 
@@ -63,24 +63,26 @@ Notation: $S \perp T$.
 
 #### Why does $C(A^{T}) \perp N(A)$?
 * $x \in N(A)$ means $Ax = 0$.  
-* Write the equation row-by-row:  
-  $$
+* Examine product Ax as the dot product of each row vector in A with x:  
+  $
   \text{(row}_i \text{ of }A) \cdot x = 0 \quad \text{for every } i.
-  $$
+  $
 * Every row of $A$ (i.e. every vector in the row space) is orthogonal to $x$.  
 * Because this holds for **all** $x\in N(A)$, the whole row space is orthogonal to the whole null space.
 
 The same argument (applied to $A^{T}$) shows $C(A) \perp N(A^{T})$.
 
 ### 4. Orthogonal Complements  
-For a subspace $S\subset \mathbb{R}^k$ its **orthogonal complement** is  
-$$
-S^{\perp}= \{ v\in\mathbb{R}^k \mid v^{T}u=0 \;\forall u\in S\}.
-$$
-Key fact:  
-$$
-\dim S + \dim S^{\perp} = k.
-$$
+For a subspace $S\subset \mathbb{R}^k$ its **orthogonal complement** contains all the other orthogonal dimensions in the subspace:
+$
+\dim S + \dim S^{\perp} = k
+$
+
+$
+S^{\perp}= \{ v\in\mathbb{R}^k \mid v^{T}u=0 \;\forall u\in S\}
+$
+
+Below, we give you a sneak peek of a method to calculate the 4 subspaces using singular value decomposition! We take the dot product to demonstrate orthogonality. It should be 0 or very close to 0 (numerical stability)
 
 ```{code-cell} python
 import numpy as np
@@ -125,163 +127,305 @@ print(f"dim(Column space) + dim(Left-null space) = {col_space.shape[1]} + {left_
     allowfullscreen>
 </iframe>
 
-This lecture introduces projections onto subspaces, finding the closest point in a subspace to a vector. We explore the projection matrix and orthogonal bases, building on Lecture 14’s orthogonality concepts.
+We learn how to **find the closest point** in a subspace to a given vector $b$.  
+This is the foundation of **least squares** — solving $Ax = b$ when no exact solution exists.
 
-### Key Definitions and Geometric Intuitions
+---
 
-**Projection onto a Subspace**:
+### 1. Projecting a Vector onto a Line (2D Intuition)
 
-Definition: For $b \in \mathbb{R}^n$ and subspace $S \subset \mathbb{R}^n$, the projection $p \in S$ is the closest point to $b$, with error $e = b - p \perp S$.
+Suppose we have two vectors in $\mathbb{R}^2$:  
+- $a$: defines a **line** through the origin  
+- $b$: any point we want to project
 
-Geometric Intuition: $p$ is the “shadow” of $b$ onto $S$ along perpendicular lines. The error $e$ lies in $S^\perp$, ensuring the shortest distance.
+**Goal**: Find the point $p$ on the line through $a$ that is **closest** to $b$.
 
-**Projection Matrix**:
+Let $p = x a$ (some scalar multiple of $a$).  
+The **error vector** is  
+$$
+e = b - p = b - x a
+$$
 
-Definition: For a subspace $C(A)$ (where $A$ is m x n, full column rank), the projection matrix is $P = A (A^T A)^{-1} A^T$.
+For $p$ to be the *closest* point, $e$ must be **perpendicular** to the line (i.e., to $a$):  
+$$
+a^T e = 0 \quad \Rightarrow \quad a^T (b - x a) = 0
+$$
+$$
+a^T b - x (a^T a) = 0 \quad \Rightarrow \quad x = \frac{a^T b}{a^T a}
+$$
+$$
+\boxed{p = a \left( \frac{a^T b}{a^T a} \right) = \frac{a a^T}{a^T a} \, b}
+$$
 
-Geometric Intuition: $P b$ projects $b$ onto $C(A)$, with $P$ symmetric ($P^T = P$) and idempotent ($P^2 = P$). It maps vectors to their closest points in $C(A)$.
+Let  
+$$
+\boxed{P = \frac{a a^T}{a^T a}}
+\qquad \text{then} \quad
+p = P b
+$$
 
-**Orthogonal Projection**:
+$P$ is the **projection matrix** onto the line through $a$.
 
-Definition: Using an orthonormal basis $q_1, \ldots, q_k$ for $S$, $p = \sum_{i=1}^k (q_i^T b) q_i$.
+---
 
-Geometric Intuition: Each term $(q_i^T b) q_i$ is the component of $b$ along $q_i$, summing to the projection.
+### 2. Properties of the Projection Matrix $P$
 
-**Orthogonal Complement**:
+| Property | Why it holds |
+|--------|--------------|
+| $P^2 = P$ | Projecting twice gives the same result |
+| $P^T = P$ | Symmetric (follows from $a a^T = (a a^T)^T$) |
+| $\text{rank}(P) = 1$ | Column space is the line spanned by $a$ |
 
-Definition: $S^\perp = { v \in \mathbb{R}^n \mid v^T u = 0 \text{ for all } u \in S }$, with $\dim(S) + \dim(S^\perp) = n$.
+---
 
-Geometric Intuition: $S^\perp$ contains all vectors perpendicular to $S$, e.g., $N(A^T)$ for $C(A)$.
+### 3. General Case: Projecting onto a Subspace $C(A)$
 
-Example
+Now let $A$ be an $m \times n$ matrix (not necessarily square).  
+We want to project $b \in \mathbb{R}^m$ onto **$C(A)$** — the column space of $A$.
 
-For $A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}$, project $b = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}$ onto $C(A)$:
+Let  
+$$
+p = A \hat{x} \quad \text{(so $p \in C(A)$)}
+$$
+Error:  
+$$
+e = b - p = b - A \hat{x}
+$$
 
-**Orthonormal basis**: $\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}$, $\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}$.
+For $p$ to be the **closest point**, $e$ must be **perpendicular to every column of $A$**:  
+$$
+a_i^T e = 0 \quad \forall i \quad \Rightarrow \quad A^T e = 0
+$$
+$$
+A^T (b - A \hat{x}) = 0 \quad \Rightarrow \quad A^T A \hat{x} = A^T b
+$$
 
-Projection: $p = (1 \cdot 1) \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + (2 \cdot 1) \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$.
+If $A^T A$ is invertible (i.e., $A$ has **full column rank**),  
+$$
+\boxed{\hat{x} = (A^T A)^{-1} A^T b}
+$$
+$$
+\boxed{p = A \hat{x} = A (A^T A)^{-1} A^T b}
+$$
 
-Error: $e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix}$, orthogonal to $C(A)$.
+Define the **projection matrix onto $C(A)$**:  
+$$
+\boxed{P = A (A^T A)^{-1} A^T}
+$$
 
-Interactive Problem Generator
+---
 
-This code generates a random 3x2 matrix $A$ (rank 2), computes an orthonormal basis for $C(A)$, projects a random $b$ onto $C(A)$, and visualizes $b$, $p$, and $e$ in 3D. Predict the projection and verify orthogonality, then check the output.
+### 4. Key Properties (Same as Before!)
+
+- $P^2 = P$  
+- $P^T = P$  
+- $\text{rank}(P) = \text{rank}(A)$  
+- $Pb \in C(A)$  
+- $b - Pb \in N(A^T)$ (i.e., perpendicular to $C(A)$)
+
+> **Note**: $A$ is **not square** → $P \neq I$, even if $A$ is invertible in some sense.  
+> Only when $C(A) = \mathbb{R}^m$ (full row rank) do we get $P = I$.
+
+---
+
+### 5. Example: Project onto the $xy$-Plane
+
+Let  
+$$
+A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}, \quad
+b = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
+$$
+
+Column space: the $xy$-plane in $\mathbb{R}^3$.
+
+Compute:  
+$$
+A^T A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, \quad
+(A^T A)^{-1} = I_2
+$$
+$$
+P = A (A^T A)^{-1} A^T = A A^T = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{pmatrix}
+$$
+$$
+p = P b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}
+$$
+Error:  
+$$
+e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix} \in N(A^T)
+$$
+
+Check: $e \perp C(A)$?  
+$$
+\begin{pmatrix} 1 & 0 & 0 \end{pmatrix} \cdot e = 0, \quad
+\begin{pmatrix} 0 & 1 & 0 \end{pmatrix} \cdot e = 0
+\;\; \checkmark
+$$
+
+---
+
+### 6. Why Do We Care? → **Least Squares**
+
+The system $Ax = b$ may have **no solution** (if $b \notin C(A)$).  
+Instead, solve the **closest problem**:  
+$$
+\text{minimize } \|Ax - b\|^2
+\quad \Rightarrow \quad
+\text{solution: } \hat{x} = (A^T A)^{-1} A^T b
+$$
+
+This is **linear regression**, **data fitting**, **curve fitting**, etc.
+
+**Example**: Fit a line $y = c + dt$ to noisy points $(t_i, b_i)$  
+→ Let $A = \begin{pmatrix} 1 & t_1 \\ 1 & t_2 \\ \vdots \end{pmatrix}$  
+→ Solve $A \hat{x} = P b$ → best-fit line.
+
+---
+
+### Summary: The Big Picture
+
+| Concept | Formula | Meaning |
+|-------|--------|--------|
+| Projection onto line | $p = \frac{a a^T}{a^T a} b$ | Shadow of $b$ on line |
+| Projection onto $C(A)$ | $p = A (A^T A)^{-1} A^T b$ | Shadow of $b$ on column space |
+| Error $e = b - p$ | $e \in N(A^T)$ | Perpendicular to subspace |
+| Least Squares | $\hat{x} = (A^T A)^{-1} A^T b$ | Best approximate solution |
+
+### Visualization: Projection on the plane
 
 ```{code-cell} python
+# ------------------------------------------------------------------
+#  Lecture 15 – Projection onto a random plane (no widgets)
+# ------------------------------------------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.patches import FancyArrowPatch
+import matplotlib as mpl
 from IPython.display import Markdown, display
 
-def generate_matrix_and_b():
-    """
-    Generate a random 3x2 matrix with rank 2 and a random b.
-    """
-    v1 = np.random.randint(-5, 6, 3)
-    v2 = np.random.randint(-5, 6, 3)
-    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
-        v2 = np.random.randint(-5, 6, 3)
-    A = np.column_stack((v1, v2))
-    b = np.random.randint(-5, 6, 3)
+# ------------------------------------------------------------------
+# 1.  Generate a random plane (two independent columns) and point b
+# ------------------------------------------------------------------
+def generate_data(seed=None):
+    if seed is not None:
+        np.random.seed(seed)
+    # Two random vectors → span a plane
+    while True:
+        a1 = np.random.randn(3)
+        a2 = np.random.randn(3)
+        if np.linalg.matrix_rank(np.column_stack([a1, a2])) == 2:
+            break
+    A = np.column_stack([a1, a2])
+    A = A / np.linalg.norm(A, axis=0)          # normalize for nice scale
+    b = np.random.randn(3) + 3                 # point not in plane
     return A, b
 
-def gram_schmidt(A):
-    """
-    Apply Gram-Schmidt to columns of A to get an orthonormal basis.
-    """
-    A = A.astype(float)
-    n, k = A.shape
-    U = np.zeros((n, k))
-    U[:, 0] = A[:, 0]
-    for i in range(1, k):
-        u = A[:, i]
-        for j in range(i):
-            u = u - (np.dot(A[:, i], U[:, j]) / np.dot(U[:, j], U[:, j])) * U[:, j]
-        U[:, i] = u
-    Q = np.zeros((n, k))
-    for i in range(k):
-        if np.linalg.norm(U[:, i]) > 1e-10:
-            Q[:, i] = U[:, i] / np.linalg.norm(U[:, i])
-    return Q
+# Change the seed below to get a new random example
+A, b = generate_data(seed=42)                  # ← edit this number!
 
-def project_onto_subspace(A, b):
-    """
-    Project b onto C(A) and compute the projection matrix.
-    """
-    Q = gram_schmidt(A)
-    p = np.dot(Q, np.dot(Q.T, b))
-    P = np.dot(Q, Q.T)
-    e = b - p
-    return p, e, P
+# ------------------------------------------------------------------
+# 2.  Compute projection p = A (A^T A)^(-1) A^T b
+# ------------------------------------------------------------------
+ATA_inv = np.linalg.inv(A.T @ A)
+P = A @ ATA_inv @ A.T
+p = P @ b
+e = b - p                                      # error vector
 
-def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+# ------------------------------------------------------------------
+# 3.  Helper: 3D arrow for the error vector
+# ------------------------------------------------------------------
+class Arrow3D(FancyArrowPatch):
+    def __init__(self, xs, ys, zs, *args, **kwargs):
+        super().__init__((0,0), (0,0), *args, **kwargs)
+        self._verts3d = xs, ys, zs
+    def do_3d_projection(self, renderer=None):
+        xs3d, ys3d, zs3d = self._verts3d
+        xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, self.axes.M)
+        self.set_positions((xs[0],ys[0]),(xs[1],ys[1]))
+        return np.min(zs)
 
-def plot_projection(A, b, p, e):
-    """
-    Plot b, p, and e in 3D.
-    """
-    Q = gram_schmidt(A)
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111, projection='3d')
-    
-    # Plot origin
-    ax.scatter([0], [0], [0], color='black', s=50, label='Origin')
-    
-    # Plot b, p, e as vectors
-    ax.quiver(0, 0, 0, b[0], b[1], b[2], color='blue', label='b', linewidth=2)
-    ax.quiver(0, 0, 0, p[0], p[1], p[2], color='green', label='Projection p', linewidth=2)
-    ax.quiver(p[0], p[1], p[2], e[0], e[1], e[2], color='red', label='Error e', linewidth=2)
-    
-    # Plot column space plane
-    x = np.linspace(-1, 1, 20)
-    y = np.linspace(-1, 1, 20)
-    X, Y = np.meshgrid(x, y)
-    Z = np.zeros_like(X)
-    for i in range(X.shape[0]):
-        for j in range(X.shape[1]):
-            point = X[i, j] * Q[:, 0] + Y[i, j] * Q[:, 1]
-            Z[i, j] = point[2]
-            X[i, j] = point[0]
-            Y[i, j] = point[1]
-    ax.plot_surface(X, Y, Z, color='cyan', alpha=0.3, label='C(A)')
-    
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    max_range = np.max(np.abs(np.concatenate([b, p, e]))) * 1.5
-    ax.set_xlim(-max_range, max_range)
-    ax.set_ylim(-max_range, max_range)
-    ax.set_zlim(-max_range, max_range)
-    
-    ax.legend()
-    plt.title('Projection of b onto C(A)')
-    plt.show()
+# ------------------------------------------------------------------
+# 4.  Plot everything
+# ------------------------------------------------------------------
+fig = plt.figure(figsize=(11, 8))
+ax = fig.add_subplot(111, projection='3d')
+ax.set_title('Projection of $b$ onto a Random Plane', fontsize=14, pad=20)
 
-# Generate matrix and vector
-A, b = generate_matrix_and_b()
-p, e, P = project_onto_subspace(A, b)
+# --- Plane (semi-transparent mesh) ---
+s = np.linspace(-2.5, 2.5, 20)
+t = np.linspace(-2.5, 2.5, 20)
+S, T = np.meshgrid(s, t)
+X = S * A[0,0] + T * A[0,1]
+Y = S * A[1,0] + T * A[1,1]
+Z = S * A[2,0] + T * A[2,1]
+ax.plot_surface(X, Y, Z, color='lightblue', alpha=0.5, linewidth=0, antialiased=True)
 
-# Verify orthogonality
-Q = gram_schmidt(A)
-ortho_check = np.allclose(np.dot(Q.T, e), 0)
+# --- Points ---
+ax.scatter(*b, color='red', s=100, label='$b$ (original point)', depthshade=False)
+ax.scatter(*p, color='blue', s=100, label='$p$ (projection)', depthshade=False)
+ax.scatter(0, 0, 0, color='gray', s=30, alpha=0.6)
 
-# Display results
-markdown = f"**Matrix A**:\n$$\n{matrix_to_latex(A)}\n$$\n\n"
-markdown += f"**Vector b**:\n$$\n{matrix_to_latex(b.reshape(-1, 1))}\n$$\n\n"
-display(Markdown(markdown))
-plot_projection(A, b, p, e)
-markdown = f"Predict:\n- Projection p of b onto C(A).\n- Error e = b - p.\n- Is e orthogonal to C(A)?\n- Dimension of C(A)?\n\n"
-display(Markdown(markdown))
+# --- Error vector e = b - p (dashed purple arrow) ---
+arrow = Arrow3D(
+    [b[0], p[0]], [b[1], p[1]], [b[2], p[2]],
+    mutation_scale=20, arrowstyle='-|>', color='purple', linewidth=2.5, linestyle='--'
+)
+ax.add_artist(arrow)
 
-# Reveal answers
-# markdown = f"**Answers**:\n"
-# markdown += f"- Projection p:\n$$\n{matrix_to_latex(p.reshape(-1, 1))}\n$$\n"
-# markdown += f"- Error e:\n$$\n{matrix_to_latex(e.reshape(-1, 1))}\n$$\n"
-# markdown += f"- e ⊥ C(A): {'True' if ortho_check else 'False'}.\n"
-# markdown += f"- dim(C(A)) = {np.linalg.matrix_rank(A)}.\n\n"
-# display(Markdown(markdown))
+# --- Dotted perpendicular line from b to p ---
+ax.plot([b[0], p[0]], [b[1], p[1]], [b[2], p[2]], 'k:', linewidth=1.8)
+
+# --- Basis vectors of the plane (thin gray) ---
+for i in range(2):
+    vec = 3.0 * A[:, i]
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color='gray', alpha=0.7, linewidth=1.2)
+
+# --- Labels ---
+ax.text(b[0], b[1], b[2], "  $b$", color='red', fontsize=13, weight='bold')
+ax.text(p[0], p[1], p[2], "  $p$", color='blue', fontsize=13, weight='bold')
+mid = (b + p) / 2
+ax.text(mid[0], mid[1], mid[2], "  $e$", color='purple', fontsize=13, weight='bold')
+
+ax.set_xlabel('X'); ax.set_ylabel('Y'); ax.set_zlabel('Z')
+ax.legend(loc='upper left', fontsize=11)
+ax.set_xlim([-4, 4]); ax.set_ylim([-4, 4]); ax.set_zlim([-4, 4])
+ax.view_init(elev=20, azim=30)
+plt.tight_layout()
+plt.show()
+
+# ------------------------------------------------------------------
+# 5.  Summary in Markdown (auto-updated when cell is re-run)
+# ------------------------------------------------------------------
+def latex_vec(v, name, dec=2):
+    entries = [f"{x:.{dec}f}" for x in v]
+    return f"${name} = \\begin{{pmatrix}} {entries[0]} \\\\ {entries[1]} \\\\ {entries[2]} \\end{{pmatrix}}$"
+
+summary = f"""
+### Projection Summary
+
+**Plane basis** (columns of $A$):  
+{latex_vec(A[:,0], 'a_1')}, {latex_vec(A[:,1], 'a_2')}
+
+**Point** $b$:  
+{latex_vec(b, 'b')}
+
+**Projection** $p = A (A^T A)^{-1} A^T b$:  
+{latex_vec(p, 'p')}
+
+**Error** $e = b - p$:  
+{latex_vec(e, 'e')}  
+$\|e\| = {np.linalg.norm(e):.3f}$
+
+**Orthogonality check** (should be ≈0):  
+$a_1^T e = {A[:,0]@e:.2e}$,  
+$a_2^T e = {A[:,1]@e:.2e}$
+
+---
+
+*To see a new random example, just **re-run this cell** (or change the `seed` value above).*
+"""
+
+display(Markdown(summary))
 ```
 
 ## Lecture 16: Projection Matrices
