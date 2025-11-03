@@ -194,96 +194,134 @@ $
 This code generates a random 3x2 matrix A (rank 2), applies Gram-Schmidt to find an orthonormal basis for C(A), and forms an orthogonal matrix Q. It visualizes the original and orthonormal basis vectors in 3D. Predict the orthonormal basis and verify orthogonality, then check the output.
 
 ```{code-cell} python
+# ------------------------------------------------------------------
+#  Lecture 17 – Gram-Schmidt: 3 orthonormal vectors in R^3
+# ------------------------------------------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from IPython.display import Markdown, display
 
-def generate_matrix():
-    """
-    Generate a random 3x2 matrix with rank 2.
-    """
-    v1 = np.random.randint(-5, 6, 3)
-    v2 = np.random.randint(-5, 6, 3)
-    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
-        v2 = np.random.randint(-5, 6, 3)
-    A = np.column_stack((v1, v2))
-    return A
+# --------------------------------------------------------------
+# 1. Generate a random 3×3 matrix with full rank
+# --------------------------------------------------------------
+def generate_full_rank_3x3():
+    """Return a 3×3 matrix with linearly independent columns."""
+    while True:
+        A = np.random.randint(-5, 6, size=(3, 3))
+        if np.linalg.matrix_rank(A) == 3:
+            return A.astype(float)
 
+A = generate_full_rank_3x3()   # ← change seed or re-run for new example
+
+# --------------------------------------------------------------
+# 2. Gram-Schmidt (returns Q only – R is optional)
+# --------------------------------------------------------------
 def gram_schmidt(A):
-    """
-    Apply Gram-Schmidt to columns of A to get an orthonormal basis.
-    """
     A = A.astype(float)
-    n, k = A.shape
-    U = np.zeros((n, k))
-    U[:, 0] = A[:, 0]
-    for i in range(1, k):
-        u = A[:, i]
-        for j in range(i):
-            u = u - (np.dot(A[:, i], U[:, j]) / np.dot(U[:, j], U[:, j])) * U[:, j]
-        U[:, i] = u
-    Q = np.zeros((n, k))
-    for i in range(k):
-        if np.linalg.norm(U[:, i]) > 1e-10:
-            Q[:, i] = U[:, i] / np.linalg.norm(U[:, i])
+    m, n = A.shape
+    Q = np.zeros((m, n))
+    for j in range(n):
+        v = A[:, j].copy()
+        for i in range(j):
+            v -= (Q[:, i] @ A[:, j]) * Q[:, i]
+        Q[:, j] = v / np.linalg.norm(v)
     return Q
 
-def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.2f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
-
-def plot_vectors(A, Q):
-    """
-    Plot original and orthonormal basis vectors in 3D.
-    """
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111, projection='3d')
-    
-    # Plot origin
-    ax.scatter([0], [0], [0], color='black', s=50, label='Origin')
-    
-    # Plot original basis
-    ax.quiver(0, 0, 0, A[0, 0], A[1, 0], A[2, 0], color='blue', label='Original v1', linewidth=2)
-    ax.quiver(0, 0, 0, A[0, 1], A[1, 1], A[2, 1], color='red', label='Original v2', linewidth=2)
-    
-    # Plot orthonormal basis
-    ax.quiver(0, 0, 0, Q[0, 0], Q[1, 0], Q[2, 0], color='green', label='Orthonormal q1', linewidth=2)
-    ax.quiver(0, 0, 0, Q[0, 1], Q[1, 1], Q[2, 1], color='purple', label='Orthonormal q2', linewidth=2)
-    
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    max_range = np.max(np.abs(np.concatenate([A, Q], axis=1))) * 1.5
-    ax.set_xlim(-max_range, max_range)
-    ax.set_ylim(-max_range, max_range)
-    ax.set_zlim(-max_range, max_range)
-    
-    ax.legend()
-    plt.title('Original and Orthonormal Basis for C(A)')
-    plt.show()
-
-# Generate matrix
-A = generate_matrix()
 Q = gram_schmidt(A)
 
-# Verify orthogonality
-ortho_check = np.allclose(np.dot(Q.T, Q), np.eye(Q.shape[1]))
-length_check = np.allclose(np.linalg.norm(Q, axis=0), 1)
+# --------------------------------------------------------------
+# 3. LaTeX helper
+# --------------------------------------------------------------
+def matrix_to_latex(M, name="A", dec=2):
+    rows = []
+    for row in M:
+        entries = [f"{x:.{dec}f}" if abs(x) > 1e-8 else "0" for x in row]
+        rows.append(" & ".join(entries))
+    body = r" \\ ".join(rows)
+    return f"${name} = \\begin{{pmatrix}} {body} \\end{{pmatrix}}$"
 
-# Display results
-markdown = f"**Matrix A (basis for C(A))**:\n$$\n{matrix_to_latex(A)}\n$$\n\n"
-display(Markdown(markdown))
-plot_vectors(A, Q)
-markdown = f"Predict:\n- Orthonormal basis for C(A) using Gram-Schmidt.\n- Is Q^T Q = I?\n- Are columns of Q unit length?\n\n"
-display(Markdown(markdown))
+# --------------------------------------------------------------
+# 4. 3-D quiver plot
+# --------------------------------------------------------------
+def plot_orthonormal_basis(A, Q):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_title('Original Basis (blue/red/yellow) → Orthonormal Basis (green/purple/orange)')
 
-# Reveal answers (students uncomment after predicting)
-# markdown = f"**Answers**:\n"
-# markdown += f"- Orthonormal Basis Q:\n$$\n{matrix_to_latex(Q)}\n$$\n"
-# markdown += f"- Q^T Q = I: {'True' if ortho_check else 'False'}.\n"
-# markdown += f"- Columns unit length: {'True' if length_check else 'False'}.\n\n"
-# display(Markdown(markdown))
+    colors_orig = ['blue', 'red', 'gold']
+    colors_orth = ['green', 'purple', 'orange']
+    labels_orig = [f'$a_{i+1}$' for i in range(3)]
+    labels_orth = [f'$q_{i+1}$' for i in range(3)]
+
+    # Original vectors
+    for i in range(3):
+        ax.quiver(0,0,0, A[0,i], A[1,i], A[2,i],
+                  color=colors_orig[i], linewidth=2.5, arrow_length_ratio=0.1,
+                  label=labels_orig[i])
+
+    # Orthonormal vectors
+    for i in range(3):
+        ax.quiver(0,0,0, Q[0,i], Q[1,i], Q[2,i],
+                  color=colors_orth[i], linewidth=2.5, arrow_length_ratio=0.1,
+                  label=labels_orth[i], alpha=0.9)
+
+    ax.set_xlim([-6,6]); ax.set_ylim([-6,6]); ax.set_zlim([-6,6])
+    ax.set_xlabel('X'); ax.set_ylabel('Y'); ax.set_zlabel('Z')
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.tight_layout()
+    plt.show()
+
+# --------------------------------------------------------------
+# 5. Verification
+# --------------------------------------------------------------
+ortho_check = np.allclose(Q.T @ Q, np.eye(3), atol=1e-6)
+unit_check  = np.allclose(np.linalg.norm(Q, axis=0), 1.0, atol=1e-6)
+
+# --------------------------------------------------------------
+# 6. Display: Hand-work section
+# --------------------------------------------------------------
+markdown = f"""
+### **Your Task: Find 3 Orthonormal Vectors by Hand**
+
+**Given basis vectors** (columns of $A$):  
+
+{matrix_to_latex(A.T, name="a_1, a_2, a_3", dec=1)}
+
+**Step-by-step (do this on paper!)**:
+
+1. $q_1 = \\dfrac{{a_1}}{{\\|a_1\\|}}$  
+2. $v_2 = a_2 - (q_1^T a_2) q_1$,&nbsp;&nbsp; $q_2 = \\dfrac{{v_2}}{{\\|v_2\\|}}$  
+3. $v_3 = a_3 - (q_1^T a_3) q_1 - (q_2^T a_3) q_2$,&nbsp;&nbsp; $q_3 = \\dfrac{{v_3}}{{\\|v_3\\|}}$
+
+**Predict**: What are $q_1, q_2, q_3$? Is $Q^T Q = I$?
+
+---
+
+*Now run the cell and compare!*
+"""
+
+display(Markdown(markdown))
+plot_orthonormal_basis(A, Q)
+
+# --------------------------------------------------------------
+# 7. Reveal answers
+# --------------------------------------------------------------
+reveal = f"""
+**Computer Solution**:
+
+**Orthonormal basis** $Q$:
+
+{matrix_to_latex(Q, name="Q", dec=3)}
+
+**Checks**:  
+- $Q^T Q = I$? → **{ortho_check}**  
+- All columns unit length? → **{unit_check}**
+
+*Great job if your hand calculation matches (up to sign)!*
+"""
+
+display(Markdown(reveal))
 ```
 
 ## Lecture 18: Properties of determinants
