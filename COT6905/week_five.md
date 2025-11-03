@@ -22,35 +22,176 @@ kernelspec:
     allowfullscreen>
 </iframe>
 
-This lecture (inspired by Gilbert Strang’s MIT 18.06 Lecture 17) introduces orthogonal matrices and the Gram-Schmidt process, key for creating orthonormal bases and simplifying computations. It builds on Lecture 14’s orthogonality and Lecture 15’s projections, connecting to optimization in your syllabus.
+We learn how to turn **any basis** into an **orthonormal basis** — the "best" coordinate system for projections and least squares.
 
-### Key Definitions and Geometric Intuitions
+---
 
-Orthogonal Matrix:
+### 1. Orthogonal and Orthonormal Vectors
 
-Definition: A square matrix ( Q ) (n x n) with orthonormal columns: ( Q^T Q = I ), so ( Q^{-1} = Q^T ).
+Two vectors $u, v$ are **orthogonal** if  
+$
+u^T v = 0
+$
 
-Geometric Intuition: Represents rotations or reflections, preserving lengths (( |Qx| = |x| )) and angles. Columns form an orthonormal coordinate system in ( \mathbb{R}^n ).
+They are **orthonormal** if also  
+$
+\|u\| = \|v\| = 1
+$
 
-Gram-Schmidt Process:
+For a set $\{q_1, \dots, q_k\}$:  
+$
+\boxed{q_i^T q_j = \delta_{ij} =
+\begin{cases}
+1 & i = j \\
+0 & i \neq j
+\end{cases}}
+$
 
-Definition: Transforms a basis ( {v_1, \ldots, v_k} ) into an orthonormal basis ( {q_1, \ldots, q_k} ):
-( u_1 = v_1 ), ( q_1 = \frac{u_1}{|u_1|} ).
-( u_i = v_i - \sum_{j=1}^{i-1} (q_j^T v_i) q_j ), ( q_i = \frac{u_i}{|u_i|} ).
-Geometric Intuition: Orthogonalizes vectors by subtracting projections onto previous vectors, creating a perpendicular basis. Normalization ensures unit lengths.
-Applications:
-Simplifies projections: ( p = \sum (q_i^T b) q_i ).
-Enables QR factorization: ( A = QR ), where ( Q ) is orthogonal.
-Example
-For ( A = \begin{pmatrix} 1 & 0 \ 1 & 1 \ 0 & 1 \end{pmatrix} ):
-Gram-Schmidt on columns ( v_1 = \begin{pmatrix} 1 \ 1 \ 0 \end{pmatrix} ), ( v_2 = \begin{pmatrix} 0 \ 1 \ 1 \end{pmatrix} ):
-( q_1 = \frac{v_1}{|v_1|} = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \ 1 \ 0 \end{pmatrix} ).
-( u_2 = v_2 - (q_1^T v_2) q_1 = \begin{pmatrix} 0 \ 1 \ 1 \end{pmatrix} - \frac{1}{\sqrt{2}} \cdot \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \ 1 \ 0 \end{pmatrix} = \begin{pmatrix} -0.5 \ 0.5 \ 1 \end{pmatrix} ), ( q_2 = \frac{u_2}{|u_2|} ).
-Orthogonal matrix: ( Q = \begin{pmatrix} \frac{1}{\sqrt{2}} & \frac{-1}{\sqrt{6}} \ \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{6}} \ 0 & \frac{2}{\sqrt{6}} \end{pmatrix} ).
+---
+
+### 2. Orthogonal Matrices
+
+Let  
+$
+Q = \begin{bmatrix} q_1 & \cdots & q_n \end{bmatrix} \quad \text{(square, } n \times n\text{)}
+$
+
+Then  
+$
+\boxed{Q^T Q = I} \quad \Rightarrow \quad \boxed{Q^T = Q^{-1}}
+$
+
+**Definition**: A square matrix with orthonormal columns is an **orthogonal matrix**.
+
+> **Note**: Only **square** matrices can be orthogonal.
+
+---
+
+### 3. Examples of Orthogonal Matrices
+
+#### a) Permutation Matrix
+$
+P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+$
+Columns are standard basis vectors (permuted) → orthonormal → $P^T P = I$.
+
+#### b) Hadamard Matrix (size 2)
+$
+H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}
+$
+Entries $\pm 1$, scaled to unit length → orthogonal.
+
+---
+
+### 4. Why Orthonormal Bases Are Useful
+
+Suppose $Q$ has **orthonormal columns** (not necessarily square).
+
+The **projection onto $C(Q)$** is  
+$
+P = Q (Q^T Q)^{-1} Q^T
+$
+
+But $Q^T Q = I_k$ (for first $k$ columns), so  
+$
+\boxed{P = Q Q^T}
+$
+
+And  
+$
+\boxed{P^2 = (Q Q^T)(Q Q^T) = Q (Q^T Q) Q^T = Q I Q^T = Q Q^T = P}
+$
+
+**Projection is clean**: no inversion needed!
+
+If $Q$ is square:  
+$
+P = Q Q^T = I \quad \Rightarrow \quad C(Q) = \mathbb{R}^n
+$
+
+---
+
+### 5. Least Squares with Orthonormal Columns
+
+Recall:  
+$
+A^T A \hat{x} = A^T b \quad \Rightarrow \quad \hat{x} = (A^T A)^{-1} A^T b
+$
+
+If $A = Q$ (orthonormal columns):  
+$
+\boxed{\hat{x} = Q^T b}
+\quad \text{(no inversion!)}
+$
+
+---
+
+### 6. Gram-Schmidt: Constructing Orthonormal Bases
+
+Start with linearly independent vectors $\{a_1, a_2, \dots\}$.
+
+**Goal**: Build $\{q_1, q_2, \dots\}$ orthonormal.
+
+#### Step 1: First Vector
+$
+v_1 = a_1, \quad
+\boxed{q_1 = \frac{v_1}{\|v_1\|}}
+$
+
+#### Step 2: Second Vector
+Subtract projection onto $q_1$:  
+$
+v_2 = a_2 - (q_1^T a_2) q_1, \quad
+\boxed{q_2 = \frac{v_2}{\|v_2\|}}
+$
+
+#### Step 3: General Step
+$
+v_k = a_k - \sum_{j=1}^{k-1} (q_j^T a_k) q_j, \quad
+q_k = \frac{v_k}{\|v_k\|}
+$
+
+**Guaranteed**: $v_k \perp \text{span}\{q_1, \dots, q_{k-1}\}$
+
+---
+
+### 7. QR Decomposition
+
+For any $m \times n$ matrix $A$ with independent columns:  
+$
+\boxed{A = Q R}
+$
+- $Q$: $m \times n$, orthonormal columns  
+- $R$: $n \times n$, **upper triangular**
+
+Like $A = LU$, but with **orthonormal $Q$**.
+
+---
+
+### 8. Example: Gram-Schmidt in $\mathbb{R}^3$
+
+Let  
+$
+a_1 = \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix}, \;
+a_2 = \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}, \;
+a_3 = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}
+$
+
+**By hand**:
+
+1. $v_1 = a_1$, $\quad \|v_1\| = \sqrt{3}$, $\quad q_1 = \frac{1}{\sqrt{3}} \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix}$
+
+2. $v_2 = a_2 - (q_1^T a_2) q_1 = \begin{pmatrix}1\\1\\0\end{pmatrix} - \frac{2}{\sqrt{3}} \cdot \frac{1}{\sqrt{3}} \begin{pmatrix}1\\1\\1\end{pmatrix} = \begin{pmatrix}1/3 \\ 1/3 \\ -2/3\end{pmatrix}$  
+   $\|v_2\| = 1$, $\quad q_2 = \begin{pmatrix} 1/3 \\ 1/3 \\ -2/3 \end{pmatrix}$
+
+3. $v_3 = a_3 - (q_1^T a_3)q_1 - (q_2^T a_3)q_2 = \cdots = \begin{pmatrix} 1/3 \\ -2/3 \\ 1/3 \end{pmatrix}$  
+   $\|v_3\| = 1$, $\quad q_3 = \begin{pmatrix} 1/3 \\ -2/3 \\ 1/3 \end{pmatrix}$
+
+---
 
 ### Interactive Problem Generator
 
-This code generates a random 3x2 matrix ( A ) (rank 2), applies Gram-Schmidt to find an orthonormal basis for ( C(A) ), and forms an orthogonal matrix ( Q ). It visualizes the original and orthonormal basis vectors in 3D. Predict the orthonormal basis and verify orthogonality, then check the output.
+This code generates a random 3x2 matrix A (rank 2), applies Gram-Schmidt to find an orthonormal basis for C(A), and forms an orthogonal matrix Q. It visualizes the original and orthonormal basis vectors in 3D. Predict the orthonormal basis and verify orthogonality, then check the output.
 
 ```{code-cell} python
 import numpy as np
