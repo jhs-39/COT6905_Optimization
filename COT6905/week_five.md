@@ -333,160 +333,188 @@ display(Markdown(reveal))
     allowfullscreen>
 </iframe>
 
-This lecture explores the determinant of a square matrix, its properties, and its geometric interpretation as a volume scaling factor. It builds on matrix theory concepts, connecting to invertibility and linear systems.
+We now turn to **square matrices** and introduce the **determinant** — a single number that tells us whether a matrix is invertible, and by how much it scales area (or volume).
 
-### Key Definitions and Geometric Intuitions
+---
 
-Determinant:
+### 1. What Is the Determinant?
 
-Definition: For an ( n \times n ) matrix ( A ), ( \det(A) ) is a scalar indicating invertibility and volume scaling.
+For a square matrix $A \in \mathbb{R}^{n \times n}$,  
+$$
+\boxed{\det(A) \text{ or } |A|}
+$$
+is a **scalar** with these key properties:
 
-Geometric Intuition: ( |\det(A)| ) is the volume of the parallelepiped formed by ( A )’s columns. If ( \det(A) = 0 ), the columns are linearly dependent, collapsing the space.
+| Property | Meaning |
+|--------|-------|
+| $\det(A) \neq 0$ | $A$ is **invertible** |
+| $\det(A) = 0$ | $A$ is **singular** (no inverse) |
 
-Properties:
+---
 
-Invertibility: ( A ) is invertible if ( \det(A) \neq 0 ).
+### 2. The 4 Defining Properties of the Determinant
 
-Row Operations:
+These **completely define** $\det$:
 
-Swap rows: ( \det(A') = -\det(A) ).
+1. **Identity**:  
+   $$
+   \boxed{\det(I) = 1}
+   $$
 
-Multiply row by ( k ): ( \det(A') = k \det(A) ).
+2. **Row Swap**:  
+   Swapping two rows **reverses the sign**:  
+   $$
+   \det(\text{swap rows}) = -\det(A)
+   $$
+   → Permutation matrices have $\det(P) = \pm 1$ (even/odd).
 
-Add multiple of one row to another: ( \det(A') = \det(A) ).
+3. **Linearity (Two Parts)**:  
+   - **Scaling a row**:  
+     $$
+     \det(\text{row}_1 \leftarrow t \cdot \text{row}_1) = t \cdot \det(A)
+     $$
+   - **Adding rows**:  
+     $$
+     \det(\text{row}_1 \leftarrow \text{row}_1 + \text{row}_2) = \det(A) + \det(\text{swapped version})
+     $$
 
-Multiplicative: ( \det(AB) = \det(A) \det(B) ).
+4. **Duplicate Rows**:  
+   $$
+   \text{If two rows are identical} \quad \Rightarrow \quad \boxed{\det(A) = 0}
+   $$
 
-Transpose: ( \det(A^T) = \det(A) ).
+---
 
-Triangular: ( \det(A) = \text{product of diagonal entries} ).
+### 3. Elimination Preserves the Determinant!
 
-Zero/Dependent Rows: ( \det(A) = 0 ).
+Elimination (without swapping) **does not change** $\det(A)$:
 
-Applications:
-Test invertibility.
+$$
+\det\begin{pmatrix} a & b \\ c - \ell a & d - \ell b \end{pmatrix}
+= \det\begin{pmatrix} a & b \\ c & d \end{pmatrix} + \det\begin{pmatrix} a & b \\ -\ell a & -\ell b \end{pmatrix}
+= \det(A) + (-\ell) \det(A) = \det(A)
+$$
 
-Compute volumes in geometry.
+**Key**: Only **scaling** or **swapping** changes $\det$.
 
-Solve systems via Cramer’s rule.
+---
 
-Example
+### 4. Triangular Matrices: The Easy Case
 
-For ( A = \begin{pmatrix} 1 & 2 & 0 \ 0 & 3 & 1 \ 2 & 0 & 4 \end{pmatrix} ):
+For **upper triangular** $U$:  
+$$
+\boxed{\det(U) = \text{product of diagonal entries}}
+$$
 
-Determinant: ( \det(A) = 1 \cdot (3 \cdot 4 - 1 \cdot 0) - 2 \cdot (0 \cdot 4 - 1 \cdot 2) + 0 \cdot (0 \cdot 0 - 3 \cdot 2) = 12 + 4 = 16 ).
+**Proof via elimination**:  
+Elimination turns any invertible $A$ into $U$ (with possible row swaps).  
+$\det(A) = (\pm 1) \cdot \det(U) = \pm d_1 d_2 \cdots d_n$
 
-Row swap (rows 1 and 2): ( A' = \begin{pmatrix} 0 & 3 & 1 \ 1 & 2 & 0 \ 2 & 0 & 4 \end{pmatrix} ), ( \det(A') = -16 ).
+---
 
-Multiply row 1 by 2: ( A'' = \begin{pmatrix} 2 & 4 & 0 \ 0 & 3 & 1 \ 2 & 0 & 4 \end{pmatrix} ), ( \det(A'') = 2 \cdot 16 = 32 ).
+### 5. When Is $\det(A) = 0$?
 
-Interactive Problem Generator
+From elimination:  
+$$
+\boxed{\det(A) = 0 \quad \Leftrightarrow \quad \text{a row of zeros appears during elimination}}
+\quad \Leftrightarrow \quad A \text{ is singular}
+$$
 
-This code generates a random 3x3 matrix, computes its determinant, and applies row operations (swap, scale, add). It visualizes the parallelepiped formed by the columns in 3D to show the volume. Predict the determinant and effects of row operations, then check the output.
+---
+
+### 6. The 2×2 Formula (You Already Know)
+
+$$
+\det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc
+$$
+
+This is the **only formula you need to memorize** — the rest follows from properties!
+
+---
+
+### 7. Multiplicative Property
+
+$$
+\boxed{\det(AB) = \det(A) \det(B)}
+$$
+
+**Downstream consequences**:
+
+| Result | Proof |
+|------|------|
+| $\det(A^{-1}) = \frac{1}{\det(A)}$ | $\det(A^{-1} A) = \det(I) = 1$ |
+| $\det(A^k) = [\det(A)]^k$ | $\det(A \cdot A \cdots A)$ |
+| $\det(tA) = t^n \det(A)$ | Scale each row by $t$ |
+| $\det(A^T) = \det(A)$ | $A^T = L^T U^T$, $\det(L^T) = \det(L)$, etc. |
+
+---
+
+### 8. Example: 3×3 Determinant via Elimination
+
+Let  
+$$
+A = \begin{pmatrix} 1 & 2 & 3 \\ 0 & 4 & 5 \\ 1 & 0 & 6 \end{pmatrix}
+$$
+
+Eliminate (no swaps):  
+$$
+\rightarrow \begin{pmatrix} 1 & 2 & 3 \\ 0 & 4 & 5 \\ 0 & -2 & 3 \end{pmatrix}
+\rightarrow \begin{pmatrix} 1 & 2 & 3 \\ 0 & 4 & 5 \\ 0 & 0 & 3.5 \end{pmatrix}
+$$
+
+$$
+\det(A) = 1 \cdot 4 \cdot 3.5 = 14
+$$
+
+**Solving Determinants using LU Decomposition**
 
 ```{code-cell} python
+# ------------------------------------------------------------------
+#  Lecture 18 – Determinant via Elimination (LU Decomposition)
+# ------------------------------------------------------------------
 import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+from scipy.linalg import lu
 from IPython.display import Markdown, display
 
-def generate_matrix():
-    """
-    Generate a random 3x3 matrix with integer entries.
-    """
-    A = np.random.randint(-5, 6, (3, 3))
-    while np.abs(np.linalg.det(A)) < 1e-10:  # Avoid singular matrices
-        A = np.random.randint(-5, 6, (3, 3))
-    return A
+# Change this matrix to explore!
+A = np.array([[1, 2, 3],
+              [0, 4, 5],
+              [1, 0, 6]], dtype=float)
 
-def apply_row_operations(A):
-    """
-    Apply row operations: swap, scale, add.
-    Return modified matrices and determinants.
-    """
-    # Swap rows 0 and 1
-    A_swap = A.copy()
-    A_swap[[0, 1]] = A_swap[[1, 0]]
-    
-    # Scale row 0 by 2
-    A_scale = A.copy()
-    A_scale[0] *= 2
-    
-    # Add 2 * row 1 to row 2
-    A_add = A.copy()
-    A_add[2] += 2 * A_add[1]
-    
-    return A_swap, A_scale, A_add
+# LU decomposition (without pivoting for simplicity)
+P, L, U = lu(A)  # P is permutation, L lower, U upper
 
-def matrix_to_latex(M):
-    rows = [r" & ".join([f"{x:.0f}" if abs(x) > 1e-10 else "0" for x in row]) for row in M]
-    return r"\begin{pmatrix} " + r" \\ ".join(rows) + r"\end{pmatrix}"
+# Determinant = product of diagonal of U, times det(P) = ±1
+det_U = np.prod(np.diag(U))
+det_P = np.linalg.det(P)  # +1 or -1
+det_computed = det_P * det_U
+det_numpy = np.linalg.det(A)
 
-def plot_parallelepiped(A):
-    """
-    Plot the parallelepiped formed by A’s columns in 3D.
-    """
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111, projection='3d')
-    
-    # Origin
-    ax.scatter([0], [0], [0], color='black', s=50, label='Origin')
-    
-    # Column vectors
-    v1, v2, v3 = A[:, 0], A[:, 1], A[:, 2]
-    ax.quiver(0, 0, 0, v1[0], v1[1], v1[2], color='blue', label='Column 1', linewidth=2)
-    ax.quiver(0, 0, 0, v2[0], v2[1], v2[2], color='red', label='Column 2', linewidth=2)
-    ax.quiver(0, 0, 0, v3[0], v3[1], v3[2], color='green', label='Column 3', linewidth=2)
-    
-    # Parallelepiped edges
-    points = np.array([
-        [0, 0, 0], v1, v2, v3,
-        v1 + v2, v1 + v3, v2 + v3, v1 + v2 + v3
-    ])
-    edges = [
-        (0, 1), (0, 2), (0, 3),
-        (1, 4), (2, 4), (2, 6),
-        (3, 5), (3, 6), (1, 5),
-        (4, 7), (5, 7), (6, 7)
-    ]
-    for edge in edges:
-        ax.plot(points[edge, 0], points[edge, 1], points[edge, 2], 'k-')
-    
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    max_range = np.max(np.abs(A)) * 1.5
-    ax.set_xlim(-max_range, max_range)
-    ax.set_ylim(-max_range, max_range)
-    ax.set_zlim(-max_range, max_range)
-    
-    ax.legend()
-    plt.title('Parallelepiped Formed by Columns of A')
-    plt.show()
+# LaTeX helper
+def matrix_to_latex(M, name="A", dec=1):
+    rows = [r" & ".join([f"{x:.{dec}f}" if abs(x) > 1e-8 else "0" for x in row]) for row in M]
+    return f"${name} = \\begin{{pmatrix}} {r' \\ '.join(rows)} \\end{{pmatrix}}$"
 
-# Generate matrix and apply operations
-A = generate_matrix()
-A_swap, A_scale, A_add = apply_row_operations(A)
-det_A = np.linalg.det(A)
-det_swap = np.linalg.det(A_swap)
-det_scale = np.linalg.det(A_scale)
-det_add = np.linalg.det(A_add)
+summary = f"""
+### Determinant via Elimination
 
-# Display results
-markdown = f"**Matrix A**:\n$$\n{matrix_to_latex(A)}\n$$\n\n"
-display(Markdown(markdown))
-plot_parallelepiped(A)
-markdown = f"Predict:\n- det(A).\n- det(A) after swapping rows 0 and 1.\n- det(A) after scaling row 0 by 2.\n- det(A) after adding 2 * row 1 to row 2.\n- Is A invertible?\n\n"
-display(Markdown(markdown))
+**Matrix** $A$:  
+{matrix_to_latex(A)}
 
-# Reveal answers (students uncomment after predicting)
-# markdown = f"**Answers**:\n"
-# markdown += f"- det(A): {det_A:.2f}\n"
-# markdown += f"- det after swap: {det_swap:.2f} (should be -det(A))\n"
-# markdown += f"- det after scale: {det_scale:.2f} (should be 2 * det(A))\n"
-# markdown += f"- det after add: {det_add:.2f} (should equal det(A))\n"
-# markdown += f"- A invertible: {'Yes' if abs(det_A) > 1e-10 else 'No'}.\n\n"
-# display(Markdown(markdown))
+**LU Decomposition** (with permutation $P$):  
+$P = {matrix_to_latex(P, 'P', dec=0)}$  
+$L = {matrix_to_latex(L, 'L')}$  
+$U = {matrix_to_latex(U, 'U')}$
+
+**Determinant** = $\det(P) \cdot \text{prod}(\text{diag}(U))$  
+$= {det_P:+.0f} \cdot {det_U:.3f} = {det_computed:.3f}$
+
+**NumPy check**: $\det(A) = {det_numpy:.3f}$ → **match!**
+
+*Try changing $A$ and re-run — watch how row swaps flip the sign!*
+"""
+
+display(Markdown(summary)
 ```
 
 ## Lecture 19: Determinant formulas and cofactors
