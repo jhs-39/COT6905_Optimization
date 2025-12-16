@@ -514,7 +514,7 @@ $= {det_P:+.0f} \cdot {det_U:.3f} = {det_computed:.3f}$
 *Try changing $A$ and re-run — watch how row swaps flip the sign!*
 """
 
-display(Markdown(summary)
+display(Markdown(summary))
 ```
 
 ## Lecture 19: Determinant formulas and cofactors
@@ -526,6 +526,155 @@ display(Markdown(summary)
     allowfullscreen>
 </iframe>
 
+We now **derive the full determinant formula** using the three defining properties — and discover **cofactors** and **recurrence relations**.
+
+---
+
+### 1. The Three Defining Properties (Recap)
+
+The determinant is **uniquely defined** by:
+
+1. $\det(I) = 1$  
+2. **Row swap** → $\det \to -\det$  
+3. **Linearity in each row** (others fixed):  
+   - Scaling: $\det(t \cdot \text{row}_i) = t \cdot \det(A)$  
+   - Addition: $\det(\text{row}_i + \text{row}_i') = \det(A) + \det(A')$
+
+---
+
+### 2. Derive the 2×2 Formula from Properties
+
+Let  
+$
+A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}
+$
+
+Use linearity in **both rows**:
+
+$
+\det(A) = \det\begin{pmatrix} a & 0 \\ c & 0 \end{pmatrix}
++ \det\begin{pmatrix} a & 0 \\ 0 & d \end{pmatrix}
++ \det\begin{pmatrix} 0 & b \\ c & 0 \end{pmatrix}
++ \det\begin{pmatrix} 0 & b \\ 0 & d \end{pmatrix}
+$
+
+Now apply properties:
+
+| Term | After row/column ops | $\det$ |
+|------|------------------------|--------|
+| 1 | Zero column → $\det=0$ | $0$ |
+| 3 | Zero column → $\det=0$ | $0$ |
+| 2 | Scale row 1 by $a$, row 2 by $d$ → $a d \det(I)$ | $a d$ |
+| 4 | Scale row 1 by $b$, row 2 by $c$ → $b c \det\begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} = b c (-1)$ | $-b c$ |
+
+$
+\boxed{\det(A) = ad - bc}
+$
+
+**Same logic works for $n \times n$** — only $n!$ terms survive.
+
+---
+
+### 3. Cofactor Expansion
+
+Define the **$(i,j)$-minor**:  
+$
+M_{ij} = \text{matrix with row } i \text{ and column } j \text{ removed}
+$
+
+Define the **cofactor**:  
+$
+\boxed{C_{ij} = (-1)^{i+j} \det(M_{ij})}
+$
+
+**Theorem (Cofactor Expansion along row 1)**:  
+$
+\boxed{\det(A) = a_{11} C_{11} + a_{12} C_{12} + \cdots + a_{1n} C_{1n}}
+$
+
+> Works along **any row or column**.
+
+---
+
+### 4. Example: 3×3 Cofactor Expansion
+
+$
+A = \begin{pmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{pmatrix}
+$
+
+Expand along row 1:  
+$
+\det(A) = 1 \cdot \det\begin{pmatrix} 5 & 6 \\ 8 & 9 \end{pmatrix}
+- 2 \cdot \det\begin{pmatrix} 4 & 6 \\ 7 & 9 \end{pmatrix}
++ 3 \cdot \det\begin{pmatrix} 4 & 5 \\ 7 & 8 \end{pmatrix}
+$
+
+$
+= 1(45-48) - 2(36-42) + 3(32-35) = -3 + 12 - 9 = 0
+$
+
+---
+
+### 5. Tridiagonal Matrices: A Recurrence!
+
+Consider the **tridiagonal matrix** with 1s on diagonals:
+
+$
+A_n = \begin{pmatrix}
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 0 \\
+0 & 1 & 1 & 1 \\
+0 & 0 & 1 & 1
+\end{pmatrix}_{n \times n}
+$
+
+Let $d_n = \det(A_n)$.
+
+Expand along **first row**:
+
+$
+d_n = 0 \cdot C_{11} + 1 \cdot C_{12} + 0 \cdots = C_{12}
+$
+
+The minor $M_{12}$ is:
+
+$
+M_{12} = \begin{pmatrix}
+1 & 1 & & \\
+& 0 & 1 & \\
+& 1 & 0 & 1 \\
+& & \ddots & \ddots
+\end{pmatrix}
+= \begin{bmatrix} 1 & \\ & A_{n-2} \end{bmatrix}
+\Rightarrow
+C_{12} = (-1)^{1+2} \det(M_{12}) = -1 \cdot 1 \cdot d_{n-2} = -d_{n-2}
+$
+
+But also: expand **first column** of $A_n$ → $d_n = 1 \cdot C_{21}$
+
+$M_{21}$ has a **row of zeros** except $A_{n-1}$ block → $C_{21} = (+1) d_{n-1}$
+
+Thus:  
+$
+\boxed{d_n = d_{n-1} - d_{n-2}}
+$
+
+Base cases:  
+- $d_1 = 1$  
+- $d_2 = \det\begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} = 0$
+
+So:  
+$d_3 = 0 - 1 = -1$,  
+$d_4 = -1 - 0 = -1$,  
+$d_5 = -1 - (-1) = 0$,  
+$d_6 = 0 -(-1) = 1$, ...
+
+**Periodic with period 6 as n increases!**
+
 ## Lecture 20: Cramer's rule, inverse matrix, and volume
 
 <iframe width="560" height="315"
@@ -534,3 +683,4 @@ display(Markdown(summary)
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
 </iframe>
+
