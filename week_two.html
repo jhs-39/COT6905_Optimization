@@ -1,0 +1,1156 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 2: Spaces &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_two';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 3: Independence, Spaces, Graphs" href="week_three.html" />
+    <link rel="prev" title="Week 1: Matrix Review" href="week_one.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_two.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_two.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_two.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_two.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 2: Spaces</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-5-transposes-permutations-spaces-r-n">Lecture 5: Transposes, permutations, spaces R^n</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definitions">Definitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-6-column-space-and-nullspace">Lecture 6: Column space and nullspace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-7-solving-ax-0-pivot-variables-special-solutions">Lecture 7: Solving Ax = 0: pivot variables, special solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-definitions">Key Definitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-8-solving-ax-b-row-reduced-form-r">Lecture 8: Solving Ax = b: row reduced form R</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-problem-generator">Interactive Problem Generator</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-2-spaces">
+<h1>Week 2: Spaces<a class="headerlink" href="#week-2-spaces" title="Permalink to this heading">#</a></h1>
+<section id="lecture-5-transposes-permutations-spaces-r-n">
+<h2>Lecture 5: Transposes, permutations, spaces R^n<a class="headerlink" href="#lecture-5-transposes-permutations-spaces-r-n" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/JibVXBElKL0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<section id="definitions">
+<h3>Definitions<a class="headerlink" href="#definitions" title="Permalink to this heading">#</a></h3>
+<p>Recall: we can define a matrix P that exchanges order of rows (permutation). They fit into last lecture’s matrix factorization as:
+<span class="math notranslate nohighlight">\(
+PA = LU
+\)</span>
+where P is permutation matrix, A is our target matrix, L is the lower triangular inverse elimination matrix, and U is the upper triangular row echelon form. A permutation matrix has a special property: its transpose is its inverse.
+<span class="math notranslate nohighlight">\(
+P^{-1} = P^{T}
+\)</span></p>
+<p>Recall: the transpose. Turn the first row into the first column, second row into second column…
+<span class="math notranslate nohighlight">\(
+(A^T)_{ij} = A{ji}
+\)</span>
+It also reverses order when distributed, similar to inverse:
+<span class="math notranslate nohighlight">\(
+(R^TR)^T = R^TR^{TT} = R^TR
+\)</span></p>
+<p>Recall: the symmetric matrix. Any matrix where <span class="math notranslate nohighlight">\(A^T = A\)</span>. This means, effectively, that it must be square (n x n), and that <span class="math notranslate nohighlight">\(A_{ij} = A_{ji}\)</span>. Note: we can construct a symmetric matrix out of a rectangular matrix (m x n). <span class="math notranslate nohighlight">\(A^T A\)</span> is always symmetric.</p>
+<p>Space: a set of vectors that are closed under vector addition and scalar multiplication. That is, any vector addition or scalar multiplication in that space must produce another vector in the space. It also must include the 0 vector.</p>
+<p>Example: the space <span class="math notranslate nohighlight">\(R^2\)</span> forms our x-y plane</p>
+<p>Negative example: the positive quadrant of the x-y plane is NOT a space. Subtract <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 \\ 1 \end{pmatrix} - \begin{pmatrix}2 \\2 \end{pmatrix} = \begin{pmatrix}-1 \\ -1 \end{pmatrix}\)</span> -&gt; we can enter the negative quadrant!</p>
+<p>How do we properly define a subspace?
+A subspace must also be closed under vector addition and scalar multiplication. The result is that the subspace MUST include the origin of the original space (otherwise, multiplication by scalar 0 will move us out of the set, violating closure of the subspace).</p>
+<p>So for <span class="math notranslate nohighlight">\(R^2\)</span>, the family of possible subspaces are:</p>
+<ol class="arabic simple">
+<li><p>All of <span class="math notranslate nohighlight">\(R^2\)</span> (you can define a subspace as the entire space)</p></li>
+<li><p>Any line in <span class="math notranslate nohighlight">\(R^2\)</span> that includes <span class="math notranslate nohighlight">\([0,0]\)</span></p></li>
+<li><p>The zero vector</p></li>
+</ol>
+<p>So how do we apply to matrices? Recall our column picture of the matrix – each column is a vector.</p>
+<p><span class="math notranslate nohighlight">\(
+A = \begin{pmatrix} 1 &amp; 3 \\ 2 &amp; 1 \\ 4 &amp; 1 \end{pmatrix}
+\)</span></p>
+<p>In the case above, the space formed by the vectors and ALL their linear combinations forms the <strong>column space</strong> C(A)</p>
+<p>Start and run the code below for a visual! Adjust the matrix values to see how the plane and column vectors respond.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+
+def plot_column_space(A=None):
+    &quot;&quot;&quot;
+    Plot the column vectors and column space of a 3x2 matrix in 3D.
+    &quot;&quot;&quot;
+    if A is None:
+        A = np.array([[1, 3], [2, 1], [4, 1]], dtype=float)
+    
+    # Extract column vectors
+    v1 = A[:, 0]  # First column
+    v2 = A[:, 1]  # Second column
+    
+    # Check rank to confirm column space is a plane
+    rank = np.linalg.matrix_rank(A)
+    if rank != 2:
+        display(Markdown(f&quot;**Warning**: Matrix rank is {rank}. Column space is {&#39;a line&#39; if rank == 1 else &#39;degenerate&#39;}. Expected rank 2 for a plane.&quot;))
+    
+    # Create figure
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+    
+    # Plot origin
+    ax.scatter([0], [0], [0], color=&#39;black&#39;, s=50, label=&#39;Origin&#39;)
+    
+    # Plot column vectors as arrows
+    ax.quiver(0, 0, 0, v1[0], v1[1], v1[2], color=&#39;blue&#39;, label=&#39;Column 1&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, v2[0], v2[1], v2[2], color=&#39;red&#39;, label=&#39;Column 2&#39;, linewidth=2)
+    
+    # Plot column space (plane) if rank is 2
+    if rank == 2:
+        # Generate points for the plane: x*v1 + y*v2
+        x = np.linspace(-1, 1, 20)
+        y = np.linspace(-1, 1, 20)
+        X, Y = np.meshgrid(x, y)
+        Z = np.zeros_like(X)
+        for i in range(X.shape[0]):
+            for j in range(X.shape[1]):
+                point = X[i, j] * v1 + Y[i, j] * v2
+                Z[i, j] = point[2]
+                X[i, j] = point[0]
+                Y[i, j] = point[1]
+        ax.plot_surface(X, Y, Z, color=&#39;green&#39;, alpha=0.5, label=&#39;Column Space (Plane)&#39;)
+    
+    # Set labels and limits
+    ax.set_xlabel(&#39;X&#39;)
+    ax.set_ylabel(&#39;Y&#39;)
+    ax.set_zlabel(&#39;Z&#39;)
+    max_range = np.max(np.abs(A)) * 1.5
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    # Add legend (note: plot_surface may not appear in legend)
+    ax.legend()
+    
+    plt.title(&#39;Column Vectors and Column Space of A&#39;)
+    plt.show()
+    
+    # Display matrix and rank
+    def matrix_to_latex(M):
+        rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+        return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot; \end{pmatrix}&quot;
+    
+    markdown = f&quot;**Matrix A**:\n\n$$ {matrix_to_latex(A)} $$\n\n&quot;
+    markdown += f&quot;**Column Space Rank**: {rank}\n\n&quot;
+    display(Markdown(markdown))
+
+# Example matrix
+A = np.array([[1, 3], [2, 1], [4, 1]], dtype=float)
+plot_column_space(A)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-6-column-space-and-nullspace">
+<h2>Lecture 6: Column space and nullspace<a class="headerlink" href="#lecture-6-column-space-and-nullspace" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/8o5Cmfpeo6g"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Recall: vector space is a set where the addition of two vectors in the set and also multiplication by scalars results in another vector in the set.</p>
+<p>In <span class="math notranslate nohighlight">\(R^3\)</span>, a plane through the origin would be a subspace.</p>
+<p>The union of two spaces is not necessarily a space. The intersection of two spaces is a space.</p>
+<p>The column space and nullspace are two of the fundamental subspaces of a matrix A (m x n):</p>
+<ul class="simple">
+<li><p><strong>Column Space C(A)</strong>: The set of all linear combinations of the columns of A, i.e., the span of the columns. It is a subspace of R^m. The equation <span class="math notranslate nohighlight">\(Ax = b\)</span> has a solution if and only if <span class="math notranslate nohighlight">\(b\)</span> is in <span class="math notranslate nohighlight">\(C(A)\)</span>.</p>
+<ul>
+<li><p>Dimension: The rank of A (number of linearly independent columns).</p></li>
+<li><p>Example: For <span class="math notranslate nohighlight">\(A = \begin{pmatrix} 1 &amp; 3 \\ 2 &amp; 1 \\ 4 &amp; 1 \end{pmatrix}\)</span>, the columns are <span class="math notranslate nohighlight">\([1,2,4]^T\)</span> and <span class="math notranslate nohighlight">\([3,1,1]^T\)</span> -&gt; <span class="math notranslate nohighlight">\(C(A)\)</span> is a plane in <span class="math notranslate nohighlight">\(R^3\)</span>.</p></li>
+</ul>
+</li>
+<li><p><strong>Nullspace N(A)</strong>: The set of all vectors x in <span class="math notranslate nohighlight">\(R^n\)</span> such that <span class="math notranslate nohighlight">\(Ax = 0\)</span>. It is a subspace of <span class="math notranslate nohighlight">\(R^n\)</span>.</p>
+<ul>
+<li><p>Dimension: <span class="math notranslate nohighlight">\(n - rank(A)\)</span> (from the rank-nullity theorem).</p></li>
+<li><p>Example: For the same A, solve <span class="math notranslate nohighlight">\(Ax = 0\)</span>. If <span class="math notranslate nohighlight">\(rank(A) = 2\)</span>, <span class="math notranslate nohighlight">\(N(A)\)</span> is a line in <span class="math notranslate nohighlight">\(R^2\)</span></p></li>
+</ul>
+</li>
+</ul>
+<p>To practice, use this problem generator to create random matrices and determine the dimensions of the column space C(A) and nullspace N(A). For a 3x2 matrix:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+from sympy import Matrix
+
+def generate_matrix(case=&#39;full_rank&#39;):
+    &quot;&quot;&quot;
+    Generate a random 3x2 matrix for the specified case.
+    &quot;&quot;&quot;
+    if case == &#39;full_rank&#39;:
+        v1 = np.random.randint(-5, 6, 3)
+        v2 = np.random.randint(-5, 6, 3)
+        while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+            v2 = np.random.randint(-5, 6, 3)
+        A = np.column_stack((v1, v2))
+    elif case == &#39;dependent&#39;:
+        v1 = np.random.randint(-5, 6, 3)
+        while np.all(v1 == 0):
+            v1 = np.random.randint(-5, 6, 3)
+        scalar = np.random.choice([-2, -1, 2, 3])
+        v2 = scalar * v1
+        A = np.column_stack((v1, v2))
+    else:
+        raise ValueError(&quot;Case must be &#39;full_rank&#39; or &#39;dependent&#39;&quot;)
+    
+    return A
+
+def plot_column_space_and_nullspace(A):
+    &quot;&quot;&quot;
+    Plot the column vectors, column space, and nullspace (if non-trivial) in 3D.
+    Returns the LaTeX string for the matrix and nullspace basis.
+    &quot;&quot;&quot;
+    v1 = A[:, 0]
+    v2 = A[:, 1]
+    
+    rank = np.linalg.matrix_rank(A)
+    
+    # 3D plot for column space and nullspace
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+    
+    ax.scatter([0], [0], [0], color=&#39;black&#39;, s=50, label=&#39;Origin&#39;)
+    
+    # Plot column vectors
+    ax.quiver(0, 0, 0, v1[0], v1[1], v1[2], color=&#39;blue&#39;, label=&#39;Column 1&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, v2[0], v2[1], v2[2], color=&#39;red&#39;, label=&#39;Column 2&#39;, linewidth=2)
+    
+    # Plot column space
+    if rank == 2:
+        x = np.linspace(-1, 1, 20)
+        y = np.linspace(-1, 1, 20)
+        X, Y = np.meshgrid(x, y)
+        Z = np.zeros_like(X)
+        for i in range(X.shape[0]):
+            for j in range(X.shape[1]):
+                point = X[i, j] * v1 + Y[i, j] * v2
+                Z[i, j] = point[2]
+                X[i, j] = point[0]
+                Y[i, j] = point[1]
+        ax.plot_surface(X, Y, Z, color=&#39;green&#39;, alpha=0.5, label=&#39;Column Space (Plane)&#39;)
+    elif rank == 1:
+        t = np.linspace(-1, 1, 20)
+        line_x = t * v1[0]
+        line_y = t * v1[1]
+        line_z = t * v1[2]
+        ax.plot(line_x, line_y, line_z, color=&#39;green&#39;, label=&#39;Column Space (Line)&#39;, linewidth=2)
+    
+    # Compute nullspace basis using SymPy
+    A_sym = Matrix(A)
+    nullspace_basis = A_sym.nullspace()
+    
+    # Convert SymPy vectors to NumPy for plotting
+    nullspace_basis_np = [np.array(vec).astype(float).flatten() for vec in nullspace_basis]
+    
+    # Plot nullspace in 3D (if non-trivial)
+    nullspace_latex = &quot;&quot;
+    if rank == 1:
+        n1 = nullspace_basis_np[0]
+        t = np.linspace(-2, 2, 20)
+        line_x = t * n1[0]
+        line_y = t * n1[1]
+        line_z = np.zeros_like(t)  # z=0 for nullspace vectors
+        ax.plot(line_x, line_y, line_z, color=&#39;purple&#39;, label=&#39;Nullspace (Line in x1-x2 plane)&#39;, linewidth=2)
+        
+        # Format nullspace basis
+        def vector_to_latex(v):
+            return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join([str(x) for x in v]) + r&quot; \end{pmatrix}&quot;
+        nullspace_latex = f&quot;\n\n**Nullspace Basis**:\n\n$$ {vector_to_latex(nullspace_basis[0])} $$&quot;
+    
+    # Set axis limits
+    A_max = np.max(np.abs(A)) * 1.5
+    null_max = np.max([np.max(np.abs(n1)) for n1 in nullspace_basis_np] + [0]) * 2.5 if nullspace_basis_np else 0
+    max_range = max(A_max, null_max)
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    ax.set_xlabel(&#39;X&#39;)
+    ax.set_ylabel(&#39;Y&#39;)
+    ax.set_zlabel(&#39;Z&#39;)
+    ax.legend()
+    
+    plt.title(&#39;Column Vectors, Column Space, and Nullspace of A in R^3&#39;)
+    plt.show()
+    
+    # Format matrix
+    def matrix_to_latex(M):
+        rows = [r&quot; &amp; &quot;.join([f&quot;{x:.0f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+        return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot; \end{pmatrix}&quot;
+    
+    return matrix_to_latex(A), nullspace_latex
+
+def reveal_dimensions(A):
+    &quot;&quot;&quot;
+    Reveal the dimensions of C(A) and N(A).
+    &quot;&quot;&quot;
+    rank = np.linalg.matrix_rank(A)
+    dim_c = rank
+    dim_n = A.shape[1] - rank
+    markdown = f&quot;**Dimension of C(A)**: {dim_c}\n\n&quot;
+    markdown += f&quot;**Dimension of N(A)**: {dim_n}\n\n&quot;
+    display(Markdown(markdown))
+
+# Generate and display a full rank matrix
+A_full = generate_matrix(&#39;full_rank&#39;)
+display(Markdown(&quot;**Problem 1: Full Rank Matrix**&quot;))
+matrix_latex, nullspace_latex = plot_column_space_and_nullspace(A_full)
+display(Markdown(f&quot;**Matrix A**:\n\n$$ {matrix_latex} $$\n\n{nullspace_latex}\n\n&quot;))
+display(Markdown(&quot;Predict the dimensions of C(A) and N(A). Since rank is 2, expect a plane for C(A) and trivial N(A). Uncomment reveal_dimensions(A_full) to check.&quot;))
+
+# Generate and display a dependent matrix
+A_dep = generate_matrix(&#39;dependent&#39;)
+display(Markdown(&quot;**Problem 2: Dependent Columns Matrix**&quot;))
+matrix_latex, nullspace_latex = plot_column_space_and_nullspace(A_dep)
+display(Markdown(f&quot;**Matrix A**:\n\n$$ {matrix_latex} $$\n\n{nullspace_latex}\n\n&quot;))
+display(Markdown(&quot;Predict the dimensions of C(A) and N(A). Since rank is 1, expect a line for C(A) and a line for N(A) in the x1-x2 plane at z=0. Uncomment reveal_dimensions(A_dep) to check.&quot;))
+
+# To reveal answers (students uncomment after predicting)
+# reveal_dimensions(A_full)
+# reveal_dimensions(A_dep)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="lecture-7-solving-ax-0-pivot-variables-special-solutions">
+<h2>Lecture 7: Solving Ax = 0: pivot variables, special solutions<a class="headerlink" href="#lecture-7-solving-ax-0-pivot-variables-special-solutions" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/VqP2tREMvt0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We explore solving the homogeneous system <span class="math notranslate nohighlight">\(Ax = 0\)</span> to find the nullspace <span class="math notranslate nohighlight">\(N(A)\)</span>. We introduce pivot variables, free variables, and special solutions to describe the structure of the nullspace, using the row reduced echelon form (RREF).</p>
+<section id="key-definitions">
+<h3>Key Definitions<a class="headerlink" href="#key-definitions" title="Permalink to this heading">#</a></h3>
+<p><strong>Nullspace</strong> <span class="math notranslate nohighlight">\(N(A)\)</span>: All <span class="math notranslate nohighlight">\(x \in \mathbb{R}^n\)</span> such that <span class="math notranslate nohighlight">\(Ax = 0\)</span>, a subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>. Dimension: <span class="math notranslate nohighlight">\(n - \text{rank}(A)\)</span></p>
+<p><strong>Row Reduced Echelon Form</strong> (RREF): Obtained via Gaussian elimination. Contains:</p>
+<ol class="arabic simple">
+<li><p><strong>Pivot columns</strong>: Have the first non-zero entry (usually 1) in each non-zero row.</p></li>
+<li><p><strong>Free columns</strong>: A column that does not have a pivot.</p></li>
+<li><p><strong>Pivot Variables</strong>: Correspond to pivot columns, determined by the system.</p></li>
+<li><p><strong>Free Variables</strong>: Correspond to free columns, assigned arbitrary values.</p></li>
+<li><p><strong>Special Solutions</strong>: For each free variable, set it to 1 (others 0) and solve for pivot variables. These form a basis for <span class="math notranslate nohighlight">\(N(A)\)</span></p></li>
+</ol>
+<p>Example</p>
+<p>For <span class="math notranslate nohighlight">\(A = \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 2 &amp; 4 &amp; 6 \end{pmatrix}\)</span>:</p>
+<p>RREF: <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 0 &amp; 0 &amp; 0 \end{pmatrix}\)</span>.</p>
+<p>Pivot column: 1. Free columns: 2, 3.</p>
+<p>Pivot variable: <span class="math notranslate nohighlight">\(x_1\)</span>. Free variables: <span class="math notranslate nohighlight">\(x_2\)</span>, <span class="math notranslate nohighlight">\(x_3\)</span>.</p>
+<p>Special solutions:</p>
+<p>Set <span class="math notranslate nohighlight">\( x_2 = 1 \)</span>, <span class="math notranslate nohighlight">\(x_3 = 0\)</span>: <span class="math notranslate nohighlight">\(x_1 + 2x_2 = x_1 + 2 = 0 \)</span>, so <span class="math notranslate nohighlight">\(x_1 = -2 \)</span>. Solution: <span class="math notranslate nohighlight">\(\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}\)</span></p>
+<p>Set <span class="math notranslate nohighlight">\( x_2 = 0 \)</span>, <span class="math notranslate nohighlight">\( x_3 = 1 \)</span>: <span class="math notranslate nohighlight">\( x_1 + 3x_3 = x_1 + 3 = 0 \)</span>, so <span class="math notranslate nohighlight">\(x_1 = -3\)</span>. Solution: <span class="math notranslate nohighlight">\(\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}\)</span></p>
+<p>Nullspace basis: <span class="math notranslate nohighlight">\(\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}\)</span></p>
+<p>Interactive Problem Generator</p>
+<p>Use this code to generate a random 3x3 matrix with rank 2 (one free variable). It computes the RREF, identifies pivot and free variables, and finds special solutions. Predict the pivot/free variables and nullspace basis, then check the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from sympy import Matrix
+from IPython.display import Markdown, display
+
+def generate_matrix():
+    &quot;&quot;&quot;
+    Generate a random 3x3 matrix with rank 2.
+    &quot;&quot;&quot;
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    # Make third column a linear combination
+    coeffs = np.random.randint(-2, 3, 2)
+    v3 = coeffs[0] * v1 + coeffs[1] * v2
+    A = np.column_stack((v1, v2, v3))
+    return A
+
+def find_special_solutions(A):
+    &quot;&quot;&quot;
+    Find special solutions for N(A) using SymPy&#39;s RREF.
+    &quot;&quot;&quot;
+    # Convert to SymPy Matrix
+    A_sym = Matrix(A)
+    # Compute RREF and pivot columns
+    R, pivot_cols = A_sym.rref()
+    R = np.array(R).astype(float)  # Convert back to NumPy for display
+    m, n = A.shape
+    free_cols = [i for i in range(n) if i not in pivot_cols]
+    special_solutions = []
+    
+    for free_col in free_cols:
+        x = np.zeros(n, dtype=float)
+        x[free_col] = 1
+        for pivot_col, row in zip(pivot_cols, range(len(pivot_cols))):
+            x[pivot_col] = -float(R[row, free_col])
+        special_solutions.append(x)
+    
+    return R, pivot_cols, free_cols, special_solutions
+
+def matrix_to_latex(M):
+    &quot;&quot;&quot;
+    Convert matrix to LaTeX, handling SymPy rationals or NumPy floats.
+    &quot;&quot;&quot;
+    if isinstance(M, Matrix):
+        rows = [r&quot; &amp; &quot;.join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot; \end{pmatrix}&quot;
+
+# Generate and analyze matrix
+A = generate_matrix()
+R, pivot_cols, free_cols, special_solutions = find_special_solutions(A)
+
+# Display results
+markdown = f&quot;**Matrix A**:\n$ {matrix_to_latex(A)} $\n\n&quot;
+markdown += f&quot;**RREF of A**:\n$ {matrix_to_latex(R)} $\n\n&quot;
+markdown += f&quot;**Pivot Columns**: {[i+1 for i in pivot_cols]} (1-based indexing)\n\n&quot;
+markdown += f&quot;**Free Columns**: {[i+1 for i in free_cols]} (1-based indexing)\n\n&quot;
+if special_solutions:
+    markdown += &quot;**Special Solutions (Nullspace Basis)**:\n\n&quot;
+    for i, sol in enumerate(special_solutions, 1):
+        markdown += f&quot;Solution {i}:\n$ {matrix_to_latex(sol.reshape(-1, 1))} $\n\n&quot;
+else:
+    markdown += &quot;**Nullspace**: Trivial (only the zero vector)\n\n&quot;
+display(Markdown(markdown))
+
+# Verify solutions
+for i, sol in enumerate(special_solutions, 1):
+    if np.allclose(np.dot(A, sol), 0):
+        display(Markdown(f&quot;**Verification**: Solution {i} satisfies Ax = 0&quot;))
+    else:
+        display(Markdown(f&quot;**Error**: Solution {i} does not satisfy Ax = 0&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-8-solving-ax-b-row-reduced-form-r">
+<h2>Lecture 8: Solving Ax = b: row reduced form R<a class="headerlink" href="#lecture-8-solving-ax-b-row-reduced-form-r" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/9Q1q7s1jTzU"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We explore solving the non-homogeneous (e.g., has nonzero solutions b) system <span class="math notranslate nohighlight">\(Ax = b\)</span>, where <span class="math notranslate nohighlight">\(A\)</span> is an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix and <span class="math notranslate nohighlight">\(b \in \mathbb{R}^m\)</span>. Using the row reduced echelon form (RREF), we determine if solutions exist and find the complete solution: a particular solution plus the nullspace.</p>
+<section id="id1">
+<h3>Key Definitions<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>System <span class="math notranslate nohighlight">\(Ax = b\)</span>: Find <span class="math notranslate nohighlight">\( x \in \mathbb{R}^n\)</span> such that <span class="math notranslate nohighlight">\(Ax = b\)</span>. Solvable if <span class="math notranslate nohighlight">\(b \in C(A)\)</span>.</p>
+<p>Row Reduced Echelon Form (RREF): From Gaussian elimination on <span class="math notranslate nohighlight">\([A | b]\)</span>, yields <span class="math notranslate nohighlight">\([R | c]\)</span>
+Complete Solution: <span class="math notranslate nohighlight">\(x = x_p + x_n \)</span>, where <span class="math notranslate nohighlight">\(x_p\)</span> is a particular solution and <span class="math notranslate nohighlight">\(x_n \in N(A)\)</span></p>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<p>For <span class="math notranslate nohighlight">\(A = \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 2 &amp; 4 &amp; 5 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(b = \begin{pmatrix} 4 \\ 5 \end{pmatrix} \)</span>: <br />
+Augmented matrix: <span class="math notranslate nohighlight">\( [A | b] = \begin{pmatrix} 1 &amp; 2 &amp; 3 &amp; 4 \\ 2 &amp; 4 &amp; 5 &amp; 5 \end{pmatrix}\)</span> <br />
+RREF: <span class="math notranslate nohighlight">\([R | c] = \begin{pmatrix} 1 &amp; 2 &amp; 0 &amp; -1 \\ 0 &amp; 0 &amp; 1 &amp; 3 \end{pmatrix}\)</span> <br />
+Pivot columns: 1, 3. Free column: 2. <br />
+Particular solution: Set <span class="math notranslate nohighlight">\(x_2 = 0\)</span>, so <span class="math notranslate nohighlight">\(x_1 = -1\)</span>, <span class="math notranslate nohighlight">\(x_3 = 3\)</span>: <span class="math notranslate nohighlight">\(x_p = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix}\)</span>
+Nullspace: Solve <span class="math notranslate nohighlight">\(Rx = 0\)</span>. Free variable <span class="math notranslate nohighlight">\(x_2\)</span>. From <span class="math notranslate nohighlight">\(x_1 + 2x_2 = 0 \)</span>, <span class="math notranslate nohighlight">\(x_1 = -2x_2\)</span> Special solution: <span class="math notranslate nohighlight">\(x_2 = 1 \)</span>, <span class="math notranslate nohighlight">\( x_1 = -2 \)</span>, <span class="math notranslate nohighlight">\(x_3 = 0 \)</span>: <span class="math notranslate nohighlight">\( \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix} \)</span> <br />
+Complete solution: <span class="math notranslate nohighlight">\(x = \begin{pmatrix} -1 \\ 0 \\ 3 \end{pmatrix} + s \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}\)</span></p>
+</section>
+<section id="interactive-problem-generator">
+<h3>Interactive Problem Generator<a class="headerlink" href="#interactive-problem-generator" title="Permalink to this heading">#</a></h3>
+<p>This code generates a random 3x3 matrix with rank 2 and a random <span class="math notranslate nohighlight">\(b\)</span>. It computes the RREF of <span class="math notranslate nohighlight">\([A | b]\)</span>, checks solvability, and finds the particular and nullspace solutions. Predict if the system is consistent and describe the solution, then check the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from sympy import Matrix
+from IPython.display import Markdown, display
+
+def generate_matrix_and_b():
+    &quot;&quot;&quot;
+    Generate a random 3x3 matrix with rank 2 and a consistent b in C(A).
+    &quot;&quot;&quot;
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    coeffs = np.random.randint(-2, 3, 2)
+    v3 = coeffs[0] * v1 + coeffs[1] * v2
+    A = np.column_stack((v1, v2, v3))
+    # Generate b in C(A)
+    scalars = np.random.randint(-2, 3, 3)
+    b = scalars[0] * v1 + scalars[1] * v2 + scalars[2] * v3
+    return A, b
+
+def solve_ax_b(A, b):
+    &quot;&quot;&quot;
+    Solve Ax = b, returning particular solution and nullspace basis using SymPy.
+    &quot;&quot;&quot;
+    # Convert to SymPy Matrix
+    A_sym = Matrix(A)
+    b_sym = Matrix(b)
+    # Create augmented matrix [A | b]
+    aug = A_sym.row_join(b_sym)
+    
+    # Compute RREF of [A | b]
+    R, pivot_cols = aug.rref()
+    R_np = np.array(R).astype(float)
+    
+    m, n = R_np.shape
+    free_cols = [i for i in range(n-1) if i not in pivot_cols]
+    
+    # Check consistency (last column should not have a pivot)
+    if len(pivot_cols) == m and pivot_cols[-1] == n-1:
+        return None, pivot_cols, free_cols, None, []  # Inconsistent
+    
+    # Particular solution: set free variables to 0
+    particular = np.zeros(n-1, dtype=float)
+    for pivot_col, row in zip(pivot_cols, range(len(pivot_cols))):
+        particular[pivot_col] = float(R[row, -1])
+    
+    # Nullspace basis using SymPy
+    nullspace_basis = A_sym.nullspace()
+    special_solutions = [np.array(vec).astype(float).flatten() for vec in nullspace_basis]
+    
+    return R_np, pivot_cols, free_cols, particular, special_solutions
+
+def matrix_to_latex(M):
+    &quot;&quot;&quot;
+    Convert matrix or vector to LaTeX, handling SymPy rationals or NumPy floats.
+    &quot;&quot;&quot;
+    if isinstance(M, Matrix):
+        rows = [r&quot; &amp; &quot;.join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in np.atleast_2d(M)]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot; \end{pmatrix}&quot;
+
+# Generate and solve
+A, b = generate_matrix_and_b()
+R, pivot_cols, free_cols, particular, special_solutions = solve_ax_b(A, b)
+
+# Display results
+markdown = f&quot;**Matrix A**:\n$ {matrix_to_latex(A)} $\n\n&quot;
+markdown += f&quot;**Vector b**:\n$ {matrix_to_latex(b.reshape(-1, 1))} $\n\n&quot;
+markdown += f&quot;**RREF of [A | b]**:\n$ {matrix_to_latex(R)} $\n\n&quot;
+markdown += f&quot;**Pivot Columns**: {[i+1 for i in pivot_cols]} (1-based indexing)\n\n&quot;
+markdown += f&quot;**Free Columns**: {[i+1 for i in free_cols]} (1-based indexing)\n\n&quot;
+if particular is not None:
+    markdown += &quot;**System is Consistent** (b is in C(A))\n\n&quot;
+    markdown += f&quot;**Particular Solution**:\n$ {matrix_to_latex(particular.reshape(-1, 1))} $\n\n&quot;
+else:
+    markdown += &quot;**System is Inconsistent** (b not in C(A))\n\n&quot;
+if special_solutions:
+    markdown += &quot;**Nullspace Basis (Special Solutions)**:\n\n&quot;
+    for i, sol in enumerate(special_solutions, 1):
+        markdown += f&quot;Solution {i}:\n$ {matrix_to_latex(sol.reshape(-1, 1))} $\n\n&quot;
+else:
+    markdown += &quot;**Nullspace**: Trivial (only the zero vector)\n\n&quot;
+display(Markdown(markdown))
+
+# Verify solutions
+if particular is not None:
+    if np.allclose(np.dot(A, particular), b):
+        display(Markdown(&quot;**Verification**: Particular solution satisfies Ax = b&quot;))
+    else:
+        display(Markdown(&quot;**Error**: Particular solution does not satisfy Ax = b&quot;))
+    for i, sol in enumerate(special_solutions, 1):
+        if np.allclose(np.dot(A, sol), 0):
+            display(Markdown(f&quot;**Verification**: Nullspace solution {i} satisfies Ax = 0&quot;))
+        else:
+            display(Markdown(f&quot;**Error**: Nullspace solution {i} does not satisfy Ax = 0&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_one.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 1: Matrix Review</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week_three.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 3: Independence, Spaces, Graphs</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-5-transposes-permutations-spaces-r-n">Lecture 5: Transposes, permutations, spaces R^n</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definitions">Definitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-6-column-space-and-nullspace">Lecture 6: Column space and nullspace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-7-solving-ax-0-pivot-variables-special-solutions">Lecture 7: Solving Ax = 0: pivot variables, special solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-definitions">Key Definitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-8-solving-ax-b-row-reduced-form-r">Lecture 8: Solving Ax = b: row reduced form R</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-problem-generator">Interactive Problem Generator</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

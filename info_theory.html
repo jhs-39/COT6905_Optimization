@@ -1,0 +1,752 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Information Theory: Introduction to Shannon Entropy &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'info_theory';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/info_theory.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Finfo_theory.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/info_theory.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/info_theory.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Information Theory: Introduction to Shannon Entropy</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shannon-entropy-formula">Shannon Entropy Formula</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-shannon-entropy-a-binary-entropy-example">What is the Shannon Entropy? A Binary Entropy Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-shannon-entropy-a-lottery-ticket-example">What is the Shannon Entropy? A Lottery Ticket Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ok-sure-but-what-is-the-shannon-entropy">OK, sure, but what is the Shannon Entropy?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-trees-and-logarithmic-scaling">Binary Trees and Logarithmic Scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-learned-as-change-in-entropy">Information Learned as Change in Entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classic-example-the-ball-weighing-puzzle-from-mackay">Classic Example: The Ball-Weighing Puzzle (from MacKay)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-code">Interactive Code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-applications-kolmogorov-sinai-entropy-in-training-dynamics">Advanced Applications: Kolmogorov-Sinai Entropy in Training Dynamics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#math-for-ks-entropy-in-training-dynamics">Math for KS Entropy in Training Dynamics</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="information-theory-introduction-to-shannon-entropy">
+<h1>Information Theory: Introduction to Shannon Entropy<a class="headerlink" href="#information-theory-introduction-to-shannon-entropy" title="Permalink to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>Information theory provides tools to quantify uncertainty and information content of data. It formulates a quantity called ‘information’ that determines how much a measurement decreases uncertainty, or Shannon Entropy, of underlying data. Tools from information theory form the backbone of neural net loss functions which are used to train models. Cross-Entropy loss and KL Divergence are used extensively for this purpose, which are derived from information-theoretic formulations. Another place where Shannon Entropy is used is to analyze the output of predictive models. The Shannon Entropy can be applied to these outputs to characterize how uncertain the model is about its predictions, critical for evaluating models for risk-aware deployments.</p>
+<p>Finally, we ask a question of Shannon Entropy in regards to training dynamics of a large neural net. Can we upper bound the amount of information learned in a single batch of data during stochastic gradient descent?</p>
+</section>
+<section id="shannon-entropy-formula">
+<h2>Shannon Entropy Formula<a class="headerlink" href="#shannon-entropy-formula" title="Permalink to this heading">#</a></h2>
+<p>For a categorical probability vector <span class="math notranslate nohighlight">\(P = [p_1, p_2, \dots, p_n]\)</span> where <span class="math notranslate nohighlight">\(\sum p_i = 1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+H(P) = -\sum_{i=1}^n p_i \log_2 p_i
+\]</div>
+<p>We use base-2 logarithms to measure in <em>bits</em>. For ( p_i = 0 ), the term is defined as 0.</p>
+</section>
+<section id="what-is-the-shannon-entropy-a-binary-entropy-example">
+<h2>What is the Shannon Entropy? A Binary Entropy Example<a class="headerlink" href="#what-is-the-shannon-entropy-a-binary-entropy-example" title="Permalink to this heading">#</a></h2>
+<p>Let’s simplify to a binary distribution, aka a coin flip: probabilities ( p ) and ( 1-p ). The entropy is:
+$<span class="math notranslate nohighlight">\(
+H(p) = -p \log_2 p - (1-p) \log_2 (1-p)
+\)</span>$
+This reaches a maximum of 1 bit at ( p = 0.5 ) (complete uncertainty) and 0 at the extremes (certainty). In simple terms: a fair coin has 1 bit of entropy associated with its unknown outcome (heads or tails). A weighted coin that always comes up heads reveals no additional information when its outcome is observed.</p>
+</section>
+<section id="what-is-the-shannon-entropy-a-lottery-ticket-example">
+<h2>What is the Shannon Entropy? A Lottery Ticket Example<a class="headerlink" href="#what-is-the-shannon-entropy-a-lottery-ticket-example" title="Permalink to this heading">#</a></h2>
+<p>A coin flip may be low stakes (or not)</p>
+<p>no country for old men image</p>
+<p>We all might agree that predicting a winning lottery ticket would be tremendously valuable. Suppose a million unique lottery tickets are sold, and each has an equal probability of winning. If you know the winning ticket before the drawing occurs, how many more bits of information do you have than a ignorant citizen?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import math
+
+# number of equally likely outcomes
+N = 1_000_000
+
+H_bits = math.log2(N)   # Shannon entropy in bits. See that the sum over N terms cancels out with p_i = 1/N coefficient in front of each term
+#See that Shannon Entropy of a uniform probability distribution scales with the log number of outcomes!
+
+print(f&quot;N = {N}&quot;)
+print(f&quot;Entropy: {H_bits:.12f} bits&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="ok-sure-but-what-is-the-shannon-entropy">
+<h2>OK, sure, but what is the Shannon Entropy?<a class="headerlink" href="#ok-sure-but-what-is-the-shannon-entropy" title="Permalink to this heading">#</a></h2>
+<p>Why does the Shannon entropy formula involve the logarithm of the probability, specifically <span class="math notranslate nohighlight">\(\log_2 p_i\)</span>? This arises from the fundamental nature of information in decision trees or binary questioning processes, where each “bit” of information halves the space of remaining possible outcomes. Suppose you hack the lottery ticket system, and discover an exploit. You can predict the last binary digit of the soon-to-be-winning ticket number! You predict ‘1.’ This naturally eliminates all the ticket numbers that end with ‘0’, or exactly half the possibilities.</p>
+<section id="binary-trees-and-logarithmic-scaling">
+<h3>Binary Trees and Logarithmic Scaling<a class="headerlink" href="#binary-trees-and-logarithmic-scaling" title="Permalink to this heading">#</a></h3>
+<p>Imagine you’re trying to identify a specific outcome from a set of equally likely possibilities. One way to gather information is through yes/no questions that split the possibilities in half each time—like a binary search. For (N) equally likely outcomes, the number of questions needed (on average) is <span class="math notranslate nohighlight">\(\log_2 N\)</span>, because each question eliminates half the possibilities.</p>
+<p>For <span class="math notranslate nohighlight">\(N = 2\)</span> (e.g., a fair coin flip), <span class="math notranslate nohighlight">\(\log_2 2 = 1\)</span> bit: one question suffices (“Heads?”).</p>
+<p>For <span class="math notranslate nohighlight">\(N = 4\)</span>, <span class="math notranslate nohighlight">\(\log_2 4 = 2\)</span> bits: two questions halve the space twice.</p>
+<p>This logarithmic scaling captures the “height” of a balanced binary decision tree. The negative sign in <span class="math notranslate nohighlight">\(H(P) = -\sum p_i \log_2 p_i\)</span> ensures entropy is positive (since <span class="math notranslate nohighlight">\(p_i &lt; 1\)</span>, <span class="math notranslate nohighlight">\(\log_2 p_i &lt; 0\)</span>), and the sum weights it by each probability. For non-uniform distributions, it generalizes this idea: low-probability events convey more information (larger <span class="math notranslate nohighlight">\(-\log_2 p_i\)</span>) when they occur, as they eliminate more uncertainty.</p>
+</section>
+<section id="information-learned-as-change-in-entropy">
+<h3>Information Learned as Change in Entropy<a class="headerlink" href="#information-learned-as-change-in-entropy" title="Permalink to this heading">#</a></h3>
+<p>Information isn’t just about the initial uncertainty—it’s about the reduction in entropy after an observation or experiment. If you start with prior entropy <span class="math notranslate nohighlight">\(H(P)\)</span> and update to a posterior distribution <span class="math notranslate nohighlight">\(Q\)</span> after new data, the information gained is <span class="math notranslate nohighlight">\(H(P) - H(Q)\)</span>. (This is related to mutual information or Kullback-Leibler divergence, which we’ll cover later)</p>
+<p>In deep learning, this is crucial: training reduces model uncertainty about data (e.g., via cross-entropy loss, which measures the “extra bits” needed to encode true labels under the model’s predictions). A model with high initial entropy (uncertain predictions) learns by minimizing this gap.</p>
+</section>
+<section id="classic-example-the-ball-weighing-puzzle-from-mackay">
+<h3>Classic Example: The Ball-Weighing Puzzle (from MacKay)<a class="headerlink" href="#classic-example-the-ball-weighing-puzzle-from-mackay" title="Permalink to this heading">#</a></h3>
+<p>To illustrate designing experiments that maximize information gain, consider this puzzle from David MacKay’s Information Theory, Inference, and Learning Algorithms: You have 12 balls that appear identical, but one is either heavier or lighter than the others (you don’t know which or in what direction). You have a balance scale with two sides. How do you identify the odd ball and its defect in the fewest number of weighings?</p>
+<p>Initial Entropy: There are 12 balls × 2 defects (heavy/light) = 24 possibilities. Entropy <span class="math notranslate nohighlight">\(H = \log_2 24 \approx 4.58\)</span> bits. This is our starting entropy</p>
+<p>How much is your change in entropy if you weigh 6 balls vs 6 balls? Hint: this measurement has only two possible outcomes. What is <span class="math notranslate nohighlight">\(log_2 2\)</span>?</p>
+<p>Draw out the tree on paper, and follow the code below. Suppose the left side of the scale drops. This means the defect is either in the left side as a ‘light ball’ (6 possibilities) or in the right side as a ‘heavy ball’ (6 possibilities) giving us 12 possibilities from the original 24. What is our new entropy, once we have this measurement?</p>
+<p>Can you imagine a split for this measurement with more possible outcomes than two?</p>
+<p>That creates a rule for experiments: to maximize information gain, maximize the number of equally weighted possible outcomes!</p>
+<p>Run the interactive code below to simulate a single weighing. Adjust group sizes and see how the entropy reduction changes. Can you devise an initial weighing step that has 3 distinct outcomes instead of only 2?</p>
+</section>
+</section>
+<section id="interactive-code">
+<h2>Interactive Code<a class="headerlink" href="#interactive-code" title="Permalink to this heading">#</a></h2>
+<p>Change the code to adjust <span class="math notranslate nohighlight">\(p\)</span> and see how entropy changes when you construct a different measurement</p>
+<div class="cell tag_thebe docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+def entropy_reduction(left_group=6, right_group=6, total_balls=12):
+    defects=1
+    total_poss = total_balls * defects  # Initial possibilities
+    initial_h = math.log2(total_poss)
+    
+    unbal_left = left_group * defects  # Poss if left heavy/light
+    unbal_right = right_group * defects
+    bal = (total_balls - left_group - right_group) * defects
+    
+    # Normalize probs
+    p_unbal_l = unbal_left / total_poss
+    p_unbal_r = unbal_right / total_poss
+    p_bal = bal / total_poss
+    
+    # Conditional entropies (simplified: assume uniform within branches)
+    h_unbal_l = math.log2(unbal_left) if unbal_left &gt; 0 else 0
+    h_unbal_r = math.log2(unbal_right) if unbal_right &gt; 0 else 0
+    h_bal = math.log2(bal) if bal &gt; 0 else 0
+    
+    # Expected posterior entropy
+    exp_h_post = p_unbal_l * h_unbal_l + p_unbal_r * h_unbal_r + p_bal * h_bal
+    
+    info_gain = initial_h - exp_h_post
+    
+    # Plot
+    labels = [&#39;Initial H&#39;, &#39;Expected Post H&#39;, &#39;Info Gain&#39;]
+    values = [initial_h, exp_h_post, info_gain]
+    colors = [&#39;gray&#39;, &#39;lightgray&#39;, &#39;skyblue&#39;]
+    
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.bar(labels, values, color=colors)
+    ax.set_ylabel(&#39;Bits&#39;)
+    ax.set_title(f&#39;Entropy Reduction for Weighing {left_group} vs. {right_group}&#39;)
+    plt.show()
+
+# Example: Change left/right group sizes!
+entropy_reduction(left_group=6, right_group=6)
+</pre></div>
+</div>
+</div>
+</div>
+<p>(if you didn’t get it, try 4 and 4 for your measurement. The balls can either be weighted to the left, right, or the scales can be balanced. This gives us a change in entropy of <span class="math notranslate nohighlight">\(log_2 3\)</span>, or equivalently it eliminates 16 possible states from the original 24, leaving only 8. Likewise, calculate the change in entropy and compare it to number of possibilities left.)</p>
+</section>
+<section id="advanced-applications-kolmogorov-sinai-entropy-in-training-dynamics">
+<h2>Advanced Applications: Kolmogorov-Sinai Entropy in Training Dynamics<a class="headerlink" href="#advanced-applications-kolmogorov-sinai-entropy-in-training-dynamics" title="Permalink to this heading">#</a></h2>
+<p>Building on Shannon entropy, Kolmogorov-Sinai (KS) entropy asks a similar question. Consider a particle moving probabilistically and in discrete time. It has many possible surrounding hypercubes it could end up in at time <span class="math notranslate nohighlight">\(t+1\)</span>. In this sense, what is the entropy of the particle?</p>
+<p>We hope to show that:</p>
+<ol class="arabic simple">
+<li><p>The loss landscape is what informs the prior that bounds the amount of information transferred.</p></li>
+<li><p>Via the second law of thermodynamics, the amount of information we learn during a single batch during SGD has the upper bound of the change in KS Entropy. Given that gradients are notoriously low-rank (IBM Research), the actual degrees of freedom are quite low, on the order of log(params)</p></li>
+<li><p>IBM research suggests the highest-noise direction on the loss landscape from batch to batch is the principal singular direction</p></li>
+<li><p>Muon optimizer has revolutionized training efficiency by descending under the spectral norm, decreasing the principal eigenvector.</p></li>
+<li><p>It suggests further research be done on effiiciency in learning. What methods maximize information transfer?</p></li>
+</ol>
+</section>
+<section id="math-for-ks-entropy-in-training-dynamics">
+<h2>Math for KS Entropy in Training Dynamics<a class="headerlink" href="#math-for-ks-entropy-in-training-dynamics" title="Permalink to this heading">#</a></h2>
+<p>We guide this discussion with the 2nd law of thermodynamics; in a closed system, the change in entropy must be greater than or equal to 0. In its extension to information theory and learning, in the closed system described by the model and data batch, the total change in entropy must be greater than or equal to 0. This means that the upper bound of ‘useful bits’ learned by the model must be given by the decrease in entropy generated by the batch update.</p>
+<p>Suppose I have <span class="math notranslate nohighlight">\(n\)</span> parameters in a neural net, and initialize at a point <span class="math notranslate nohighlight">\(\theta_0\)</span> in the parameter space. After SGD at learning rate R over batch 1, the model has moved to point <span class="math notranslate nohighlight">\(\theta_1\)</span> in parameter space. Can we express the number of possible states of <span class="math notranslate nohighlight">\(\theta_1\)</span> as the surface area of the high dimensional shell, divided by the spherical cap area given by quantization? Under the (unlikely) case that all model variables were independent, this would be the upper bound of the information transferred.</p>
+<p>Surface Area of the d-Dimensional Hypersphere
+$<span class="math notranslate nohighlight">\(
+A = \frac{2 pi ^ d/2 r^d-1}{\gamma(d/2)} 
+\)</span>$</p>
+<p>Speherical Cap given by quantum epsilon
+$<span class="math notranslate nohighlight">\(
+\sin{\epsilon}^{d-2} \epsilon \approx \epsilon{d-1}
+\)</span>$</p>
+<p>Number of possible microstates in d dimensions with quantum epsilon
+$<span class="math notranslate nohighlight">\(
+log_2{\frac{A}{\epsilon^{n-1}}
+\)</span>$</p>
+<p>Plugging in numbers for a 1-billion-parameter model with fp16 quantum:</p>
+<p>$</p>
+<p>$</p>
+<p>Yikes! That’s a large number. Imagine transferring gigabytes of information per update!</p>
+<p>However, in real life, gradient updates are much lower rank; the parameters are far, far from independence. IBM’s work shows that 99% of the variance in a layer’s gradients is captured by a rank-40 matrix. Indeed, LoRA in the fine-tuning community can be incredibly useful with ranks below 128. In that case, let’s take a numerical example with IBM’s rank 40 matrix:</p>
+<div class="math notranslate nohighlight">
+\[\]</div>
+<p>Several hundred bits. A much more reasonable upper bound on information in parameter space.</p>
+<p>Finally, let’s consider temperature. IBM’s definition of temperature is actually anisotropic; the noise on the loss landscape actually varies with the direction you consider. There are high-noise directions that greatly vary from batch to batch (primarily the direction of the principal singular value), and low-noise directions that are the same batch-to-batch.</p>
+<p>We can consider a Helmholtz free energy equivalent to see how temperature affects learning.
+F = U - TS</p>
+<p>Recall Helmholtz free energy describes the amount of energy available to do work. In our case, we are drawing the parallel to information available to do useful work. If we learn a great deal about a particular batch (and overfit) this inflates the TS term.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shannon-entropy-formula">Shannon Entropy Formula</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-shannon-entropy-a-binary-entropy-example">What is the Shannon Entropy? A Binary Entropy Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-the-shannon-entropy-a-lottery-ticket-example">What is the Shannon Entropy? A Lottery Ticket Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ok-sure-but-what-is-the-shannon-entropy">OK, sure, but what is the Shannon Entropy?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-trees-and-logarithmic-scaling">Binary Trees and Logarithmic Scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-learned-as-change-in-entropy">Information Learned as Change in Entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classic-example-the-ball-weighing-puzzle-from-mackay">Classic Example: The Ball-Weighing Puzzle (from MacKay)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-code">Interactive Code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-applications-kolmogorov-sinai-entropy-in-training-dynamics">Advanced Applications: Kolmogorov-Sinai Entropy in Training Dynamics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#math-for-ks-entropy-in-training-dynamics">Math for KS Entropy in Training Dynamics</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1264 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 3: Independence, Spaces, Graphs &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_three';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 4: Orthogonal Basis and Projection" href="week_four.html" />
+    <link rel="prev" title="Week 2: Spaces" href="week_two.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_three.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_three.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_three.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_three.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 3: Independence, Spaces, Graphs</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-9-independence-basis-and-dimension">Lecture 9: Independence, basis, and dimension</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-definitions">Key Definitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-10-the-four-fundamental-subspaces">Lecture 10: The four fundamental subspaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-11-matrix-spaces-rank-1-small-world-graphs">Lecture 11: Matrix spaces; rank 1; small world graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-1-matrices">Rank-1 Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#subspace-of-vectors-summing-to-zero">Subspace of Vectors Summing to Zero</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#differential-equations-as-vector-spaces">Differential Equations as Vector Spaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#small-world-graphs">Small-World Graphs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-12-graphs-networks-incidence-matrices">Lecture 12: Graphs, networks, incidence matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-network-with-4-nodes-5-edges">Example: Network with 4 Nodes, 5 Edges</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kirchhoff-ohms-law-network-equations">Kirchhoff + Ohm’s Law → Network Equations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applications-beyond-electricity">Applications Beyond Electricity</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-3-independence-spaces-graphs">
+<h1>Week 3: Independence, Spaces, Graphs<a class="headerlink" href="#week-3-independence-spaces-graphs" title="Permalink to this heading">#</a></h1>
+<section id="lecture-9-independence-basis-and-dimension">
+<h2>Lecture 9: Independence, basis, and dimension<a class="headerlink" href="#lecture-9-independence-basis-and-dimension" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/yjBerM5jWsc"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>This lecture introduces linear independence, basis, and dimension, key concepts for understanding vector spaces and subspaces like <span class="math notranslate nohighlight">\(C(A)\)</span> and <span class="math notranslate nohighlight">\(N(A)\)</span>. These ideas help us describe the structure of matrices and their solutions, building on Lectures 6–8.</p>
+<section id="key-definitions">
+<h3>Key Definitions<a class="headerlink" href="#key-definitions" title="Permalink to this heading">#</a></h3>
+<p><strong>Linear Independence</strong>: A set of vectors <span class="math notranslate nohighlight">\({v_1, v_2, \ldots, v_k}\)</span> is independent if <span class="math notranslate nohighlight">\(c_1 v_1 + c_2 v_2 + \cdots + c_k v_k = 0\)</span> only when <span class="math notranslate nohighlight">\(c_1 = c_2 = \cdots = c_k = 0\)</span> Otherwise, they are dependent.</p>
+<p><strong>Basis</strong>: A set of linearly independent vectors that spans a vector space (every vector in the space is a unique linear combination of the basis).</p>
+<p><strong>Dimension</strong>: The number of vectors in a basis. For a matrix <span class="math notranslate nohighlight">\(A\)</span> (m x n): <br />
+<span class="math notranslate nohighlight">\(\dim(C(A)) = \text{rank}(A)\)</span> <br />
+<span class="math notranslate nohighlight">\(\dim(N(A)) = n - \text{rank}(A)\)</span> <br />
+We call this relationship the <strong>Rank-Nullity Theorem</strong>: <span class="math notranslate nohighlight">\(\text{rank}(A) + \dim(N(A)) = n \)</span></p>
+<p><strong>Example</strong></p>
+<p>For <span class="math notranslate nohighlight">\(A = \begin{pmatrix} 1 &amp; 2 &amp; 2 \\ 3 &amp; 4 &amp; 6 \\ 5 &amp; 6 &amp; 10 \end{pmatrix} \)</span></p>
+<p>RREF: <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 &amp; 0 &amp; 2 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 \end{pmatrix}\)</span><br />
+Rank: 2 (two pivot columns). <br />
+Columns 1 and 2 are independent (pivot columns). Column 3 is dependent (e.g., <span class="math notranslate nohighlight">\(2 v_1 + v_2 - v_3 = 0 \)</span>) <br />
+Basis for <span class="math notranslate nohighlight">\(C(A)\)</span>: <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 \\ 3 \\ 5 \end{pmatrix}, \begin{pmatrix} 2 \\ 4 \\ 6 \end{pmatrix} \)</span> <br />
+Dimensions: <span class="math notranslate nohighlight">\(\dim(C(A)) = 2 \)</span>, <span class="math notranslate nohighlight">\( \dim(N(A)) = 3 - 2 = 1 \)</span></p>
+<p>Interactive Problem Generator</p>
+<p>This code generates two 3x3 matrices:</p>
+<p>Rank 2: Two independent columns.</p>
+<p>Rank 1: All columns dependent (multiples of one vector). For each, compute the RREF and predict:</p>
+<p>Are the columns linearly independent?</p>
+<p>What is a basis for <span class="math notranslate nohighlight">\(C(A)\)</span>?</p>
+<p>What are <span class="math notranslate nohighlight">\(\dim(C(A))\)</span> and <span class="math notranslate nohighlight">\(\dim(N(A))\)</span>? Check the output to verify.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from sympy import Matrix
+from IPython.display import Markdown, display
+
+def generate_matrix(case=&#39;rank2&#39;):
+    &quot;&quot;&quot;
+    Generate a random 3x3 matrix with specified rank.
+    &quot;&quot;&quot;
+    if case == &#39;rank2&#39;:
+        # Rank 2: Two independent columns
+        v1 = np.random.randint(-5, 6, 3)
+        v2 = np.random.randint(-5, 6, 3)
+        while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+            v2 = np.random.randint(-5, 6, 3)
+        coeffs = np.random.randint(-2, 3, 2)
+        v3 = coeffs[0] * v1 + coeffs[1] * v2
+        A = np.column_stack((v1, v2, v3))
+    elif case == &#39;rank1&#39;:
+        # Rank 1: All columns dependent
+        v1 = np.random.randint(-5, 6, 3)
+        while np.all(v1 == 0):
+            v1 = np.random.randint(-5, 6, 3)
+        scalars = np.random.randint(-2, 3, 2)
+        v2 = scalars[0] * v1
+        v3 = scalars[1] * v1
+        A = np.column_stack((v1, v2, v3))
+    else:
+        raise ValueError(&quot;Case must be &#39;rank2&#39; or &#39;rank1&#39;&quot;)
+    return A
+
+def matrix_to_latex(M):
+    &quot;&quot;&quot;
+    Convert matrix to LaTeX, handling SymPy rationals or NumPy floats.
+    &quot;&quot;&quot;
+    if isinstance(M, Matrix):
+        rows = [r&quot; &amp; &quot;.join([str(x) for x in row]) for row in M.tolist()]
+    else:
+        rows = [r&quot; &amp; &quot;.join([f&quot;{x:.0f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot; \end{pmatrix}&quot;
+
+# Generate and analyze matrices
+A_rank2 = generate_matrix(&#39;rank2&#39;)
+A_rank2_sym = Matrix(A_rank2)
+R_rank2, pivot_cols_rank2 = A_rank2_sym.rref()
+R_rank2_np = np.array(R_rank2).astype(float)
+
+A_rank1 = generate_matrix(&#39;rank1&#39;)
+A_rank1_sym = Matrix(A_rank1)
+R_rank1, pivot_cols_rank1 = A_rank1_sym.rref()
+R_rank1_np = np.array(R_rank1).astype(float)
+
+# Display Problem 1: Rank 2
+markdown = f&quot;**Problem 1: Rank 2 Matrix**\n\n&quot;
+markdown += f&quot;**Matrix A**:\n$ {matrix_to_latex(A_rank2)} $\n\n&quot;
+markdown += f&quot;**RREF of A**:\n$ {matrix_to_latex(R_rank2)} $\n\n&quot;
+markdown += f&quot;**Pivot Columns**: {[i+1 for i in pivot_cols_rank2]} (1-based indexing)\n\n&quot;
+markdown += f&quot;Predict:\n- Are the columns linearly independent?\n- Basis for C(A)?\n- Dimensions: dim(C(A)), dim(N(A))?\n\n&quot;
+display(Markdown(markdown))
+
+# Display Problem 2: Rank 1
+markdown = f&quot;**Problem 2: Rank 1 Matrix**\n\n&quot;
+markdown += f&quot;**Matrix A**:\n$ {matrix_to_latex(A_rank1)} $\n\n&quot;
+markdown += f&quot;**RREF of A**:\n$ {matrix_to_latex(R_rank1)} $\n\n&quot;
+markdown += f&quot;**Pivot Columns**: {[i+1 for i in pivot_cols_rank1]} (1-based indexing)\n\n&quot;
+markdown += f&quot;Predict:\n- Are the columns linearly independent?\n- Basis for C(A)?\n- Dimensions: dim(C(A)), dim(N(A))?\n\n&quot;
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# rank = A_rank2_sym.rank()
+# markdown = f&quot;**Answers for Problem 1**:\n&quot;
+# markdown += f&quot;- Linear Independence: Columns {[i+1 for i in pivot_cols_rank2]} are independent; others dependent.\n&quot;
+# markdown += f&quot;- Basis for C(A): Columns {[i+1 for i in pivot_cols_rank2]} of A.\n&quot;
+# markdown += f&quot;- dim(C(A)) = {rank}, dim(N(A)) = {A_rank2.shape[1] - rank}.\n\n&quot;
+# display(Markdown(markdown))
+#
+# rank = A_rank1_sym.rank()
+# markdown = f&quot;**Answers for Problem 2**:\n&quot;
+# markdown += f&quot;- Linear Independence: Columns are dependent (rank 1).\n&quot;
+# markdown += f&quot;- Basis for C(A): Column {[pivot_cols_rank1[0]+1 if pivot_cols_rank1 else &#39;none&#39;]} of A.\n&quot;
+# markdown += f&quot;- dim(C(A)) = {rank}, dim(N(A)) = {A_rank1.shape[1] - rank}.\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-10-the-four-fundamental-subspaces">
+<h2>Lecture 10: The four fundamental subspaces<a class="headerlink" href="#lecture-10-the-four-fundamental-subspaces" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/nHlE7EgJFds"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>This lecture introduces the four fundamental subspaces of an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>: column space <span class="math notranslate nohighlight">\(C(A)\)</span>, nullspace <span class="math notranslate nohighlight">\(N(A)\)</span>, row space <span class="math notranslate nohighlight">\(C(A^T)\)</span>, and left nullspace <span class="math notranslate nohighlight">\(N(A^T)\)</span>. We explore their dimensions, bases, and orthogonality, connecting to the rank-nullity theorem and linear system solutions.</p>
+<section id="id1">
+<h3>Key Definitions<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p><strong>Column Space</strong> <span class="math notranslate nohighlight">\(C(A)\)</span>: Subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^m\)</span>, spanned by <span class="math notranslate nohighlight">\(A\)</span>’s columns. Dimension: <span class="math notranslate nohighlight">\(\text{rank}(A)\)</span> <br />
+<strong>Nullspace</strong> <span class="math notranslate nohighlight">\(N(A)\)</span>: Subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, all <span class="math notranslate nohighlight">\(x\)</span> such that <span class="math notranslate nohighlight">\(Ax = 0\)</span>. Dimension: <span class="math notranslate nohighlight">\(n - \text{rank}(A)\)</span> <br />
+<strong>Row Space</strong> <span class="math notranslate nohighlight">\(C(A^T)\)</span>: Subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, spanned by <span class="math notranslate nohighlight">\(A\)</span>’s rows columns of <span class="math notranslate nohighlight">\(A^T\)</span>. Dimension: <span class="math notranslate nohighlight">\(\text{rank}(A)\)</span> <br />
+<strong>Left Nullspace</strong> <span class="math notranslate nohighlight">\(N(A^T)\)</span>: Subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^m\)</span>, all <span class="math notranslate nohighlight">\(y\)</span> such that <span class="math notranslate nohighlight">\(A^T y = 0\)</span>. Dimension: <span class="math notranslate nohighlight">\(m - \text{rank}(A)\)</span> <br />
+<strong>Orthogonality</strong>: <span class="math notranslate nohighlight">\(C(A) \perp N(A^T)\)</span> in <span class="math notranslate nohighlight">\( \mathbb{R}^m \)</span>, <span class="math notranslate nohighlight">\(C(A^T) \perp N(A)\)</span> in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> <br />
+<strong>Rank-Nullity</strong>: <span class="math notranslate nohighlight">\(\text{rank}(A) + \dim(N(A)) = n \)</span>, <span class="math notranslate nohighlight">\(\text{rank}(A^T) + \dim(N(A^T)) = m\)</span></p>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<p>For <span class="math notranslate nohighlight">\(A = \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 2 &amp; 4 &amp; 6 \\ 3 &amp; 6 &amp; 9 \end{pmatrix} \)</span> (rank 1): <br />
+RREF: <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 \end{pmatrix} \)</span> <br />
+Column Space: <span class="math notranslate nohighlight">\(C(A) = a { \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }\)</span>, dim = 1 <br />
+Nullspace: <span class="math notranslate nohighlight">\(N(A) = a \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}\)</span> + b<span class="math notranslate nohighlight">\(\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(dim = 3 - 1 = 2 \)</span> <br />
+Row Space: <span class="math notranslate nohighlight">\(C(A^T) = a { \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} }\)</span>, <span class="math notranslate nohighlight">\(dim = 1\)</span> <br />
+Left Nullspace: Basis <span class="math notranslate nohighlight">\(N(A^T) = a \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}\)</span> + b <span class="math notranslate nohighlight">\(\begin{pmatrix} -3 \\ 0 \\ 1 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(dim = 3 - 1 = 2\)</span>
+where <span class="math notranslate nohighlight">\(a, b \in \mathbb{R} \)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from sympy import Matrix
+import matplotlib.pyplot as plt
+from IPython.display import Markdown, display
+
+def find_subspaces(A):
+    A_sym = Matrix(A)
+    A_t_sym = A_sym.T
+    
+    # Column space and nullspace
+    R, pivot_cols = A_sym.rref()
+    rank = len(pivot_cols)
+    c_a_basis = [np.array(A_sym.col(j)).flatten().astype(float) for j in pivot_cols]
+    n_a_basis = [np.array(vec).flatten().astype(float) for vec in A_sym.nullspace()]
+    
+    # Row space and left nullspace
+    R_at, pivot_cols_at = A_t_sym.rref()
+    c_at_basis = [np.array(A_t_sym.col(j)).flatten().astype(float) for j in pivot_cols_at]
+    n_at_basis = [np.array(vec).flatten().astype(float) for vec in A_t_sym.nullspace()]
+    
+    return rank, c_a_basis, n_a_basis, c_at_basis, n_at_basis
+
+# 3x3 rank-1 matrix
+A = np.array([[1, 2, 3],
+              [-3, -6, -9],
+              [4, 8, 12]])
+rank, c_a_basis, n_a_basis, c_at_basis, n_at_basis = find_subspaces(A)
+
+#Matrix Parsing for Markdown
+def latex_matrix(M):
+    rows = []
+    for row in M:
+        entries = [f&quot;{x:.0f}&quot; if x == int(x) else f&quot;{x}&quot; for x in row]
+        rows.append(&quot; &amp; &quot;.join(entries))
+    return r&quot;\begin{pmatrix} &quot; + &quot; \\\\\n&quot;.join(rows) + r&quot; \end{pmatrix}&quot;
+
+def vec_str(v):
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(f&quot;{x:.0f}&quot; for x in v) + r&quot; \end{pmatrix}&quot;
+
+# Display summary
+markdown = f&quot;**Matrix A (Rank {rank}):**\n\n&quot;
+markdown += f&quot;$ A = {latex_matrix(A)} $\n\n&quot;
+markdown += f&quot;- dim(C(A)) = {rank}, Basis: `{c_a_basis[0]}`\n&quot;
+markdown += f&quot;- dim(N(A)) = {3 - rank}, Basis: `{n_a_basis[0]}`, `{n_a_basis[1]}`\n&quot;
+markdown += f&quot;- dim(C(Aᵀ)) = {rank}, Basis: `{c_at_basis[0]}`\n&quot;
+markdown += f&quot;- dim(N(Aᵀ)) = {3 - rank}, Basis: `{n_at_basis[0]}`, `{n_at_basis[1]}`\n&quot;
+display(Markdown(markdown))
+
+# === 3D Visualization (Modern Style - No mpl_toolkits import) ===
+fig = plt.figure(figsize=(14, 6))
+
+# Left: Domain R^3 — Row Space (line), Null Space (plane)
+ax1 = fig.add_subplot(121, projection=&#39;3d&#39;)
+ax1.set_title(&#39;Domain $\\mathbb{R}^3$: Row Space (blue), Null Space (green)&#39;)
+
+# Row space: line through origin
+row_vec = c_at_basis[0]
+t = np.linspace(-6, 6, 100)
+ax1.plot(t * row_vec[0], t * row_vec[1], t * row_vec[2], &#39;b-&#39;, linewidth=3, label=&#39;Row Space&#39;)
+
+# Null space: plane
+b1, b2 = n_a_basis
+s, t_grid = np.meshgrid(np.linspace(-3, 3, 8), np.linspace(-3, 3, 8))
+X = s * b1[0] + t_grid * b2[0]
+Y = s * b1[1] + t_grid * b2[1]
+Z = s * b1[2] + t_grid * b2[2]
+ax1.plot_surface(X, Y, Z, color=&#39;green&#39;, alpha=0.4)
+
+ax1.set_xlabel(&#39;x&#39;); ax1.set_ylabel(&#39;y&#39;); ax1.set_zlabel(&#39;z&#39;)
+ax1.legend()
+ax1.set_xlim([-10,10]); ax1.set_ylim([-10,10]); ax1.set_zlim([-10,10])
+
+# Right: Codomain R^3 — Column Space (line), Left Null Space (plane)
+ax2 = fig.add_subplot(122, projection=&#39;3d&#39;)
+ax2.set_title(&#39;Codomain $\\mathbb{R}^3$: Column Space (red), Left Null Space (purple)&#39;)
+
+# Column space: line
+col_vec = c_a_basis[0]
+ax2.plot(t * col_vec[0], t * col_vec[1], t * col_vec[2], &#39;r-&#39;, linewidth=3, label=&#39;Column Space&#39;)
+
+# Left null space: plane
+b1_l, b2_l = n_at_basis
+X_l = s * b1_l[0] + t_grid * b2_l[0]
+Y_l = s * b1_l[1] + t_grid * b2_l[1]
+Z_l = s * b1_l[2] + t_grid * b2_l[2]
+ax2.plot_surface(X_l, Y_l, Z_l, color=&#39;purple&#39;, alpha=0.4)
+
+ax2.set_xlabel(&#39;x&#39;); ax2.set_ylabel(&#39;y&#39;); ax2.set_zlabel(&#39;z&#39;)
+ax2.legend()
+ax2.set_xlim([-10,10]); ax2.set_ylim([-10,10]); ax2.set_zlim([-10,10])
+
+plt.tight_layout()
+plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-11-matrix-spaces-rank-1-small-world-graphs">
+<h2>Lecture 11: Matrix spaces; rank 1; small world graphs<a class="headerlink" href="#lecture-11-matrix-spaces-rank-1-small-world-graphs" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/2IdtqGM6KWU"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>This lecture expands the notion of <strong>vector spaces</strong> to collections of matrices, proves which collections are subspaces, and connects rank-1 matrices to low-rank structure. It closes with an introduction to <strong>small-world graphs</strong> via adjacency matrices, illustrating how linear-algebraic tools describe network connectivity.</p>
+<section id="id2">
+<h3>Key Definitions<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p><strong>Matrix Space</strong> <span class="math notranslate nohighlight">\(M_{m \times n}\)</span>:<br />
+The set of <em>all</em> <span class="math notranslate nohighlight">\(m \times n\)</span> real matrices, equipped with componentwise addition and scalar multiplication. It is a vector space of dimension <span class="math notranslate nohighlight">\(m \cdot n\)</span>.</p>
+<p><strong>Symmetric Matrices</strong> <span class="math notranslate nohighlight">\(\mathcal{S}_{n}\)</span>:<br />
+Matrices <span class="math notranslate nohighlight">\(A \in M_{n \times n}\)</span> satisfying <span class="math notranslate nohighlight">\(A = A^T\)</span>.</p>
+<p><strong>Upper-Triangular Matrices</strong> <span class="math notranslate nohighlight">\(\mathcal{U}_{n}\)</span>:<br />
+Matrices <span class="math notranslate nohighlight">\(A \in M_{n \times n}\)</span> with <span class="math notranslate nohighlight">\(A_{ij}=0\)</span> whenever <span class="math notranslate nohighlight">\(i&gt;j\)</span>.</p>
+<p><strong>Diagonal Matrices</strong> <span class="math notranslate nohighlight">\(\mathcal{D}_{n}\)</span>:<br />
+Matrices <span class="math notranslate nohighlight">\(A \in M_{n \times n}\)</span> with <span class="math notranslate nohighlight">\(A_{ij}=0\)</span> whenever <span class="math notranslate nohighlight">\(i\neq j\)</span>.</p>
+<p><strong>Rank-1 Matrix</strong>:<br />
+<span class="math notranslate nohighlight">\(A = u v^T\)</span> for column vectors <span class="math notranslate nohighlight">\(u \in \mathbb{R}^m\)</span>, <span class="math notranslate nohighlight">\(v \in \mathbb{R}^n\)</span> (both non-zero).<br />
+All rows of <span class="math notranslate nohighlight">\(A\)</span> are scalar multiples of <span class="math notranslate nohighlight">\(v^T\)</span>; all columns are scalar multiples of <span class="math notranslate nohighlight">\(u\)</span>.</p>
+<p><strong>Intersection of Upper Triangular and Symmetric is Diagonal</strong><br />
+A matrix that is both symmetric and upper-triangular must have zeros below <em>and</em> above the diagonal, leaving only the diagonal entries free.</p>
+<p><strong>Span of symmetric + upper-triangular = all matrices</strong></p>
+</section>
+<section id="rank-1-matrices">
+<h3>Rank-1 Matrices<a class="headerlink" href="#rank-1-matrices" title="Permalink to this heading">#</a></h3>
+<p>A matrix <span class="math notranslate nohighlight">\(A \in M_{m \times n}\)</span> has rank 1 <strong>iff</strong> it can be written <span class="math notranslate nohighlight">\(A = u v^T\)</span> with <span class="math notranslate nohighlight">\(u \neq 0\)</span>, <span class="math notranslate nohighlight">\(v \neq 0\)</span>.<br />
+<em>Column space</em> = <span class="math notranslate nohighlight">\(\operatorname{span}\{u\}\)</span>, dimension 1.<br />
+<em>Row space</em> = <span class="math notranslate nohighlight">\(\operatorname{span}\{v\}\)</span>, dimension 1.</p>
+<p><strong>Example</strong><br />
+<span class="math notranslate nohighlight">\(
+u = \begin{pmatrix} 1 \\ 2 \end{pmatrix},\;
+v = \begin{pmatrix} 3 \\ 4 \end{pmatrix}
+\;\Rightarrow\;
+A = u v^T = \begin{pmatrix} 3 &amp; 4 \\ 6 &amp; 8 \end{pmatrix}.
+\)</span></p>
+<p><strong>Sum of rank-1 matrices</strong><br />
+Every matrix of rank <span class="math notranslate nohighlight">\(r\)</span> is a sum of (at most) <span class="math notranslate nohighlight">\(r\)</span> rank-1 matrices.</p>
+</section>
+<section id="subspace-of-vectors-summing-to-zero">
+<h3>Subspace of Vectors Summing to Zero<a class="headerlink" href="#subspace-of-vectors-summing-to-zero" title="Permalink to this heading">#</a></h3>
+<p>Consider <span class="math notranslate nohighlight">\(\mathbb{R}^4\)</span> and the hyperplane<br />
+<span class="math notranslate nohighlight">\(
+S = \{v = (v_1,v_2,v_3,v_4) \mid v_1+v_2+v_3+v_4 = 0\}.
+\)</span>
+This is the <strong>null space</strong> of the row vector <span class="math notranslate nohighlight">\(a^T = [1\;1\;1\;1]\)</span>, i.e., <span class="math notranslate nohighlight">\(S = N(A)\)</span> where<br />
+<span class="math notranslate nohighlight">\(
+A = \begin{pmatrix} 1 &amp; 1 &amp; 1 &amp; 1 \end{pmatrix}.
+\)</span>
+Rank of <span class="math notranslate nohighlight">\(A\)</span> is 1, so <span class="math notranslate nohighlight">\(\dim S = 4 - 1 = 3\)</span>.</p>
+<p>A basis would therefore have 3 components, and is given by holding the pivot value to 1 while all but one free value are 0.<br />
+<span class="math notranslate nohighlight">\(
+\{(1,-1,0,0),\; (1,0,-1,0),\; (1,0,0,-1)\}
+\)</span></p>
+</section>
+<section id="differential-equations-as-vector-spaces">
+<h3>Differential Equations as Vector Spaces<a class="headerlink" href="#differential-equations-as-vector-spaces" title="Permalink to this heading">#</a></h3>
+<p>The general solution to the linear ODE<br />
+<span class="math notranslate nohighlight">\(
+\frac{d^2 y}{dx^2} + y = 0
+\)</span>
+forms a 2-dimensional vector space. A basis is<br />
+<span class="math notranslate nohighlight">\(
+\{\cos x,\; \sin x\}.
+\)</span>
+Any solution is <span class="math notranslate nohighlight">\(c_1 \cos x + c_2 \sin x\)</span>.</p>
+</section>
+<section id="small-world-graphs">
+<h3>Small-World Graphs<a class="headerlink" href="#small-world-graphs" title="Permalink to this heading">#</a></h3>
+<p>A <strong>graph</strong> <span class="math notranslate nohighlight">\(G = (V,E)\)</span> consists of nodes <span class="math notranslate nohighlight">\(V\)</span> and edges <span class="math notranslate nohighlight">\(E\)</span>.<br />
+The <strong>adjacency matrix</strong> <span class="math notranslate nohighlight">\(A \in M_{n \times n}\)</span> (binary, undirected, no self-loops) encodes connectivity.</p>
+<p><strong>Small-world property</strong>
+Most pairs of nodes are connected by a short path path length <span class="math notranslate nohighlight">\(\sim \log n\)</span>. Empirically observed as “six degrees of separation” in social networks.</p>
+<p><strong>Linear-algebraic view</strong><br />
+The rank of <span class="math notranslate nohighlight">\(A\)</span> reveals the number of connected components (for undirected graphs, rank = number of components if the graph is bipartite; otherwise related to the number of independent cycles). Low-rank approximations of <span class="math notranslate nohighlight">\(A\)</span> capture dominant community structure.</p>
+<p>Interactive Problem Generator</p>
+<p>The following code generates: A 3x3 rank-1 matrix, verifying its rank and structure. Predict the rank, basis for the matrix space.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+def generate_rank1_matrix(m=3, n=3):
+    &quot;&quot;&quot;
+    Generate a random 3x3 rank-1 matrix as u v^T.
+    &quot;&quot;&quot;
+    u = np.random.randint(-5, 6, m)
+    while np.all(u == 0):
+        u = np.random.randint(-5, 6, m)
+    v = np.random.randint(-5, 6, n)
+    while np.all(v == 0):
+        v = np.random.randint(-5, 6, n)
+    A = np.outer(u, v)
+    return A, u, v
+
+def matrix_to_latex(M):
+    rows = [r&quot; &amp; &quot;.join([f&quot;{x:.0f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot;\end{pmatrix}&quot;
+
+# Problem: Rank-1 Matrix
+A_rank1, u, v = generate_rank1_matrix()
+rank = np.linalg.matrix_rank(A_rank1)
+
+markdown = f&quot;**Problem 1: Rank-1 Matrix**\n\n&quot;
+markdown += f&quot;**Matrix A**:\n$ {matrix_to_latex(A_rank1)} $\n\n&quot;
+markdown += f&quot;Predict:\n- What is the rank of A?\n- Express A as u v^T (find u, v).\n- What is the dimension of the 3x3 matrix space M_{{3x3}}?\n\n&quot;
+
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f&quot;**Answers for Problem 1**:\n&quot;
+# markdown += f&quot;- Rank of A: {rank}\n&quot;
+# markdown += f&quot;- A = u v^T, where u =\n$ {matrix_to_latex(u.reshape(-1, 1))} $\n&quot;
+# markdown += f&quot;  v^T =\n$ {matrix_to_latex(v.reshape(1, -1))} $\n&quot;
+# markdown += f&quot;- Dimension of M_{{3x3}}: 9\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-12-graphs-networks-incidence-matrices">
+<h2>Lecture 12: Graphs, networks, incidence matrices<a class="headerlink" href="#lecture-12-graphs-networks-incidence-matrices" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/6-wh6yvk6uc"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>This lecture explores how linear algebra models graphs and networks using incidence matrices. We analyze the matrix’s subspaces to understand network properties like connectivity and flow, building on Lecture 10’s fundamental subspaces.</p>
+<section id="id3">
+<h3>Key Definitions<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<p><strong>Directed Graph</strong>:<br />
+A set of <strong>nodes</strong> <span class="math notranslate nohighlight">\(V = \{1,\dots,n\}\)</span> and <strong>directed edges</strong> <span class="math notranslate nohighlight">\(E = \{e_1,\dots,e_m\}\)</span></p>
+<p><strong>Incidence Matrix</strong> <span class="math notranslate nohighlight">\(A \in \mathbb{R}^{n \times m}\)</span>:</p>
+<ul class="simple">
+<li><p><strong>Rows</strong> ↔ nodes, <strong>columns</strong> ↔ edges.</p></li>
+<li><p>For edge <span class="math notranslate nohighlight">\(e_k: t_k \to h_k\)</span>,<br />
+<span class="math notranslate nohighlight">\(
+A_{ik} =
+\begin{cases}
+-1 &amp; \text{if node } i = t_k \text{ (outgoing)}, \\
++1 &amp; \text{if node } i = h_k \text{ (incoming)}, \\
+0  &amp; \text{otherwise}.
+\end{cases}
+\)</span></p></li>
+</ul>
+<p><strong>Column Space</strong> <span class="math notranslate nohighlight">\(C(A) \subseteq \mathbb{R}^n\)</span>:<br />
+Spanned by the columns of <span class="math notranslate nohighlight">\(A\)</span>. Each column is a <strong>unit flow</strong> along one edge.<br />
+<strong>Interpretation</strong>: All possible <strong>node potential differences</strong> (voltages) inducible by edge flows.</p>
+<p><strong>Nullspace</strong> <span class="math notranslate nohighlight">\(N(A) \subseteq \mathbb{R}^m\)</span>:<br />
+Solutions <span class="math notranslate nohighlight">\(x \in \mathbb{R}^m\)</span> such that <span class="math notranslate nohighlight">\(Ax = 0\)</span>.<br />
+<strong>Interpretation</strong>: <strong>Cycle flows</strong> — edge weights that produce zero net flow at every node (conservation).</p>
+<p><strong>Row Space</strong> <span class="math notranslate nohighlight">\(C(A^T) \subseteq \mathbb{R}^m\)</span>:<br />
+Spanned by rows of <span class="math notranslate nohighlight">\(A\)</span> (columns of <span class="math notranslate nohighlight">\(A^T\)</span>).<br />
+<strong>Interpretation</strong>: Linear combinations of node incidence patterns — valid <strong>edge current distributions</strong>.</p>
+<p><strong>Left Nullspace</strong> <span class="math notranslate nohighlight">\(N(A^T) \subseteq \mathbb{R}^n\)</span>:<br />
+Solutions <span class="math notranslate nohighlight">\(y \in \mathbb{R}^n\)</span> such that <span class="math notranslate nohighlight">\(A^T y = 0\)</span>.<br />
+<strong>Interpretation</strong>: <strong>Constant node potentials</strong> — all nodes at the same voltage (ground).</p>
+<p><strong>Kirchhoff’s Current Law (KCL)</strong>:<br />
+Net current into any node is zero → <span class="math notranslate nohighlight">\(Ax = 0\)</span> for current vector <span class="math notranslate nohighlight">\(x\)</span>.<br />
+Thus, <strong>valid currents live in <span class="math notranslate nohighlight">\(N(A)\)</span></strong>.</p>
+<p><strong>Kirchhoff’s Voltage Law (KVL)</strong>:<br />
+Sum of voltage drops around any loop is zero → <span class="math notranslate nohighlight">\(A^T y = 0\)</span> for potential <span class="math notranslate nohighlight">\(y\)</span>.<br />
+Thus, <strong>consistent voltages live in <span class="math notranslate nohighlight">\(N(A^T)\)</span></strong>.</p>
+<p><strong>Tree</strong>:<br />
+A connected graph with no cycles</p>
+<p><strong>Euler’s Formula</strong>:<br />
+<span class="math notranslate nohighlight">\(
+Nodes - Edges + Loops = 1
+\)</span></p>
+</section>
+<section id="example-network-with-4-nodes-5-edges">
+<h3>Example: Network with 4 Nodes, 5 Edges<a class="headerlink" href="#example-network-with-4-nodes-5-edges" title="Permalink to this heading">#</a></h3>
+<p><strong>Graph</strong>:<br />
+Nodes: <span class="math notranslate nohighlight">\(0,1,2,3\)</span><br />
+Edges: <span class="math notranslate nohighlight">\(0\to1\)</span>, <span class="math notranslate nohighlight">\(1\to2\)</span>, <span class="math notranslate nohighlight">\(2\to3\)</span>, <span class="math notranslate nohighlight">\(3\to1\)</span>, <span class="math notranslate nohighlight">\(0\to2\)</span></p>
+<p><strong>Incidence Matrix</strong> <span class="math notranslate nohighlight">\(A\)</span> (4×5):</p>
+<p><span class="math notranslate nohighlight">\(
+A = 
+\begin{pmatrix}
+\color{blue}{-1} &amp; 0 &amp; 0 &amp; 0 &amp; \color{blue}{-1} \\
+\color{red}{+1} &amp; \color{blue}{-1} &amp; 0 &amp; 0 &amp; \color{red}{+1} \\
+0 &amp; \color{red}{+1} &amp; \color{blue}{-1} &amp; 0 &amp; \color{red}{+1} \\
+0 &amp; 0 &amp; \color{red}{+1} &amp; \color{blue}{-1} &amp; 0
+\end{pmatrix}
+\)</span></p>
+<p><strong>Rank</strong>: <span class="math notranslate nohighlight">\(3\)</span> (<span class="math notranslate nohighlight">\(\text{rank}(A) = n - 1 = 3\)</span>)</p>
+<p><strong>Column Space</strong> <span class="math notranslate nohighlight">\(C(A)\)</span>:<br />
+Dim = 3. Basis: first three columns (pivot columns).<br />
+Represents all achievable <strong>voltage drops</strong>.</p>
+<p><strong>Nullspace</strong> <span class="math notranslate nohighlight">\(N(A)\)</span>:<br />
+Dim = <span class="math notranslate nohighlight">\(5 - 3 = 2\)</span>.<br />
+Basis vectors correspond to two <strong>independent cycles</strong>:</p>
+<ul class="simple">
+<li><p>Cycle <span class="math notranslate nohighlight">\(1\to2\to3\to1\)</span></p></li>
+<li><p>Cycle <span class="math notranslate nohighlight">\(0\to1\to2\to0\)</span> (via <span class="math notranslate nohighlight">\(0\to2\)</span>)</p></li>
+</ul>
+<p><strong>Row Space</strong> <span class="math notranslate nohighlight">\(C(A^T)\)</span>:<br />
+Dim = 3. Basis: first three rows of <span class="math notranslate nohighlight">\(A\)</span>.<br />
+Valid <strong>current injection patterns</strong> at nodes.</p>
+<p><strong>Left Nullspace</strong> <span class="math notranslate nohighlight">\(N(A^T)\)</span>:<br />
+Dim = <span class="math notranslate nohighlight">\(4 - 3 = 1\)</span>.<br />
+Basis: <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 \\ 1 \\ 1 \\ 1 \end{pmatrix}^T\)</span><br />
+→ All nodes can be grounded to same potential.</p>
+</section>
+<hr class="docutils" />
+<section id="kirchhoff-ohms-law-network-equations">
+<h3>Kirchhoff + Ohm’s Law → Network Equations<a class="headerlink" href="#kirchhoff-ohms-law-network-equations" title="Permalink to this heading">#</a></h3>
+<p>Let:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x \in \mathbb{R}^m\)</span>: edge <strong>currents</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(y \in \mathbb{R}^n\)</span>: node <strong>potentials</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(C\)</span>: diagonal conductance matrix (Ohm’s law: <span class="math notranslate nohighlight">\(x = C A^T y\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(f \in \mathbb{R}^n\)</span>: external current sources at nodes</p></li>
+</ul>
+<p>Then:</p>
+<ol class="arabic simple">
+<li><p><strong>KCL</strong>: <span class="math notranslate nohighlight">\(A x = f\)</span></p></li>
+<li><p><strong>Ohm</strong>: <span class="math notranslate nohighlight">\(x = C A^T y\)</span></p></li>
+<li><p>Substitute:<br />
+<span class="math notranslate nohighlight">\(
+A (C A^T) y = f
+\quad\Rightarrow\quad
+\underbrace{A C A^T}_{\text{symmetric, positive semidefinite}} y = f
+\)</span></p></li>
+</ol>
+<p>This is the <strong>Laplacian system</strong> of network theory.</p>
+</section>
+<hr class="docutils" />
+<section id="applications-beyond-electricity">
+<h3>Applications Beyond Electricity<a class="headerlink" href="#applications-beyond-electricity" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Incidence Matrix Represents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Chemistry</strong></p></td>
+<td><p>Reaction stoichiometry (reagents consumed/produced)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Traffic</strong></p></td>
+<td><p>Flow conservation at intersections</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Hydraulics</strong></p></td>
+<td><p>Pressure drops and flow balance</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+<p><strong>Key Takeaway</strong>:<br />
+The <strong>incidence matrix</strong> turns graph topology into linear algebra. The <strong>four subspaces</strong> directly encode:</p>
+<ul class="simple">
+<li><p><strong>Connectivity</strong> (rank = <span class="math notranslate nohighlight">\(n-1\)</span>)</p></li>
+<li><p><strong>Cycles</strong> (nullspace dimension)</p></li>
+<li><p><strong>Conservation laws</strong> (KCL/KVL)</p></li>
+<li><p><strong>Solvable systems</strong> (via <span class="math notranslate nohighlight">\(A C A^T\)</span>)</p></li>
+</ul>
+<p>Interactive Problem Generator</p>
+<p>This code generates a random directed graph with 4 nodes and 4–6 edges, ensuring connectivity. It computes the incidence matrix, rank, and bases for the four fundamental subspaces, with a graph visualization. Predict the rank and subspace dimensions, then check the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+import networkx as nx
+from IPython.display import Markdown, display
+
+def generate_graph(n=4):
+    &quot;&quot;&quot;
+    Generate a random directed graph with n nodes and 4-6 edges, ensuring connectivity.
+    Return incidence matrix and edge list.
+    &quot;&quot;&quot;
+    m = np.random.randint(4, 7)
+    edges = []
+    # Ensure connectivity with a path 0-&gt;1-&gt;2-&gt;3
+    for i in range(n-1):
+        edges.append((i, i+1))
+    # Add random edges
+    while len(edges) &lt; m:
+        i, j = np.random.choice(n, 2, replace=False)
+        if i != j and (i, j) not in edges and (j, i) not in edges:
+            edges.append((i, j))
+    
+    A = np.zeros((n, m))
+    for k, (i, j) in enumerate(edges):
+        A[i, k] = -1  # Outgoing
+        A[j, k] = 1   # Incoming
+    
+    return A, edges
+
+def rref(A):
+    &quot;&quot;&quot;
+    Compute RREF of A and return pivot columns.
+    &quot;&quot;&quot;
+    A = A.astype(float)
+    m, n = A.shape
+    R = A.copy()
+    pivot_cols = []
+    row = 0
+    for col in range(n):
+        if row &gt;= m:
+            break
+        pivot_row = row
+        while pivot_row &lt; m and abs(R[pivot_row, col]) &lt; 1e-10:
+            pivot_row += 1
+        if pivot_row &lt; m:
+            if pivot_row != row:
+                R[[row, pivot_row]] = R[[pivot_row, row]]
+            R[row] /= R[row, col]
+            for i in range(m):
+                if i != row:
+                    R[i] -= R[i, col] * R[row]
+            pivot_cols.append(col)
+            row += 1
+    return R, pivot_cols
+
+def find_subspaces(A):
+    &quot;&quot;&quot;
+    Compute bases for C(A), N(A), C(A^T), N(A^T).
+    &quot;&quot;&quot;
+    R, pivot_cols = rref(A)
+    rank = len(pivot_cols)
+    c_a_basis = A[:, pivot_cols] if pivot_cols else np.zeros((A.shape[0], 1))
+    
+    U, S, Vt = np.linalg.svd(A, full_matrices=True)
+    n_a_basis = Vt[rank:, :].T if rank &lt; A.shape[1] else np.zeros((A.shape[1], 1))
+    
+    R_at, pivot_cols_at = rref(A.T)
+    c_at_basis = A.T[:, pivot_cols_at] if pivot_cols_at else np.zeros((A.shape[0], 1))
+    
+    U_at, S_at, Vt_at = np.linalg.svd(A.T, full_matrices=True)
+    n_at_basis = Vt_at[rank:, :].T if rank &lt; A.shape[0] else np.zeros((A.shape[0], 1))
+    
+    return rank, c_a_basis, n_a_basis, c_at_basis, n_at_basis
+
+def matrix_to_latex(M):
+    rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot;\end{pmatrix}&quot;
+
+def plot_graph(edges, n=4):
+    &quot;&quot;&quot;
+    Plot the directed graph using networkx.
+    &quot;&quot;&quot;
+    G = nx.DiGraph()
+    G.add_nodes_from(range(n))
+    G.add_edges_from(edges)
+    pos = nx.spring_layout(G)
+    plt.figure(figsize=(6, 6))
+    nx.draw(G, pos, with_labels=True, node_color=&#39;lightblue&#39;, node_size=500, arrowsize=20)
+    plt.title(&quot;Directed Graph&quot;)
+    plt.show()
+
+# Generate graph and incidence matrix
+A, edges = generate_graph()
+rank, c_a_basis, n_a_basis, c_at_basis, n_at_basis = find_subspaces(A)
+
+# Display results
+markdown = f&quot;**Directed Graph (nodes labeled 0 to 3)**:\n\n&quot;
+display(Markdown(markdown))
+plot_graph(edges)
+markdown = f&quot;**Incidence Matrix A**:\n$$\n{matrix_to_latex(A)}\n$$\n\n&quot;
+markdown += f&quot;Predict:\n- What is the rank of A?\n- What are dim(C(A)), dim(N(A)), dim(C(A^T)), dim(N(A^T))?\n- What do solutions in N(A) represent (e.g., cycles)?\n- What does N(A^T) represent (e.g., potentials)?\n\n&quot;
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f&quot;**Answers**:\n&quot;
+# markdown += f&quot;- Rank of A: {rank}\n&quot;
+# markdown += f&quot;- dim(C(A)) = {rank}, dim(N(A)) = {A.shape[1] - rank}\n&quot;
+# markdown += f&quot;- dim(C(A^T)) = {rank}, dim(N(A^T)) = {A.shape[0] - rank}\n&quot;
+# markdown += f&quot;- C(A) Basis:\n$$\n{matrix_to_latex(c_a_basis)}\n$$\n&quot;
+# markdown += f&quot;- N(A) Basis:\n$$\n{matrix_to_latex(n_a_basis)}\n$$\n&quot;
+# markdown += f&quot;- C(A^T) Basis:\n$$\n{matrix_to_latex(c_at_basis)}\n$$\n&quot;
+# markdown += f&quot;- N(A^T) Basis:\n$$\n{matrix_to_latex(n_at_basis)}\n$$\n&quot;
+# markdown += f&quot;- N(A) represents flows around cycles in the graph.\n&quot;
+# markdown += f&quot;- N(A^T) represents equal potentials across nodes.\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_two.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 2: Spaces</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week_four.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 4: Orthogonal Basis and Projection</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-9-independence-basis-and-dimension">Lecture 9: Independence, basis, and dimension</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-definitions">Key Definitions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-10-the-four-fundamental-subspaces">Lecture 10: The four fundamental subspaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-11-matrix-spaces-rank-1-small-world-graphs">Lecture 11: Matrix spaces; rank 1; small world graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-1-matrices">Rank-1 Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#subspace-of-vectors-summing-to-zero">Subspace of Vectors Summing to Zero</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#differential-equations-as-vector-spaces">Differential Equations as Vector Spaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#small-world-graphs">Small-World Graphs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-12-graphs-networks-incidence-matrices">Lecture 12: Graphs, networks, incidence matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Key Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-network-with-4-nodes-5-edges">Example: Network with 4 Nodes, 5 Edges</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kirchhoff-ohms-law-network-equations">Kirchhoff + Ohm’s Law → Network Equations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applications-beyond-electricity">Applications Beyond Electricity</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
