@@ -22,7 +22,7 @@ kernelspec:
     allowfullscreen>
 </iframe>
 
-The **singular value decomposition** (SVD) is the ultimate factorization: it works for **any matrix** (square or rectangular, full rank or not) and reveals its **rank**, **fundamental subspaces**, and **condition number**.
+The **singular value decomposition** (SVD) is the ultimate factorization: it works for **any matrix** (square or rectangular, full rank or not) and reveals its **rank**, **fundamental subspaces**, and **condition number** (read more on this independently of lecture)
 
 ---
 
@@ -173,15 +173,6 @@ display(Markdown(markdown))
 # markdown += f"- V^T:\n$$\n{matrix_to_latex(np.round(Vt, 3))}\n$$\n\n"
 # display(Markdown(markdown))
 ```
-
-## Lecture 30: Linear transformations and their matrices
-
-<iframe width="560" height="315"
-    src="https://www.youtube.com/embed/Ts3o2I8_Mxc"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-</iframe>
 
 ## Lecture 30: Linear transformations and their matrices
 

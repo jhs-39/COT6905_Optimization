@@ -33,14 +33,7 @@ Students will develop the mathematical and computational background to contribut
 
 - Matrix theory foundations for deep learning
 - Block matrix multiplications and tensor factorization
-- Stochastic gradient descent and adaptive optimizers (Adam, RMSProp, etc.)
-- Numerical stability in optimization: conditioning, exploding/vanishing gradients, preconditioning
-- Second-order optimization algorithms: natural gradient, quasi-Newton, Fisher-based methods
-- Probabilistic and information-theoretic tools: entropy, KL divergence, variational inference
-- Model compression: quantization, structured/unstructured pruning, knowledge distillation
-- Hardware-aware optimization: mixed-precision training, quantization-aware training
-- Scaling laws and training dynamics of large AI models
-- Evaluation metrics for efficiency: FLOPs, throughput, latency, memory footprint, and accuracy trade-offs
+- Optimization Theory
 
 ## Course Work
 
