@@ -1,0 +1,1363 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 4: Orthogonal Basis and Projection &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_four';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 5: Determinants" href="week_five.html" />
+    <link rel="prev" title="Week 3: Independence, Spaces, Graphs" href="week_three.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_four.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_four.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_four.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_four.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 4: Orthogonal Basis and Projection</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-13-concept-review-consolidation">Lecture 13: Concept Review &amp; Consolidation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-14-orthogonal-basis">Lecture 14: Orthogonal Basis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-vectors-the-dot-product-test">1. Orthogonal Vectors – the dot-product test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-subspaces">2. Orthogonal Subspaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-four-subspaces-are-orthogonal-pairs">3. The Four Subspaces are Orthogonal Pairs</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-does-c-a-t-perp-n-a">Why does <span class="math notranslate nohighlight">\(C(A^{T}) \perp N(A)\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-complements">4. Orthogonal Complements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-15-projections-onto-subspaces">Lecture 15: Projections onto subspaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#projecting-a-vector-onto-a-line-2d-intuition">1. Projecting a Vector onto a Line (2D Intuition)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-the-projection-matrix-p">2. Properties of the Projection Matrix <span class="math notranslate nohighlight">\(P\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-case-projecting-onto-a-subspace-c-a">3. General Case: Projecting onto a Subspace <span class="math notranslate nohighlight">\(C(A)\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-properties-same-as-before">4. Key Properties (Same as Before!)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-project-onto-the-xy-plane">5. Example: Project onto the <span class="math notranslate nohighlight">\(xy\)</span>-Plane</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-do-we-care-least-squares">6. Why Do We Care? → <strong>Least Squares</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-the-big-picture">Summary: The Big Picture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-projection-on-the-plane">Visualization: Projection on the plane</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-16-projection-matrices">Lecture 16: Projection Matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recall-the-projection-matrix">1. Recall: The Projection Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#least-squares-minimize-the-error">2. Least Squares: Minimize the Error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-fitting-a-line-to-3-points">3. Example: Fitting a Line to 3 Points</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-projection-p-a-hat-x">4. Verify: Projection <span class="math notranslate nohighlight">\(p = A \hat{x}\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-a-t-a-invertible">5. Why Is <span class="math notranslate nohighlight">\(A^T A\)</span> Invertible?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-least-squares-in-one-picture">6. Summary: Least Squares in One Picture</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-4-orthogonal-basis-and-projection">
+<h1>Week 4: Orthogonal Basis and Projection<a class="headerlink" href="#week-4-orthogonal-basis-and-projection" title="Permalink to this heading">#</a></h1>
+<section id="lecture-13-concept-review-consolidation">
+<h2>Lecture 13: Concept Review &amp; Consolidation<a class="headerlink" href="#lecture-13-concept-review-consolidation" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/l88D4r74gtM"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We’ve include this for your interest and completeness, but feel free to skip if you are confident in your understanding so far; this is a skill/concept review lecture.</p>
+</section>
+<section id="lecture-14-orthogonal-basis">
+<h2>Lecture 14: Orthogonal Basis<a class="headerlink" href="#lecture-14-orthogonal-basis" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/YzZUIYRCE38"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We introduce orthogonal vectors, orthogonal subspaces, and orthogonal bases, key for understanding geometric relationships in vector spaces and solving problems like projections. We connect these to the fundamental subspaces from Lecture 10.</p>
+<p>We show <strong>why</strong> the row space is orthogonal to the null space, and the column space is orthogonal to the left-null space.<br />
+These two <em>orthogonal-complement</em> pairs completely carve <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> and <span class="math notranslate nohighlight">\(\mathbb{R}^m\)</span> into perpendicular pieces.</p>
+<section id="orthogonal-vectors-the-dot-product-test">
+<h3>1. Orthogonal Vectors – the dot-product test<a class="headerlink" href="#orthogonal-vectors-the-dot-product-test" title="Permalink to this heading">#</a></h3>
+<p>Two vectors <span class="math notranslate nohighlight">\(u, v \in \mathbb{R}^k\)</span> are <strong>orthogonal</strong> if<br />
+<span class="math notranslate nohighlight">\(
+u^{T}v = 0 .
+\)</span>
+Geometrically they are perpendicular (90°).<br />
+The Pythagorean theorem holds <strong>only</strong> when the vectors are orthogonal:</p>
+<div class="math notranslate nohighlight">
+\[
+\|u+v\|^{2}= (u+v)^{T}(u+v)= u^{T}u + 2u^{T}v + v^{T}v .
+\qquad \text{If } u^{T}v=0 \;\Rightarrow\; \|u+v\|^{2}= \|u\|^{2}+\|v\|^{2}.
+\]</div>
+</section>
+<section id="orthogonal-subspaces">
+<h3>2. Orthogonal Subspaces<a class="headerlink" href="#orthogonal-subspaces" title="Permalink to this heading">#</a></h3>
+<p>Subspaces <span class="math notranslate nohighlight">\(S, T \subset \mathbb{R}^k\)</span> are <strong>orthogonal</strong> if <strong>every</strong> vector in <span class="math notranslate nohighlight">\(S\)</span> is orthogonal to <strong>every</strong> vector in <span class="math notranslate nohighlight">\(T\)</span>.<br />
+Notation: <span class="math notranslate nohighlight">\(S \perp T\)</span>.</p>
+</section>
+<section id="the-four-subspaces-are-orthogonal-pairs">
+<h3>3. The Four Subspaces are Orthogonal Pairs<a class="headerlink" href="#the-four-subspaces-are-orthogonal-pairs" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pair (in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>)</p></th>
+<th class="head"><p>Pair (in <span class="math notranslate nohighlight">\(\mathbb{R}^m\)</span>)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Row space</strong> <span class="math notranslate nohighlight">\(C(A^{T})\)</span> <span class="math notranslate nohighlight">\(\perp\)</span> <strong>Null space</strong> <span class="math notranslate nohighlight">\(N(A)\)</span></p></td>
+<td><p><strong>Column space</strong> <span class="math notranslate nohighlight">\(C(A)\)</span> <span class="math notranslate nohighlight">\(\perp\)</span> <strong>Left-null space</strong> <span class="math notranslate nohighlight">\(N(A^{T})\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="why-does-c-a-t-perp-n-a">
+<h4>Why does <span class="math notranslate nohighlight">\(C(A^{T}) \perp N(A)\)</span>?<a class="headerlink" href="#why-does-c-a-t-perp-n-a" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x \in N(A)\)</span> means <span class="math notranslate nohighlight">\(Ax = 0\)</span>.</p></li>
+<li><p>Examine product Ax as the dot product of each row vector in A with x:<br />
+<span class="math notranslate nohighlight">\(
+\text{(row}_i \text{ of }A) \cdot x = 0 \quad \text{for every } i.
+\)</span></p></li>
+<li><p>Every row of <span class="math notranslate nohighlight">\(A\)</span> (i.e. every vector in the row space) is orthogonal to <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+<li><p>Because this holds for <strong>all</strong> <span class="math notranslate nohighlight">\(x\in N(A)\)</span>, the whole row space is orthogonal to the whole null space.</p></li>
+</ul>
+<p>The same argument (applied to <span class="math notranslate nohighlight">\(A^{T}\)</span>) shows <span class="math notranslate nohighlight">\(C(A) \perp N(A^{T})\)</span>.</p>
+</section>
+</section>
+<section id="orthogonal-complements">
+<h3>4. Orthogonal Complements<a class="headerlink" href="#orthogonal-complements" title="Permalink to this heading">#</a></h3>
+<p>For a subspace <span class="math notranslate nohighlight">\(S\subset \mathbb{R}^k\)</span> its <strong>orthogonal complement</strong> contains all the other orthogonal dimensions in the subspace:
+<span class="math notranslate nohighlight">\(
+\dim S + \dim S^{\perp} = k
+\)</span></p>
+<p><span class="math notranslate nohighlight">\(
+S^{\perp}= \{ v\in\mathbb{R}^k \mid v^{T}u=0 \;\forall u\in S\}
+\)</span></p>
+<p>Below, we give you a sneak peek of a method to calculate the 4 subspaces using singular value decomposition! We take the dot product to demonstrate orthogonality. It should be 0 or very close to 0 (numerical stability)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from numpy.linalg import svd
+
+# Example matrix A (not square)
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+], dtype=float)
+
+# --- Compute the four fundamental subspaces via SVD ---
+U, s, Vt = svd(A)
+r = np.sum(s &gt; 1e-10)   # rank
+
+# Bases for each subspace
+row_space = Vt[:r].T              # C(A^T)
+null_space = Vt[r:].T             # N(A)
+col_space = U[:, :r]              # C(A)
+left_null_space = U[:, r:]        # N(A^T)
+
+# --- Check orthogonality numerically ---
+def check_orthogonal(X, Y, nameX, nameY):
+    dot_product = X.T @ Y
+    print(f&quot;{nameX} ⟂ {nameY}?  ||dot|| = {np.linalg.norm(dot_product):.2e}&quot;)
+
+check_orthogonal(row_space, null_space, &quot;Row space&quot;, &quot;Null space&quot;)
+check_orthogonal(col_space, left_null_space, &quot;Column space&quot;, &quot;Left-null space&quot;)
+
+# --- Dimensional sanity checks ---
+print(&quot;\nDimensional checks:&quot;)
+print(f&quot;dim(Row space) + dim(Null space) = {row_space.shape[1]} + {null_space.shape[1]} = {A.shape[1]}&quot;)
+print(f&quot;dim(Column space) + dim(Left-null space) = {col_space.shape[1]} + {left_null_space.shape[1]} = {A.shape[0]}&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-15-projections-onto-subspaces">
+<h2>Lecture 15: Projections onto subspaces<a class="headerlink" href="#lecture-15-projections-onto-subspaces" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/Y_Ac6KiQ1t0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We learn how to <strong>find the closest point</strong> in a subspace to a given vector <span class="math notranslate nohighlight">\(b\)</span>.<br />
+This is the foundation of <strong>least squares</strong> — solving <span class="math notranslate nohighlight">\(Ax = b\)</span> when no exact solution exists.</p>
+<hr class="docutils" />
+<section id="projecting-a-vector-onto-a-line-2d-intuition">
+<h3>1. Projecting a Vector onto a Line (2D Intuition)<a class="headerlink" href="#projecting-a-vector-onto-a-line-2d-intuition" title="Permalink to this heading">#</a></h3>
+<p>Suppose we have two vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a\)</span>: defines a <strong>line</strong> through the origin</p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span>: any point we want to project</p></li>
+</ul>
+<p><strong>Goal</strong>: Find the point <span class="math notranslate nohighlight">\(p\)</span> on the line through <span class="math notranslate nohighlight">\(a\)</span> that is <strong>closest</strong> to <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<p>Let <span class="math notranslate nohighlight">\(p = x a\)</span> (some scalar multiple of <span class="math notranslate nohighlight">\(a\)</span>).<br />
+The <strong>error vector</strong> is<br />
+$<span class="math notranslate nohighlight">\(
+e = b - p = b - x a
+\)</span>$</p>
+<p>For <span class="math notranslate nohighlight">\(p\)</span> to be the <em>closest</em> point, <span class="math notranslate nohighlight">\(e\)</span> must be <strong>perpendicular</strong> to the line (i.e., to <span class="math notranslate nohighlight">\(a\)</span>):<br />
+$<span class="math notranslate nohighlight">\(
+a^T e = 0 \quad \Rightarrow \quad a^T (b - x a) = 0
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+a^T b - x (a^T a) = 0 \quad \Rightarrow \quad x = \frac{a^T b}{a^T a}
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+\boxed{p = a \left( \frac{a^T b}{a^T a} \right) = \frac{a a^T}{a^T a} \, b}
+\)</span>$</p>
+<p>Let<br />
+$<span class="math notranslate nohighlight">\(
+\boxed{P = \frac{a a^T}{a^T a}}
+\qquad \text{then} \quad
+p = P b
+\)</span>$</p>
+<p><span class="math notranslate nohighlight">\(P\)</span> is the <strong>projection matrix</strong> onto the line through <span class="math notranslate nohighlight">\(a\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="properties-of-the-projection-matrix-p">
+<h3>2. Properties of the Projection Matrix <span class="math notranslate nohighlight">\(P\)</span><a class="headerlink" href="#properties-of-the-projection-matrix-p" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Why it holds</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(P^2 = P\)</span></p></td>
+<td><p>Projecting twice gives the same result</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(P^T = P\)</span></p></td>
+<td><p>Symmetric (follows from <span class="math notranslate nohighlight">\(a a^T = (a a^T)^T\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\text{rank}(P) = 1\)</span></p></td>
+<td><p>Column space is the line spanned by <span class="math notranslate nohighlight">\(a\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="general-case-projecting-onto-a-subspace-c-a">
+<h3>3. General Case: Projecting onto a Subspace <span class="math notranslate nohighlight">\(C(A)\)</span><a class="headerlink" href="#general-case-projecting-onto-a-subspace-c-a" title="Permalink to this heading">#</a></h3>
+<p>Now let <span class="math notranslate nohighlight">\(A\)</span> be an <span class="math notranslate nohighlight">\(m \times n\)</span> matrix (not necessarily square).<br />
+We want to project <span class="math notranslate nohighlight">\(b \in \mathbb{R}^m\)</span> onto <strong><span class="math notranslate nohighlight">\(C(A)\)</span></strong> — the column space of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p>Let<br />
+$<span class="math notranslate nohighlight">\(
+p = A \hat{x} \quad \text{(so \)</span>p \in C(A)<span class="math notranslate nohighlight">\()}
+\)</span><span class="math notranslate nohighlight">\(
+Error:  
+\)</span><span class="math notranslate nohighlight">\(
+e = b - p = b - A \hat{x}
+\)</span>$</p>
+<p>For <span class="math notranslate nohighlight">\(p\)</span> to be the <strong>closest point</strong>, <span class="math notranslate nohighlight">\(e\)</span> must be <strong>perpendicular to every column of <span class="math notranslate nohighlight">\(A\)</span></strong>:<br />
+$<span class="math notranslate nohighlight">\(
+a_i^T e = 0 \quad \forall i \quad \Rightarrow \quad A^T e = 0
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+A^T (b - A \hat{x}) = 0 \quad \Rightarrow \quad A^T A \hat{x} = A^T b
+\)</span>$</p>
+<p>If <span class="math notranslate nohighlight">\(A^T A\)</span> is invertible (i.e., <span class="math notranslate nohighlight">\(A\)</span> has <strong>full column rank</strong>),<br />
+$<span class="math notranslate nohighlight">\(
+\boxed{\hat{x} = (A^T A)^{-1} A^T b}
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+\boxed{p = A \hat{x} = A (A^T A)^{-1} A^T b}
+\)</span>$</p>
+<p>Define the <strong>projection matrix onto <span class="math notranslate nohighlight">\(C(A)\)</span></strong>:<br />
+$<span class="math notranslate nohighlight">\(
+\boxed{P = A (A^T A)^{-1} A^T}
+\)</span>$</p>
+</section>
+<hr class="docutils" />
+<section id="key-properties-same-as-before">
+<h3>4. Key Properties (Same as Before!)<a class="headerlink" href="#key-properties-same-as-before" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P^2 = P\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(P^T = P\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{rank}(P) = \text{rank}(A)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(Pb \in C(A)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(b - Pb \in N(A^T)\)</span> (i.e., perpendicular to <span class="math notranslate nohighlight">\(C(A)\)</span>)</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Note</strong>: <span class="math notranslate nohighlight">\(A\)</span> is <strong>not square</strong> → <span class="math notranslate nohighlight">\(P \neq I\)</span>, even if <span class="math notranslate nohighlight">\(A\)</span> is invertible in some sense.<br />
+Only when <span class="math notranslate nohighlight">\(C(A) = \mathbb{R}^m\)</span> (full row rank) do we get <span class="math notranslate nohighlight">\(P = I\)</span>.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="example-project-onto-the-xy-plane">
+<h3>5. Example: Project onto the <span class="math notranslate nohighlight">\(xy\)</span>-Plane<a class="headerlink" href="#example-project-onto-the-xy-plane" title="Permalink to this heading">#</a></h3>
+<p>Let<br />
+$<span class="math notranslate nohighlight">\(
+A = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \\ 0 &amp; 0 \end{pmatrix}, \quad
+b = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
+\)</span>$</p>
+<p>Column space: the <span class="math notranslate nohighlight">\(xy\)</span>-plane in <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>.</p>
+<p>Compute:<br />
+$<span class="math notranslate nohighlight">\(
+A^T A = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}, \quad
+(A^T A)^{-1} = I_2
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+P = A (A^T A)^{-1} A^T = A A^T = \begin{pmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 \end{pmatrix}
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+p = P b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}
+\)</span><span class="math notranslate nohighlight">\(
+Error:  
+\)</span><span class="math notranslate nohighlight">\(
+e = b - p = \begin{pmatrix} 0 \\ 0 \\ 3 \end{pmatrix} \in N(A^T)
+\)</span>$</p>
+<p>Check: <span class="math notranslate nohighlight">\(e \perp C(A)\)</span>?<br />
+$<span class="math notranslate nohighlight">\(
+\begin{pmatrix} 1 &amp; 0 &amp; 0 \end{pmatrix} \cdot e = 0, \quad
+\begin{pmatrix} 0 &amp; 1 &amp; 0 \end{pmatrix} \cdot e = 0
+\;\; \checkmark
+\)</span>$</p>
+</section>
+<hr class="docutils" />
+<section id="why-do-we-care-least-squares">
+<h3>6. Why Do We Care? → <strong>Least Squares</strong><a class="headerlink" href="#why-do-we-care-least-squares" title="Permalink to this heading">#</a></h3>
+<p>The system <span class="math notranslate nohighlight">\(Ax = b\)</span> may have <strong>no solution</strong> (if <span class="math notranslate nohighlight">\(b \notin C(A)\)</span>).<br />
+Instead, solve the <strong>closest problem</strong>:<br />
+$<span class="math notranslate nohighlight">\(
+\text{minimize } \|Ax - b\|^2
+\quad \Rightarrow \quad
+\text{solution: } \hat{x} = (A^T A)^{-1} A^T b
+\)</span>$</p>
+<p>This is <strong>linear regression</strong>, <strong>data fitting</strong>, <strong>curve fitting</strong>, etc.</p>
+<p><strong>Example</strong>: Fit a line <span class="math notranslate nohighlight">\(y = c + dt\)</span> to noisy points <span class="math notranslate nohighlight">\((t_i, b_i)\)</span><br />
+→ Let <span class="math notranslate nohighlight">\(A = \begin{pmatrix} 1 &amp; t_1 \\ 1 &amp; t_2 \\ \vdots \end{pmatrix}\)</span><br />
+→ Solve <span class="math notranslate nohighlight">\(A \hat{x} = P b\)</span> → best-fit line.</p>
+</section>
+<hr class="docutils" />
+<section id="summary-the-big-picture">
+<h3>Summary: The Big Picture<a class="headerlink" href="#summary-the-big-picture" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Concept</p></th>
+<th class="head"><p>Formula</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Projection onto line</p></td>
+<td><p><span class="math notranslate nohighlight">\(p = \frac{a a^T}{a^T a} b\)</span></p></td>
+<td><p>Shadow of <span class="math notranslate nohighlight">\(b\)</span> on line</p></td>
+</tr>
+<tr class="row-odd"><td><p>Projection onto <span class="math notranslate nohighlight">\(C(A)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(p = A (A^T A)^{-1} A^T b\)</span></p></td>
+<td><p>Shadow of <span class="math notranslate nohighlight">\(b\)</span> on column space</p></td>
+</tr>
+<tr class="row-even"><td><p>Error <span class="math notranslate nohighlight">\(e = b - p\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(e \in N(A^T)\)</span></p></td>
+<td><p>Perpendicular to subspace</p></td>
+</tr>
+<tr class="row-odd"><td><p>Least Squares</p></td>
+<td><p><span class="math notranslate nohighlight">\(\hat{x} = (A^T A)^{-1} A^T b\)</span></p></td>
+<td><p>Best approximate solution</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="visualization-projection-on-the-plane">
+<h3>Visualization: Projection on the plane<a class="headerlink" href="#visualization-projection-on-the-plane" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># ------------------------------------------------------------------
+#  Lecture 15 – Projection onto a random plane (no widgets)
+# ------------------------------------------------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.patches import FancyArrowPatch
+import matplotlib as mpl
+from IPython.display import Markdown, display
+
+# ------------------------------------------------------------------
+# 1.  Generate a random plane (two independent columns) and point b
+# ------------------------------------------------------------------
+def generate_data(seed=None):
+    if seed is not None:
+        np.random.seed(seed)
+    # Two random vectors → span a plane
+    while True:
+        a1 = np.random.randn(3)
+        a2 = np.random.randn(3)
+        if np.linalg.matrix_rank(np.column_stack([a1, a2])) == 2:
+            break
+    A = np.column_stack([a1, a2])
+    A = A / np.linalg.norm(A, axis=0)          # normalize for nice scale
+    b = np.random.randn(3) + 3                 # point not in plane
+    return A, b
+
+# Change the seed below to get a new random example
+A, b = generate_data(seed=42)                  # ← edit this number!
+
+# ------------------------------------------------------------------
+# 2.  Compute projection p = A (A^T A)^(-1) A^T b
+# ------------------------------------------------------------------
+ATA_inv = np.linalg.inv(A.T @ A)
+P = A @ ATA_inv @ A.T
+p = P @ b
+e = b - p                                      # error vector
+
+# ------------------------------------------------------------------
+# 3.  Helper: 3D arrow for the error vector
+# ------------------------------------------------------------------
+class Arrow3D(FancyArrowPatch):
+    def __init__(self, xs, ys, zs, *args, **kwargs):
+        super().__init__((0,0), (0,0), *args, **kwargs)
+        self._verts3d = xs, ys, zs
+    def do_3d_projection(self, renderer=None):
+        xs3d, ys3d, zs3d = self._verts3d
+        xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, self.axes.M)
+        self.set_positions((xs[0],ys[0]),(xs[1],ys[1]))
+        return np.min(zs)
+
+# ------------------------------------------------------------------
+# 4.  Plot everything
+# ------------------------------------------------------------------
+fig = plt.figure(figsize=(11, 8))
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+ax.set_title(&#39;Projection of $b$ onto a Random Plane&#39;, fontsize=14, pad=20)
+
+# --- Plane (semi-transparent mesh) ---
+s = np.linspace(-2.5, 2.5, 20)
+t = np.linspace(-2.5, 2.5, 20)
+S, T = np.meshgrid(s, t)
+X = S * A[0,0] + T * A[0,1]
+Y = S * A[1,0] + T * A[1,1]
+Z = S * A[2,0] + T * A[2,1]
+ax.plot_surface(X, Y, Z, color=&#39;lightblue&#39;, alpha=0.5, linewidth=0, antialiased=True)
+
+# --- Points ---
+ax.scatter(*b, color=&#39;red&#39;, s=100, label=&#39;$b$ (original point)&#39;, depthshade=False)
+ax.scatter(*p, color=&#39;blue&#39;, s=100, label=&#39;$p$ (projection)&#39;, depthshade=False)
+ax.scatter(0, 0, 0, color=&#39;gray&#39;, s=30, alpha=0.6)
+
+# --- Error vector e = b - p (dashed purple arrow) ---
+arrow = Arrow3D(
+    [b[0], p[0]], [b[1], p[1]], [b[2], p[2]],
+    mutation_scale=20, arrowstyle=&#39;-|&gt;&#39;, color=&#39;purple&#39;, linewidth=2.5, linestyle=&#39;--&#39;
+)
+ax.add_artist(arrow)
+
+# --- Dotted perpendicular line from b to p ---
+ax.plot([b[0], p[0]], [b[1], p[1]], [b[2], p[2]], &#39;k:&#39;, linewidth=1.8)
+
+# --- Basis vectors of the plane (thin gray) ---
+for i in range(2):
+    vec = 3.0 * A[:, i]
+    ax.quiver(0, 0, 0, vec[0], vec[1], vec[2], color=&#39;gray&#39;, alpha=0.7, linewidth=1.2)
+
+# --- Labels ---
+ax.text(b[0], b[1], b[2], &quot;  $b$&quot;, color=&#39;red&#39;, fontsize=13, weight=&#39;bold&#39;)
+ax.text(p[0], p[1], p[2], &quot;  $p$&quot;, color=&#39;blue&#39;, fontsize=13, weight=&#39;bold&#39;)
+mid = (b + p) / 2
+ax.text(mid[0], mid[1], mid[2], &quot;  $e$&quot;, color=&#39;purple&#39;, fontsize=13, weight=&#39;bold&#39;)
+
+ax.set_xlabel(&#39;X&#39;); ax.set_ylabel(&#39;Y&#39;); ax.set_zlabel(&#39;Z&#39;)
+ax.legend(loc=&#39;upper left&#39;, fontsize=11)
+ax.set_xlim([-4, 4]); ax.set_ylim([-4, 4]); ax.set_zlim([-4, 4])
+ax.view_init(elev=20, azim=30)
+plt.tight_layout()
+plt.show()
+
+# ------------------------------------------------------------------
+# 5.  Summary in Markdown (auto-updated when cell is re-run)
+# ------------------------------------------------------------------
+def latex_vec(v, name, dec=2):
+    entries = [f&quot;{x:.{dec}f}&quot; for x in v]
+    return f&quot;${name} = \\begin{{pmatrix}} {entries[0]} \\\\ {entries[1]} \\\\ {entries[2]} \\end{{pmatrix}}$&quot;
+
+summary = f&quot;&quot;&quot;
+### Projection Summary
+
+**Plane basis** (columns of $A$):  
+{latex_vec(A[:,0], &#39;a_1&#39;)}, {latex_vec(A[:,1], &#39;a_2&#39;)}
+
+**Point** $b$:  
+{latex_vec(b, &#39;b&#39;)}
+
+**Projection** $p = A (A^T A)^{-1} A^T b$:  
+{latex_vec(p, &#39;p&#39;)}
+
+**Error** $e = b - p$:  
+{latex_vec(e, &#39;e&#39;)}  
+$\|e\| = {np.linalg.norm(e):.3f}$
+
+**Orthogonality check** (should be ≈0):  
+$a_1^T e = {A[:,0]@e:.2e}$,  
+$a_2^T e = {A[:,1]@e:.2e}$
+
+---
+
+*To see a new random example, just **re-run this cell** (or change the `seed` value above).*
+&quot;&quot;&quot;
+
+display(Markdown(summary))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-16-projection-matrices">
+<h2>Lecture 16: Projection Matrices<a class="headerlink" href="#lecture-16-projection-matrices" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/osh80YCg_GM"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>In this lecture we explore projection matrices and least-squares problems, focusing on projecting vectors onto subspaces and finding approximate solutions to <span class="math notranslate nohighlight">\(Ax = b\)</span>. It builds on Lecture 15’s projection concepts, and we can start to connect these concepts in linear algebra back to model fitting and optimization.</p>
+<p>We now <strong>use</strong> the projection matrix to solve real problems:<br />
+<strong>When <span class="math notranslate nohighlight">\(Ax = b\)</span> has no solution, find the best possible <span class="math notranslate nohighlight">\(\hat{x}\)</span>.</strong></p>
+<section id="recall-the-projection-matrix">
+<h3>1. Recall: The Projection Matrix<a class="headerlink" href="#recall-the-projection-matrix" title="Permalink to this heading">#</a></h3>
+<p>For any <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> with <strong>independent columns</strong>,<br />
+<span class="math notranslate nohighlight">\(
+\boxed{P = A (A^T A)^{-1} A^T}
+\)</span>
+projects any <span class="math notranslate nohighlight">\(b \in \mathbb{R}^m\)</span> onto <span class="math notranslate nohighlight">\(C(A)\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Case</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(b \in C(A)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(Pb = b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(b \perp C(A)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(Pb = 0\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Otherwise</p></td>
+<td><p><span class="math notranslate nohighlight">\(Pb = p \in C(A)\)</span>: closest point to <span class="math notranslate nohighlight">\(b\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="least-squares-minimize-the-error">
+<h3>2. Least Squares: Minimize the Error<a class="headerlink" href="#least-squares-minimize-the-error" title="Permalink to this heading">#</a></h3>
+<p>When <span class="math notranslate nohighlight">\(b \notin C(A)\)</span>, <span class="math notranslate nohighlight">\(Ax = b\)</span> has <strong>no solution</strong>.<br />
+Instead, minimize the <strong>squared error</strong>:<br />
+<span class="math notranslate nohighlight">\(
+\min_x \|Ax - b\|^2 = \min_x \|e\|^2
+\quad \Rightarrow \quad
+\text{solve } A^T A \hat{x} = A^T b
+\)</span></p>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> has independent columns, <span class="math notranslate nohighlight">\(A^T A\)</span> is <strong>invertible</strong>, so<br />
+<span class="math notranslate nohighlight">\(
+\boxed{\hat{x} = (A^T A)^{-1} A^T b}, \quad
+p = A \hat{x} = P b
+\)</span></p>
+<blockquote>
+<div><p><strong>Key geometric fact</strong>:<br />
+<span class="math notranslate nohighlight">\(e = b - p \perp C(A)\)</span> → <span class="math notranslate nohighlight">\(A^T e = 0\)</span></p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="example-fitting-a-line-to-3-points">
+<h3>3. Example: Fitting a Line to 3 Points<a class="headerlink" href="#example-fitting-a-line-to-3-points" title="Permalink to this heading">#</a></h3>
+<p>We want to fit <span class="math notranslate nohighlight">\(y = C + D t\)</span> to data:<br />
+<span class="math notranslate nohighlight">\(
+(t_1, b_1) = (1,1), \quad (2,2), \quad (3,1)
+\)</span></p>
+<p>Form the system:<br />
+<span class="math notranslate nohighlight">\(
+A = \begin{pmatrix}
+1 &amp; 1 \\
+1 &amp; 2 \\
+1 &amp; 3
+\end{pmatrix}, \quad
+b = \begin{pmatrix} 1 \\ 2 \\ 1 \end{pmatrix}
+\)</span></p>
+<p>No exact solution — but we can find <strong>best fit</strong>.</p>
+<p>Compute:<br />
+<span class="math notranslate nohighlight">\(
+A^T A = \begin{pmatrix} 1&amp;1&amp;1 \\ 1&amp;2&amp;3 \end{pmatrix}
+\begin{pmatrix} 1&amp;1 \\ 1&amp;2 \\ 1&amp;3 \end{pmatrix}
+= \begin{pmatrix} 3 &amp; 6 \\ 6 &amp; 14 \end{pmatrix}
+\)</span>
+<span class="math notranslate nohighlight">\(
+A^T b = \begin{pmatrix} 1&amp;1&amp;1 \\ 1&amp;2&amp;3 \end{pmatrix}
+\begin{pmatrix} 1 \\ 2 \\ 1 \end{pmatrix}
+= \begin{pmatrix} 4 \\ 9 \end{pmatrix}
+\)</span></p>
+<p>Solve:<br />
+<span class="math notranslate nohighlight">\(
+\begin{pmatrix} 3 &amp; 6 \\ 6 &amp; 14 \end{pmatrix} \hat{x} = \begin{pmatrix} 4 \\ 9 \end{pmatrix}
+\quad \Rightarrow \quad
+\hat{x} = \begin{pmatrix} \hat{C} \\ \hat{D} \end{pmatrix}
+= \begin{pmatrix} \frac{2}{3} \\ \frac{1}{2} \end{pmatrix}
+\)</span></p>
+<p><strong>Best-fit line</strong>:<br />
+<span class="math notranslate nohighlight">\(
+\boxed{y = \frac{2}{3} + \frac{1}{2} t}
+\)</span></p>
+</section>
+<section id="verify-projection-p-a-hat-x">
+<h3>4. Verify: Projection <span class="math notranslate nohighlight">\(p = A \hat{x}\)</span><a class="headerlink" href="#verify-projection-p-a-hat-x" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(
+p = A \hat{x} = \begin{pmatrix} 1 &amp; 1 \\ 1 &amp; 2 \\ 1 &amp; 3 \end{pmatrix}
+\begin{pmatrix} 2/3 \\ 1/2 \end{pmatrix}
+= \begin{pmatrix} 2/3 + 1/2 \\ 2/3 + 1 \\ 2/3 + 3/2 \end{pmatrix}
+= \begin{pmatrix} 7/6 \\ 4/3 \\ 13/6 \end{pmatrix}
+\)</span></p>
+<p>Error:<br />
+<span class="math notranslate nohighlight">\(
+e = b - p = \begin{pmatrix} 1 - 7/6 \\ 2 - 4/3 \\ 1 - 13/6 \end{pmatrix}
+= \begin{pmatrix} -1/6 \\ 2/3 \\ -7/6 \end{pmatrix}
+\)</span></p>
+<p>Check <span class="math notranslate nohighlight">\(e \perp C(A)\)</span>:<br />
+<span class="math notranslate nohighlight">\(
+A^T e = \begin{pmatrix} 1&amp;1&amp;1 \\ 1&amp;2&amp;3 \end{pmatrix}
+\begin{pmatrix} -1/6 \\ 2/3 \\ -7/6 \end{pmatrix}
+= \begin{pmatrix} 0 \\ 0 \end{pmatrix} \quad \checkmark
+\)</span></p>
+</section>
+<section id="why-is-a-t-a-invertible">
+<h3>5. Why Is <span class="math notranslate nohighlight">\(A^T A\)</span> Invertible?<a class="headerlink" href="#why-is-a-t-a-invertible" title="Permalink to this heading">#</a></h3>
+<p><strong>Only if the columns of <span class="math notranslate nohighlight">\(A\)</span> are linearly independent.</strong></p>
+<p><strong>Proof</strong>:<br />
+Suppose <span class="math notranslate nohighlight">\(A^T A x = 0\)</span>. Then<br />
+<span class="math notranslate nohighlight">\(
+x^T (A^T A x) = 0 \quad \Rightarrow \quad (Ax)^T (Ax) = 0 \quad \Rightarrow \quad \|Ax\| = 0 \quad \Rightarrow \quad Ax = 0
+\)</span>
+If columns are independent → <span class="math notranslate nohighlight">\(N(A) = \{0\}\)</span> → <span class="math notranslate nohighlight">\(x = 0\)</span>.<br />
+Thus <span class="math notranslate nohighlight">\(N(A^T A) = \{0\}\)</span> → <span class="math notranslate nohighlight">\(A^T A\)</span> is <strong>invertible</strong>.</p>
+<blockquote>
+<div><p><strong>Insight</strong>:<br />
+Perpendicular (or orthonormal) columns make <span class="math notranslate nohighlight">\(A^T A = I\)</span> — the <strong>“best”</strong> case — but <strong>any independent columns work</strong>.</p>
+</div></blockquote>
+</section>
+<section id="summary-least-squares-in-one-picture">
+<h3>6. Summary: Least Squares in One Picture<a class="headerlink" href="#summary-least-squares-in-one-picture" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Formula</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Model</p></td>
+<td><p><span class="math notranslate nohighlight">\(Ax = b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>No solution?</p></td>
+<td><p>Minimize <span class="math notranslate nohighlight">\(|Ax - b|^2\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Normal equations</p></td>
+<td><p><span class="math notranslate nohighlight">\(A^T A \hat{x} = A^T b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Solution</p></td>
+<td><p><span class="math notranslate nohighlight">\(\hat{x} = (A^T A)^{-1} A^T b\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Projection</p></td>
+<td><p><span class="math notranslate nohighlight">\(p = A \hat{x} = P b\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Error</p></td>
+<td><p><span class="math notranslate nohighlight">\(e = b - p \perp C(A)\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We provide visualization and practice problem below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import Markdown, display
+
+def generate_matrix_and_b():
+    &quot;&quot;&quot;
+    Generate a random 3x2 matrix with rank 2 and a random b.
+    &quot;&quot;&quot;
+    v1 = np.random.randint(-5, 6, 3)
+    v2 = np.random.randint(-5, 6, 3)
+    while np.linalg.matrix_rank(np.column_stack((v1, v2))) != 2:
+        v2 = np.random.randint(-5, 6, 3)
+    A = np.column_stack((v1, v2))
+    b = np.random.randint(-5, 6, 3)
+    return A, b
+
+def compute_projection(A, b):
+    &quot;&quot;&quot;
+    Compute projection matrix, projection of b onto C(A), and least-squares solution.
+    &quot;&quot;&quot;
+    P = np.dot(A, np.dot(np.linalg.inv(np.dot(A.T, A)), A.T))
+    x_hat = np.dot(np.linalg.inv(np.dot(A.T, A)), np.dot(A.T, b))
+    p = np.dot(A, x_hat)
+    e = b - p
+    return P, x_hat, p, e
+
+def matrix_to_latex(M):
+    rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot;\end{pmatrix}&quot;
+
+def plot_projection(A, b, p, e):
+    &quot;&quot;&quot;
+    Plot b, p, and e in 3D.
+    &quot;&quot;&quot;
+    Q = np.linalg.qr(A)[0]  # Orthonormal basis for C(A)
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+    
+    # Plot origin
+    ax.scatter([0], [0], [0], color=&#39;black&#39;, s=50, label=&#39;Origin&#39;)
+    
+    # Plot b, p, e as vectors
+    ax.quiver(0, 0, 0, b[0], b[1], b[2], color=&#39;blue&#39;, label=&#39;b&#39;, linewidth=2)
+    ax.quiver(0, 0, 0, p[0], p[1], p[2], color=&#39;green&#39;, label=&#39;Projection p&#39;, linewidth=2)
+    ax.quiver(p[0], p[1], p[2], e[0], e[1], e[2], color=&#39;red&#39;, label=&#39;Error e&#39;, linewidth=2)
+    
+    # Plot column space plane
+    x = np.linspace(-1, 1, 20)
+    y = np.linspace(-1, 1, 20)
+    X, Y = np.meshgrid(x, y)
+    Z = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            point = X[i, j] * Q[:, 0] + Y[i, j] * Q[:, 1]
+            Z[i, j] = point[2]
+            X[i, j] = point[0]
+            Y[i, j] = point[1]
+    ax.plot_surface(X, Y, Z, color=&#39;cyan&#39;, alpha=0.3, label=&#39;C(A)&#39;)
+    
+    ax.set_xlabel(&#39;X&#39;)
+    ax.set_ylabel(&#39;Y&#39;)
+    ax.set_zlabel(&#39;Z&#39;)
+    max_range = np.max(np.abs(np.concatenate([b, p, e]))) * 1.5
+    ax.set_xlim(-max_range, max_range)
+    ax.set_ylim(-max_range, max_range)
+    ax.set_zlim(-max_range, max_range)
+    
+    ax.legend()
+    plt.title(&#39;Least-Squares Projection of b onto C(A)&#39;)
+    plt.show()
+
+# Generate matrix and vector
+A, b = generate_matrix_and_b()
+P, x_hat, p, e = compute_projection(A, b)
+
+# Verify properties
+symmetric = np.allclose(P, P.T)
+idempotent = np.allclose(np.dot(P, P), P)
+ortho_check = np.allclose(np.dot(A.T, e), 0)
+
+# Display results
+markdown = f&quot;**Matrix A**:\n$$\n{matrix_to_latex(A)}\n$$\n\n&quot;
+markdown += f&quot;**Vector b**:\n$$\n{matrix_to_latex(b.reshape(-1, 1))}\n$$\n\n&quot;
+display(Markdown(markdown))
+plot_projection(A, b, p, e)
+markdown = f&quot;Predict:\n- Least-squares solution x̂.\n- Projection p = A x̂.\n- Error e = b - p.\n- Is P symmetric and idempotent?\n- Is e ⊥ C(A)?\n\n&quot;
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f&quot;**Answers**:\n&quot;
+# markdown += f&quot;- Least-squares solution x̂:\n$$\n{matrix_to_latex(x_hat.reshape(-1, 1))}\n$$\n&quot;
+# markdown += f&quot;- Projection p:\n$$\n{matrix_to_latex(p.reshape(-1, 1))}\n$$\n&quot;
+# markdown += f&quot;- Error e:\n$$\n{matrix_to_latex(e.reshape(-1, 1))}\n$$\n&quot;
+# markdown += f&quot;- P is symmetric: {&#39;True&#39; if symmetric else &#39;False&#39;}.\n&quot;
+# markdown += f&quot;- P is idempotent: {&#39;True&#39; if idempotent else &#39;False&#39;}.\n&quot;
+# markdown += f&quot;- e ⊥ C(A): {&#39;True&#39; if ortho_check else &#39;False&#39;}.\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_three.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 3: Independence, Spaces, Graphs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week_five.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 5: Determinants</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-13-concept-review-consolidation">Lecture 13: Concept Review &amp; Consolidation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-14-orthogonal-basis">Lecture 14: Orthogonal Basis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-vectors-the-dot-product-test">1. Orthogonal Vectors – the dot-product test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-subspaces">2. Orthogonal Subspaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-four-subspaces-are-orthogonal-pairs">3. The Four Subspaces are Orthogonal Pairs</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-does-c-a-t-perp-n-a">Why does <span class="math notranslate nohighlight">\(C(A^{T}) \perp N(A)\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-complements">4. Orthogonal Complements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-15-projections-onto-subspaces">Lecture 15: Projections onto subspaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#projecting-a-vector-onto-a-line-2d-intuition">1. Projecting a Vector onto a Line (2D Intuition)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-the-projection-matrix-p">2. Properties of the Projection Matrix <span class="math notranslate nohighlight">\(P\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-case-projecting-onto-a-subspace-c-a">3. General Case: Projecting onto a Subspace <span class="math notranslate nohighlight">\(C(A)\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-properties-same-as-before">4. Key Properties (Same as Before!)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-project-onto-the-xy-plane">5. Example: Project onto the <span class="math notranslate nohighlight">\(xy\)</span>-Plane</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-do-we-care-least-squares">6. Why Do We Care? → <strong>Least Squares</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-the-big-picture">Summary: The Big Picture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-projection-on-the-plane">Visualization: Projection on the plane</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-16-projection-matrices">Lecture 16: Projection Matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recall-the-projection-matrix">1. Recall: The Projection Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#least-squares-minimize-the-error">2. Least Squares: Minimize the Error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-fitting-a-line-to-3-points">3. Example: Fitting a Line to 3 Points</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-projection-p-a-hat-x">4. Verify: Projection <span class="math notranslate nohighlight">\(p = A \hat{x}\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-a-t-a-invertible">5. Why Is <span class="math notranslate nohighlight">\(A^T A\)</span> Invertible?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-least-squares-in-one-picture">6. Summary: Least Squares in One Picture</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

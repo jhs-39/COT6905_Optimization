@@ -1,0 +1,1301 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 8: SVD, Linear Transform, Compression &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_eight';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Week 7: Symmetric and Complex Matrices" href="week_seven.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_eight.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_eight.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_eight.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_eight.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 8: SVD, Linear Transform, Compression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-29-singular-value-decomposition">Lecture 29: Singular value decomposition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#svd-form">1. SVD Form</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-interpretation">2. Geometric Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-svd-via-eigenvalues-of-a-t-a-and-a-a-t">3. Computing SVD: Via Eigenvalues of <span class="math notranslate nohighlight">\(A^T A\)</span> and <span class="math notranslate nohighlight">\(A A^T\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-full-rank-matrix">4. Example: Full Rank Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rank-deficient-matrix">5. Example: Rank-Deficient Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-svd-explorer">Interactive SVD Explorer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-30-linear-transformations-and-their-matrices">Lecture 30: Linear transformations and their matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-and-non-examples">2. Examples and Non-Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-representation">3. Matrix Representation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-bases">4. General Bases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-projection-onto-a-line">5. Example: Projection onto a Line</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-from-mathbb-r-3-to-mathbb-r-2">6. Example: From <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> to <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-differentiation-infinite-dimensions-finite">7. Example: Differentiation (Infinite Dimensions → Finite)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-visualizing-a-linear-transformation">Code: Visualizing a Linear Transformation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-31-change-of-basis-image-compression">Lecture 31: Change of basis; image compression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Lecture 31: Change of basis; image compression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compression-lossless-vs-lossy">1. Compression: Lossless vs Lossy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#change-of-basis-for-compression">2. Change of Basis for Compression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jpeg-discrete-cosine-transform-dct">3. JPEG: Discrete Cosine Transform (DCT)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wavelets-an-alternative-basis">4. Wavelets: An Alternative Basis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formal-change-of-basis">5. Formal Change of Basis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compression-pipeline">6. Compression Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-simple-1d-compression-demo-dct-like">Code: Simple 1D Compression Demo (DCT-like)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-32-left-and-right-inverses-pseudoinverse">Lecture 32: Left and right inverses; pseudoinverse</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-sided-inverse">1. Two-Sided Inverse</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#left-inverse-tall-matrix-full-column-rank">2. Left Inverse (Tall Matrix, Full Column Rank)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#right-inverse-wide-matrix-full-row-rank">3. Right Inverse (Wide Matrix, Full Row Rank)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#projections-revisited">4. Projections Revisited</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudoinverse-for-any-matrix">5. Pseudoinverse (For Any Matrix)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#least-squares-and-minimum-norm-solutions">6. Least-Squares and Minimum-Norm Solutions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-compute-pseudoinverse-and-solve-systems">Code: Compute Pseudoinverse and Solve Systems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-33-recap">Lecture 33: Recap</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-8-svd-linear-transform-compression">
+<h1>Week 8: SVD, Linear Transform, Compression<a class="headerlink" href="#week-8-svd-linear-transform-compression" title="Permalink to this heading">#</a></h1>
+<section id="lecture-29-singular-value-decomposition">
+<h2>Lecture 29: Singular value decomposition<a class="headerlink" href="#lecture-29-singular-value-decomposition" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/TX_vooSnhm8"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>The <strong>singular value decomposition</strong> (SVD) is the ultimate factorization: it works for <strong>any matrix</strong> (square or rectangular, full rank or not) and reveals its <strong>rank</strong>, <strong>fundamental subspaces</strong>, and <strong>condition number</strong> (read more on this independently of lecture)</p>
+<hr class="docutils" />
+<section id="svd-form">
+<h3>1. SVD Form<a class="headerlink" href="#svd-form" title="Permalink to this heading">#</a></h3>
+<p>For any <span class="math notranslate nohighlight">\(m \times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>:<br />
+[
+\boxed{A = U \Sigma V^T}
+]</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(U\)</span>: <span class="math notranslate nohighlight">\(m \times m\)</span> orthogonal (<span class="math notranslate nohighlight">\(U^T U = I\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Sigma\)</span>: <span class="math notranslate nohighlight">\(m \times n\)</span> diagonal (singular values <span class="math notranslate nohighlight">\(\sigma_1 \geq \sigma_2 \geq \cdots \geq 0\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(V\)</span>: <span class="math notranslate nohighlight">\(n \times n\)</span> orthogonal (<span class="math notranslate nohighlight">\(V^T V = I\)</span>)</p></li>
+</ul>
+<p>The <strong>rank</strong> <span class="math notranslate nohighlight">\(r = \#\)</span> of nonzero <span class="math notranslate nohighlight">\(\sigma_i\)</span>.</p>
+<blockquote>
+<div><p><strong>Note</strong>: If <span class="math notranslate nohighlight">\(A\)</span> is symmetric positive definite, SVD = eigenvalue decomposition: <span class="math notranslate nohighlight">\(A = Q \Lambda Q^T\)</span>.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="geometric-interpretation">
+<h3>2. Geometric Interpretation<a class="headerlink" href="#geometric-interpretation" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Columns of <span class="math notranslate nohighlight">\(V\)</span> = <strong>orthonormal basis</strong> for row space <span class="math notranslate nohighlight">\(C(A^T)\)</span> (input space).</p></li>
+<li><p>Columns of <span class="math notranslate nohighlight">\(U\)</span> = <strong>orthonormal basis</strong> for column space <span class="math notranslate nohighlight">\(C(A)\)</span> (output space).</p></li>
+<li><p><span class="math notranslate nohighlight">\(A\)</span> maps <span class="math notranslate nohighlight">\(v_i\)</span> to <span class="math notranslate nohighlight">\(\sigma_i u_i\)</span>:<br />
+[
+\boxed{A v_i = \sigma_i u_i}
+]</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(i &gt; r\)</span>, <span class="math notranslate nohighlight">\(\sigma_i = 0\)</span> → <span class="math notranslate nohighlight">\(v_i\)</span> in null space <span class="math notranslate nohighlight">\(N(A)\)</span>.</p></li>
+</ul>
+<p>Full matrix equation:<br />
+[
+A V = U \Sigma \quad \Rightarrow \quad A = U \Sigma V^T
+]</p>
+</section>
+<hr class="docutils" />
+<section id="computing-svd-via-eigenvalues-of-a-t-a-and-a-a-t">
+<h3>3. Computing SVD: Via Eigenvalues of <span class="math notranslate nohighlight">\(A^T A\)</span> and <span class="math notranslate nohighlight">\(A A^T\)</span><a class="headerlink" href="#computing-svd-via-eigenvalues-of-a-t-a-and-a-a-t" title="Permalink to this heading">#</a></h3>
+<p>[
+A^T A = (U \Sigma V^T)^T (U \Sigma V^T) = V \Sigma^T U^T U \Sigma V^T = V (\Sigma^T \Sigma) V^T
+]</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\Sigma^T \Sigma\)</span> = diagonal with <span class="math notranslate nohighlight">\(\sigma_i^2\)</span> → eigenvalues of <span class="math notranslate nohighlight">\(A^T A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(V\)</span> = eigenvectors of <span class="math notranslate nohighlight">\(A^T A\)</span>.</p></li>
+</ul>
+<p>Similarly:<br />
+[
+A A^T = U (\Sigma \Sigma^T) U^T
+]</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(U\)</span> = eigenvectors of <span class="math notranslate nohighlight">\(A A^T\)</span>.</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Key</strong>: Eigenvalues of <span class="math notranslate nohighlight">\(A^T A\)</span> and <span class="math notranslate nohighlight">\(A A^T\)</span> are the same (nonzero) <span class="math notranslate nohighlight">\(\sigma_i^2\)</span>.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="example-full-rank-matrix">
+<h3>4. Example: Full Rank Matrix<a class="headerlink" href="#example-full-rank-matrix" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 4 &amp; 4 \ -3 &amp; 3 \end{pmatrix}
+]</p>
+<p>First, <span class="math notranslate nohighlight">\(A^T A = \begin{pmatrix} 25 &amp; 7 \\ 7 &amp; 25 \end{pmatrix}\)</span></p>
+<p>Eigenvalues: <span class="math notranslate nohighlight">\(\lambda_1 = 32\)</span>, <span class="math notranslate nohighlight">\(\lambda_2 = 18\)</span> → <span class="math notranslate nohighlight">\(\sigma_1 = \sqrt{32} = 4\sqrt{2}\)</span>, <span class="math notranslate nohighlight">\(\sigma_2 = \sqrt{18} = 3\sqrt{2}\)</span></p>
+<p>Eigenvectors (normalized):<br />
+<span class="math notranslate nohighlight">\(v_1 = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \\ 1 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(v_2 = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \\ -1 \end{pmatrix}\)</span></p>
+<p>Now, <span class="math notranslate nohighlight">\(A A^T = \begin{pmatrix} 32 &amp; 0 \\ 0 &amp; 18 \end{pmatrix}\)</span></p>
+<p>Eigenvectors (normalized):<br />
+<span class="math notranslate nohighlight">\(u_1 = \begin{pmatrix} 1 \\ 0 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(u_2 = \begin{pmatrix} 0 \\ 1 \end{pmatrix}\)</span></p>
+<p><strong>Note</strong>: Signs may vary; adjust to match <span class="math notranslate nohighlight">\(A v_i = \sigma_i u_i\)</span>.</p>
+<p>SVD:<br />
+[
+A = \begin{pmatrix} 1 &amp; 0 \ 0 &amp; 1 \end{pmatrix} \begin{pmatrix} 4\sqrt{2} &amp; 0 \ 0 &amp; 3\sqrt{2} \end{pmatrix} \begin{pmatrix} \frac{1}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}} \ \frac{1}{\sqrt{2}} &amp; -\frac{1}{\sqrt{2}} \end{pmatrix}^T
+]</p>
+</section>
+<hr class="docutils" />
+<section id="example-rank-deficient-matrix">
+<h3>5. Example: Rank-Deficient Matrix<a class="headerlink" href="#example-rank-deficient-matrix" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 4 &amp; 3 \ 8 &amp; 6 \end{pmatrix} \quad (\text{rank 1})
+]</p>
+<p><span class="math notranslate nohighlight">\(A^T A = \begin{pmatrix} 80 &amp; 60 \\ 60 &amp; 45 \end{pmatrix}\)</span></p>
+<p>Eigenvalues: <span class="math notranslate nohighlight">\(\lambda_1 = 125\)</span>, <span class="math notranslate nohighlight">\(\lambda_2 = 0\)</span> → <span class="math notranslate nohighlight">\(\sigma_1 = \sqrt{125} = 5\sqrt{5}\)</span>, <span class="math notranslate nohighlight">\(\sigma_2 = 0\)</span></p>
+<p><span class="math notranslate nohighlight">\(v_1 = \begin{pmatrix} 0.8 \\ 0.6 \end{pmatrix}\)</span> (normalized)</p>
+<p><span class="math notranslate nohighlight">\(A A^T = \begin{pmatrix} 25 &amp; 50 \\ 50 &amp; 100 \end{pmatrix}\)</span></p>
+<p>Eigenvalues: same nonzero, plus zero.</p>
+<p><span class="math notranslate nohighlight">\(u_1 = \frac{1}{\sqrt{5}} \begin{pmatrix} 1 \\ 2 \end{pmatrix}\)</span> (adjust sign if needed)</p>
+<p>SVD:<br />
+[
+A = \frac{1}{\sqrt{5}} \begin{pmatrix} 1 &amp; -2 \ 2 &amp; 1 \end{pmatrix} \begin{pmatrix} 5\sqrt{5} &amp; 0 \ 0 &amp; 0 \end{pmatrix} \begin{pmatrix} 0.8 &amp; 0.6 \ 0.6 &amp; -0.8 \end{pmatrix}^T
+]</p>
+<blockquote>
+<div><p><strong>Note</strong>: In lecture, signs may differ; verify <span class="math notranslate nohighlight">\(A = U \Sigma V^T\)</span>.</p>
+</div></blockquote>
+</section>
+<section id="interactive-svd-explorer">
+<h3>Interactive SVD Explorer<a class="headerlink" href="#interactive-svd-explorer" title="Permalink to this heading">#</a></h3>
+<p>Run the code below to generate a random low-rank matrix and compute its SVD. Predict the singular values and rank, then check!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+def generate_low_rank_matrix(m=3, n=4, rank=2):
+    &quot;&quot;&quot;
+    Generate a random m x n matrix with specified rank.
+    &quot;&quot;&quot;
+    U = np.random.randn(m, rank)
+    V = np.random.randn(n, rank)
+    A = U @ V.T
+    return A
+
+def matrix_to_latex(M):
+    rows = [r&quot; &amp; &quot;.join([f&quot;{x:.2f}&quot; if abs(x) &gt; 1e-10 else &quot;0&quot; for x in row]) for row in M]
+    return r&quot;\begin{pmatrix} &quot; + r&quot; \\ &quot;.join(rows) + r&quot;\end{pmatrix}&quot;
+
+# Generate matrix
+A = generate_low_rank_matrix()
+
+# Compute SVD
+U_svd, S, Vt = np.linalg.svd(A, full_matrices=True)
+Sigma = np.zeros((U_svd.shape[1], Vt.shape[0]))
+np.fill_diagonal(Sigma, S)
+
+# Display matrix
+markdown = f&quot;**Matrix A** (rank ~2):\n$$\n{matrix_to_latex(A)}\n$$\n\n&quot;
+markdown += &quot;Predict:\n- Singular values (σ).\n- Rank.\n- Bases for U and V.\n\n&quot;
+display(Markdown(markdown))
+
+# Reveal answers (students uncomment after predicting)
+# markdown = f&quot;**SVD**:\n&quot;
+# markdown += f&quot;- Singular values: {np.round(S, 3).tolist()}\n&quot;
+# markdown += f&quot;- Rank: {np.sum(S &gt; 1e-10)}\n&quot;
+# markdown += f&quot;- U:\n$$\n{matrix_to_latex(np.round(U_svd, 3))}\n$$\n&quot;
+# markdown += f&quot;- Σ:\n$$\n{matrix_to_latex(np.round(Sigma, 3))}\n$$\n&quot;
+# markdown += f&quot;- V^T:\n$$\n{matrix_to_latex(np.round(Vt, 3))}\n$$\n\n&quot;
+# display(Markdown(markdown))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-30-linear-transformations-and-their-matrices">
+<h2>Lecture 30: Linear transformations and their matrices<a class="headerlink" href="#lecture-30-linear-transformations-and-their-matrices" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/Ts3o2I8_Mxc"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>A <strong>linear transformation</strong> <span class="math notranslate nohighlight">\(T: \mathbb{R}^n \to \mathbb{R}^m\)</span> is a function between vector spaces that preserves vector addition and scalar multiplication.</p>
+<hr class="docutils" />
+<section id="definition">
+<h3>1. Definition<a class="headerlink" href="#definition" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(T\)</span> is <strong>linear</strong> if for all vectors <span class="math notranslate nohighlight">\(v, w\)</span> and scalars <span class="math notranslate nohighlight">\(c\)</span>:</p>
+<p>[
+\boxed{T(v + w) = T(v) + T(w)}, \quad \boxed{T(c v) = c T(v)}
+]</p>
+<p>Equivalently:</p>
+<p>[
+T(c v + d w) = c T(v) + d T(w)
+]</p>
+<p>Consequences:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T(0) = 0\)</span></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="examples-and-non-examples">
+<h3>2. Examples and Non-Examples<a class="headerlink" href="#examples-and-non-examples" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Transformation</p></th>
+<th class="head"><p>Linear?</p></th>
+<th class="head"><p>Reason</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Projection onto a line in <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span></p></td>
+<td><p>Yes</p></td>
+<td><p>Preserves addition &amp; scaling</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rotation by any angle</p></td>
+<td><p>Yes</p></td>
+<td><p>Distances and directions preserved in a linear way</p></td>
+</tr>
+<tr class="row-even"><td><p>Translation: <span class="math notranslate nohighlight">\(T(v) = v + v_0\)</span> (<span class="math notranslate nohighlight">\(v_0 \neq 0\)</span>)</p></td>
+<td><p>No</p></td>
+<td><p><span class="math notranslate nohighlight">\(T(0) = v_0 \neq 0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Length: <span class="math notranslate nohighlight">\(T(v) = |v|\)</span></p></td>
+<td><p>No</p></td>
+<td><p><span class="math notranslate nohighlight">\(T(-2v) = 2|v| \neq -2 T(v)\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="matrix-representation">
+<h3>3. Matrix Representation<a class="headerlink" href="#matrix-representation" title="Permalink to this heading">#</a></h3>
+<p>Every linear transformation <span class="math notranslate nohighlight">\(T: \mathbb{R}^n \to \mathbb{R}^m\)</span> can be represented by a matrix <span class="math notranslate nohighlight">\(A\)</span> (<span class="math notranslate nohighlight">\(m \times n\)</span>) such that</p>
+<p>[
+\boxed{T(v) = A v}
+]</p>
+<p><strong>Key idea</strong>: To define <span class="math notranslate nohighlight">\(T\)</span> completely, it suffices to know <span class="math notranslate nohighlight">\(T(e_1), \dots, T(e_n)\)</span> where <span class="math notranslate nohighlight">\(\{e_1, \dots, e_n\}\)</span> is the <strong>standard basis</strong> of <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>.</p>
+<p>The columns of <span class="math notranslate nohighlight">\(A\)</span> are exactly these images:</p>
+<p>[
+A = \begin{bmatrix} T(e_1) &amp; T(e_2) &amp; \cdots &amp; T(e_n) \end{bmatrix}
+]</p>
+</section>
+<hr class="docutils" />
+<section id="general-bases">
+<h3>4. General Bases<a class="headerlink" href="#general-bases" title="Permalink to this heading">#</a></h3>
+<p>Suppose we choose any basis <span class="math notranslate nohighlight">\(\{v_1, \dots, v_n\}\)</span> for the input space and <span class="math notranslate nohighlight">\(\{w_1, \dots, w_m\}\)</span> for the output space.</p>
+<p>Any vector <span class="math notranslate nohighlight">\(v = c_1 v_1 + \cdots + c_n v_n\)</span>, so</p>
+<p>[
+T(v) = c_1 T(v_1) + \cdots + c_n T(v_n)
+]</p>
+<p>Express each <span class="math notranslate nohighlight">\(T(v_j)\)</span> in the output basis:</p>
+<p>[
+T(v_j) = a_{1j} w_1 + \cdots + a_{mj} w_m
+]</p>
+<p>Then the matrix <span class="math notranslate nohighlight">\(A\)</span> (with respect to these bases) has columns given by these coefficients.</p>
+</section>
+<hr class="docutils" />
+<section id="example-projection-onto-a-line">
+<h3>5. Example: Projection onto a Line<a class="headerlink" href="#example-projection-onto-a-line" title="Permalink to this heading">#</a></h3>
+<p>Project onto the line in direction <span class="math notranslate nohighlight">\(b = \begin{pmatrix} 1 \\ 1 \end{pmatrix}\)</span> in <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>.</p>
+<p>Choose input basis:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(v_1 = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \\ 1 \end{pmatrix}\)</span> (unit vector along line)</p></li>
+<li><p><span class="math notranslate nohighlight">\(v_2 = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \\ -1 \end{pmatrix}\)</span> (perpendicular)</p></li>
+</ul>
+<p>Same for output basis (standard orthonormal works too, but let’s use same).</p>
+<p>Projection leaves component along <span class="math notranslate nohighlight">\(v_1\)</span> unchanged, drops component along <span class="math notranslate nohighlight">\(v_2\)</span>:</p>
+<p>[
+T(v_1) = v_1, \quad T(v_2) = 0
+]</p>
+<p>Matrix (in this basis):</p>
+<p>[
+A = \begin{pmatrix} 1 &amp; 0 \ 0 &amp; 0 \end{pmatrix}
+]</p>
+</section>
+<hr class="docutils" />
+<section id="example-from-mathbb-r-3-to-mathbb-r-2">
+<h3>6. Example: From <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> to <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span><a class="headerlink" href="#example-from-mathbb-r-3-to-mathbb-r-2" title="Permalink to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(T\begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} x + y \\ y + z \end{pmatrix}\)</span>.</p>
+<p>Matrix (standard bases):</p>
+<p>[
+A = \begin{pmatrix} 1 &amp; 1 &amp; 0 \ 0 &amp; 1 &amp; 1 \end{pmatrix}
+]</p>
+<p>Columns: <span class="math notranslate nohighlight">\(T(e_1) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(T(e_2) = \begin{pmatrix} 1 \\ 1 \end{pmatrix}\)</span>, <span class="math notranslate nohighlight">\(T(e_3) = \begin{pmatrix} 0 \\ 1 \end{pmatrix}\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="example-differentiation-infinite-dimensions-finite">
+<h3>7. Example: Differentiation (Infinite Dimensions → Finite)<a class="headerlink" href="#example-differentiation-infinite-dimensions-finite" title="Permalink to this heading">#</a></h3>
+<p>Consider polynomials of degree <span class="math notranslate nohighlight">\(\leq 2\)</span>: basis <span class="math notranslate nohighlight">\(\{1, x, x^2\}\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(T(p) = p'(x)\)</span>.</p>
+<p>[
+T(1) = 0, \quad T(x) = 1, \quad T(x^2) = 2x
+]</p>
+<p>Output basis <span class="math notranslate nohighlight">\(\{1, x\}\)</span>.</p>
+<p>Coefficients:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T(1) = 0 \cdot 1 + 0 \cdot x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(T(x) = 1 \cdot 1 + 0 \cdot x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(T(x^2) = 0 \cdot 1 + 2 \cdot x\)</span></p></li>
+</ul>
+<p>Matrix (2×3):</p>
+<p>[
+A = \begin{pmatrix} 0 &amp; 1 &amp; 0 \ 0 &amp; 0 &amp; 2 \end{pmatrix}
+]</p>
+</section>
+<hr class="docutils" />
+<section id="code-visualizing-a-linear-transformation">
+<h3>Code: Visualizing a Linear Transformation<a class="headerlink" href="#code-visualizing-a-linear-transformation" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+
+# Define a 2x2 matrix (linear transformation)
+A = np.array([[2, 1],
+              [0, 1.5]])  # Shear + scale
+
+# Grid of points in unit square
+x = np.linspace(0, 1, 10)
+y = np.linspace(0, 1, 10)
+X, Y = np.meshgrid(x, y)
+points = np.stack([X.ravel(), Y.ravel()])
+
+# Apply transformation
+transformed = A @ points
+X_t = transformed[0].reshape(10, 10)
+Y_t = transformed[1].reshape(10, 10)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+# Original
+ax1.plot([0,1,1,0,0], [0,0,1,1,0], &#39;b&#39;, linewidth=2)
+ax1.grid(True)
+ax1.set_xlim(-0.5, 1.5); ax1.set_ylim(-0.5, 1.5)
+ax1.set_aspect(&#39;equal&#39;)
+ax1.set_title(&#39;Original Unit Square&#39;)
+
+# Transformed
+ax2.plot([0, A[:,0][0], A[:,0][0]+A[:,1][0], A[:,1][0], 0],
+         [0, A[:,0][1], A[:,0][1]+A[:,1][1], A[:,1][1], 0], &#39;r&#39;, linewidth=2)
+ax2.grid(True)
+ax2.set_xlim(-0.5, 3.5); ax2.set_ylim(-0.5, 3)
+ax2.set_aspect(&#39;equal&#39;)
+ax2.set_title(&#39;After Transformation T(v) = A v&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-31-change-of-basis-image-compression">
+<h2>Lecture 31: Change of basis; image compression<a class="headerlink" href="#lecture-31-change-of-basis-image-compression" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/0h43aV4aH7I"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+</section>
+<section id="id1">
+<h2>Lecture 31: Change of basis; image compression<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/0h43aV4aH7I"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We explore how <strong>changing the basis</strong> can reveal structure in data and enable <strong>compression</strong> — representing the same information with fewer numbers.</p>
+<hr class="docutils" />
+<section id="compression-lossless-vs-lossy">
+<h3>1. Compression: Lossless vs Lossy<a class="headerlink" href="#compression-lossless-vs-lossy" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Lossless</strong>: Exact reconstruction (e.g., ZIP, PNG).</p></li>
+<li><p><strong>Lossy</strong>: Approximate reconstruction, but much higher compression (e.g., JPEG, MP3).</p></li>
+</ul>
+<p>A 512×512 grayscale image (8-bit pixels):<br />
+<span class="math notranslate nohighlight">\(n = 512^2 = 262\,144\)</span> numbers, each 0–255 → ~2 million bits.</p>
+<p>In the <strong>standard pixel basis</strong>, each basis vector has a 1 in one pixel and 0 elsewhere — highly inefficient for correlated images (e.g., a blackboard with smooth regions).</p>
+</section>
+<hr class="docutils" />
+<section id="change-of-basis-for-compression">
+<h3>2. Change of Basis for Compression<a class="headerlink" href="#change-of-basis-for-compression" title="Permalink to this heading">#</a></h3>
+<p>Idea: Represent the image <span class="math notranslate nohighlight">\(x \in \mathbb{R}^n\)</span> in a new basis <span class="math notranslate nohighlight">\(\{v_1, \dots, v_n\}\)</span> where most coefficients are small or zero.</p>
+<p>Let <span class="math notranslate nohighlight">\(W\)</span> be the matrix with columns <span class="math notranslate nohighlight">\(v_1, \dots, v_n\)</span> (orthonormal → <span class="math notranslate nohighlight">\(W^T W = I\)</span>).</p>
+<p>Then:</p>
+<p>[
+\boxed{x = W c}, \quad c = W^T x
+]</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(c\)</span>: coefficients in new basis (lossless transform).</p></li>
+<li><p>Compress by keeping only largest <span class="math notranslate nohighlight">\(|c_i|\)</span> → <span class="math notranslate nohighlight">\(\hat{c}\)</span> (many zeros).</p></li>
+<li><p>Reconstruct: <span class="math notranslate nohighlight">\(\hat{x} = W \hat{c}\)</span>.</p></li>
+</ul>
+<p>Good basis → few large coefficients → high compression with low error.</p>
+</section>
+<hr class="docutils" />
+<section id="jpeg-discrete-cosine-transform-dct">
+<h3>3. JPEG: Discrete Cosine Transform (DCT)<a class="headerlink" href="#jpeg-discrete-cosine-transform-dct" title="Permalink to this heading">#</a></h3>
+<p>JPEG breaks image into 8×8 blocks (lossless tiling).</p>
+<p>Each block uses a <strong>cosine basis</strong> (Fourier-like, low to high frequencies).</p>
+<p>Low-frequency coefficients (smooth parts) are large; high-frequency (details) often small → quantized/thrown away (lossy).</p>
+</section>
+<hr class="docutils" />
+<section id="wavelets-an-alternative-basis">
+<h3>4. Wavelets: An Alternative Basis<a class="headerlink" href="#wavelets-an-alternative-basis" title="Permalink to this heading">#</a></h3>
+<p>Wavelets capture both location and frequency.</p>
+<p>Example basis for <span class="math notranslate nohighlight">\(\mathbb{R}^8\)</span> (Haar wavelets, scaled):</p>
+<ul class="simple">
+<li><p>Constant: <span class="math notranslate nohighlight">\([1,1,1,1,1,1,1,1]\)</span></p></li>
+<li><p>Coarse difference: <span class="math notranslate nohighlight">\([1,1,1,1,-1,-1,-1,-1]\)</span></p></li>
+<li><p>Finer differences, etc.</p></li>
+</ul>
+<p>Advantages: Better for images with sharp edges.</p>
+</section>
+<hr class="docutils" />
+<section id="formal-change-of-basis">
+<h3>5. Formal Change of Basis<a class="headerlink" href="#formal-change-of-basis" title="Permalink to this heading">#</a></h3>
+<p>Suppose matrix <span class="math notranslate nohighlight">\(A\)</span> represents a linear transformation in the <strong>standard basis</strong>.</p>
+<p>We change to new bases:</p>
+<ul class="simple">
+<li><p>Input basis columns in matrix <span class="math notranslate nohighlight">\(M\)</span> (standard → new input basis)</p></li>
+<li><p>Output basis columns in matrix <span class="math notranslate nohighlight">\(N\)</span> (standard → new output basis)</p></li>
+</ul>
+<p>Then the matrix in the new bases is:</p>
+<p>[
+\boxed{B = N^{-1} A M}
+]</p>
+<p>If bases are the same (<span class="math notranslate nohighlight">\(M = N\)</span>), then <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are <strong>similar</strong>:</p>
+<p>[
+\boxed{B = M^{-1} A M}
+]</p>
+<p>Same eigenvalues, different eigenvectors.</p>
+</section>
+<hr class="docutils" />
+<section id="compression-pipeline">
+<h3>6. Compression Pipeline<a class="headerlink" href="#compression-pipeline" title="Permalink to this heading">#</a></h3>
+<p>[
+\text{Image } x
+\xrightarrow{\text{change basis}} c = W^T x
+\xrightarrow{\text{quantize / threshold}} \hat{c}
+\xrightarrow{\text{inverse}} \hat{x} = W \hat{c}
+]</p>
+<p>For orthonormal <span class="math notranslate nohighlight">\(W\)</span>: inverse is just <span class="math notranslate nohighlight">\(W^T\)</span> → fast!</p>
+</section>
+<hr class="docutils" />
+<section id="code-simple-1d-compression-demo-dct-like">
+<h3>Code: Simple 1D Compression Demo (DCT-like)<a class="headerlink" href="#code-simple-1d-compression-demo-dct-like" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.fft import dct, idct
+
+# Synthetic smooth signal (highly compressible in DCT basis)
+n = 256
+x = np.sin(np.linspace(0, 4*np.pi, n)) + 0.5*np.cos(np.linspace(0, 20*np.pi, n))
+
+# DCT (orthonormal basis change)
+c = dct(x, norm=&#39;ortho&#39;)
+
+# Keep only top k coefficients
+k_values = [5, 20, 50, 256]
+plt.figure(figsize=(12, 8))
+
+plt.subplot(3, 1, 1)
+plt.plot(x, &#39;k&#39;, label=&#39;Original&#39;)
+plt.title(&#39;Original Signal&#39;)
+plt.legend()
+
+plt.subplot(3, 1, 2)
+plt.stem(c, use_line_collection=True)
+plt.title(&#39;DCT Coefficients&#39;)
+plt.xlim(0, 50)
+
+plt.subplot(3, 1, 3)
+for k in k_values:
+    c_hat = np.copy(c)
+    c_hat[k:] = 0
+    x_hat = idct(c_hat, norm=&#39;ortho&#39;)
+    compression_ratio = n / k
+    plt.plot(x_hat, label=f&#39;k={k} (compression ~{compression_ratio:.0f}x)&#39;)
+
+plt.title(&#39;Reconstructions&#39;)
+plt.legend()
+plt.tight_layout()
+plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-32-left-and-right-inverses-pseudoinverse">
+<h2>Lecture 32: Left and right inverses; pseudoinverse<a class="headerlink" href="#lecture-32-left-and-right-inverses-pseudoinverse" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/Go2aLo7ZOlU"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Not every matrix has a two-sided inverse, but <strong>every</strong> matrix has a <strong>pseudoinverse</strong> — the closest thing to an inverse, built from the SVD.</p>
+<hr class="docutils" />
+<section id="two-sided-inverse">
+<h3>1. Two-Sided Inverse<a class="headerlink" href="#two-sided-inverse" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(A\)</span> (<span class="math notranslate nohighlight">\(n \times n\)</span>) has an inverse <span class="math notranslate nohighlight">\(A^{-1}\)</span> if</p>
+<p>[
+\boxed{A A^{-1} = A^{-1} A = I}
+]</p>
+<p>Exists <span class="math notranslate nohighlight">\(\iff\)</span> full rank (<span class="math notranslate nohighlight">\(r = n\)</span>), null space <span class="math notranslate nohighlight">\(\{0\}\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="left-inverse-tall-matrix-full-column-rank">
+<h3>2. Left Inverse (Tall Matrix, Full Column Rank)<a class="headerlink" href="#left-inverse-tall-matrix-full-column-rank" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(A\)</span>: <span class="math notranslate nohighlight">\(m \times n\)</span> with <span class="math notranslate nohighlight">\(m &gt; n\)</span> and <span class="math notranslate nohighlight">\(\rank(A) = n\)</span> (full column rank).</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N(A) = \{0\}\)</span> → at most one solution to <span class="math notranslate nohighlight">\(Ax = b\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A^T A\)</span> (<span class="math notranslate nohighlight">\(n \times n\)</span>) is symmetric positive definite → invertible.</p></li>
+</ul>
+<p><strong>Left inverse</strong>:</p>
+<p>[
+\boxed{A_L^{-1} = (A^T A)^{-1} A^T}
+]</p>
+<p>Check:</p>
+<p>[
+A_L^{-1} A = (A^T A)^{-1} A^T A = I_n
+]</p>
+<p>Cannot have <span class="math notranslate nohighlight">\(A A_L^{-1} = I_m\)</span> (wrong size).</p>
+</section>
+<hr class="docutils" />
+<section id="right-inverse-wide-matrix-full-row-rank">
+<h3>3. Right Inverse (Wide Matrix, Full Row Rank)<a class="headerlink" href="#right-inverse-wide-matrix-full-row-rank" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(A\)</span>: <span class="math notranslate nohighlight">\(m \times n\)</span> with <span class="math notranslate nohighlight">\(m &lt; n\)</span> and <span class="math notranslate nohighlight">\(\rank(A) = m\)</span> (full row rank).</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N(A^T) = \{0\}\)</span> → <span class="math notranslate nohighlight">\(b\)</span> must be in <span class="math notranslate nohighlight">\(C(A)\)</span> for consistency; then infinitely many solutions.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A A^T\)</span> (<span class="math notranslate nohighlight">\(m \times m\)</span>) invertible.</p></li>
+</ul>
+<p><strong>Right inverse</strong>:</p>
+<p>[
+\boxed{A_R^{-1} = A^T (A A^T)^{-1}}
+]</p>
+<p>Check:</p>
+<p>[
+A A_R^{-1} = A A^T (A A^T)^{-1} = I_m
+]</p>
+</section>
+<hr class="docutils" />
+<section id="projections-revisited">
+<h3>4. Projections Revisited<a class="headerlink" href="#projections-revisited" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Projection onto column space <span class="math notranslate nohighlight">\(C(A)\)</span>:</p></li>
+</ul>
+<p>[
+\boxed{P = A (A^T A)^{-1} A^T}
+]</p>
+<p>(If full column rank, this is the left inverse.)</p>
+<ul class="simple">
+<li><p>Projection onto row space <span class="math notranslate nohighlight">\(C(A^T)\)</span>:</p></li>
+</ul>
+<p>[
+\boxed{P = A^T (A A^T)^{-1} A}
+]</p>
+<p>(If full row rank, this is the right inverse.)</p>
+</section>
+<hr class="docutils" />
+<section id="pseudoinverse-for-any-matrix">
+<h3>5. Pseudoinverse (For Any Matrix)<a class="headerlink" href="#pseudoinverse-for-any-matrix" title="Permalink to this heading">#</a></h3>
+<p>The <strong>Moore-Penrose pseudoinverse</strong> <span class="math notranslate nohighlight">\(A^+\)</span> satisfies:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A A^+ A = A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A^+ A A^+ = A^+\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A A^+)^T = A A^+\)</span>, <span class="math notranslate nohighlight">\((A^+ A)^T = A^+ A\)</span></p></li>
+</ul>
+<p><strong>Construction via SVD</strong>:</p>
+<p>[
+A = U \Sigma V^T, \quad \rank(A) = r
+]</p>
+<p><span class="math notranslate nohighlight">\(\Sigma\)</span>: <span class="math notranslate nohighlight">\(m \times n\)</span>, nonzero singular values <span class="math notranslate nohighlight">\(\sigma_1, \dots, \sigma_r\)</span> on diagonal.</p>
+<p>Pseudoinverse of <span class="math notranslate nohighlight">\(\Sigma\)</span>:</p>
+<p>[
+\Sigma^+ : n \times m, \quad (\Sigma^+)_{ii} =
+\begin{cases}
+1/\sigma_i &amp; i \leq r \
+0 &amp; i &gt; r
+\end{cases}
+]</p>
+<p>Then:</p>
+<p>[
+\boxed{A^+ = V \Sigma^+ U^T}
+]</p>
+<p>Properties:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> invertible → <span class="math notranslate nohighlight">\(A^+ = A^{-1}\)</span></p></li>
+<li><p>If full column rank → <span class="math notranslate nohighlight">\(A^+ = (A^T A)^{-1} A^T\)</span> (left inverse)</p></li>
+<li><p>If full row rank → <span class="math notranslate nohighlight">\(A^+ = A^T (A A^T)^{-1}\)</span> (right inverse)</p></li>
+</ul>
+<p>Geometrically: <span class="math notranslate nohighlight">\(A^+\)</span> maps from column space back to row space, inverting the nonzero singular directions.</p>
+</section>
+<hr class="docutils" />
+<section id="least-squares-and-minimum-norm-solutions">
+<h3>6. Least-Squares and Minimum-Norm Solutions<a class="headerlink" href="#least-squares-and-minimum-norm-solutions" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Overdetermined (<span class="math notranslate nohighlight">\(m &gt; n\)</span>): <span class="math notranslate nohighlight">\(A^+ b = \hat{x}\)</span> → least-squares solution (<span class="math notranslate nohighlight">\(\min \|Ax - b\|\)</span>)</p></li>
+<li><p>Underdetermined (<span class="math notranslate nohighlight">\(m &lt; n\)</span>): <span class="math notranslate nohighlight">\(A^+ b = \hat{x}\)</span> → minimum-norm solution among all solutions</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="code-compute-pseudoinverse-and-solve-systems">
+<h3>Code: Compute Pseudoinverse and Solve Systems<a class="headerlink" href="#code-compute-pseudoinverse-and-solve-systems" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+# Example: tall matrix (full column rank)
+A_tall = np.array([[1, 0],
+                   [1, 1],
+                   [1, 2]], dtype=float)
+b_tall = np.array([0, 1, 3])
+
+# Example: wide matrix (full row rank)
+A_wide = np.array([[1, 2, 3],
+                   [4, 5, 6]], dtype=float)
+b_wide = np.array([1, 2])
+
+# Pseudoinverse via np.linalg.pinv (uses SVD)
+A_plus_tall = np.linalg.pinv(A_tall)
+A_plus_wide = np.linalg.pinv(A_wide)
+
+x_tall = A_plus_tall @ b_tall
+x_wide = A_plus_wide @ b_wide
+
+display(Markdown(f&quot;&quot;&quot;
+**Tall matrix** (3×2, full column rank):
+
+$$ A = \\begin{{pmatrix}} 1 &amp; 0 \\\\ 1 &amp; 1 \\\\ 1 &amp; 2 \\end{{pmatrix}} $$, 
+$$ b = \\begin{{pmatrix}} 0 \\\\ 1 \\\\ 3 \\end{{pmatrix}} $$
+
+Least-squares solution: $$ \\hat{{x}} = {np.round(x_tall, 3).tolist()} $$
+
+Residual $$ \\|A\\hat{{x}} - b\\| \\approx {np.linalg.norm(A_tall @ x_tall - b_tall):.3f} $$
+
+**Wide matrix** (2×3, full row rank):
+
+$$ A = \\begin{{pmatrix}} 1 &amp; 2 &amp; 3 \\\\ 4 &amp; 5 &amp; 6 \\end{{pmatrix}} $$, 
+$$ b = \\begin{{pmatrix}} 1 \\\\ 2 \\end{{pmatrix}} $$
+
+Minimum-norm solution: $$ \\hat{{x}} = {np.round(x_wide, 3).tolist()} $$
+
+Norm $$ \\|\\hat{{x}}\\| \\approx {np.linalg.norm(x_wide):.3f} $$
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-33-recap">
+<h2>Lecture 33: Recap<a class="headerlink" href="#lecture-33-recap" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/RWvi4Vx4CDc"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>No lecture notes or exercises for recap, but feel free to watch and review!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_seven.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 7: Symmetric and Complex Matrices</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-29-singular-value-decomposition">Lecture 29: Singular value decomposition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#svd-form">1. SVD Form</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-interpretation">2. Geometric Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-svd-via-eigenvalues-of-a-t-a-and-a-a-t">3. Computing SVD: Via Eigenvalues of <span class="math notranslate nohighlight">\(A^T A\)</span> and <span class="math notranslate nohighlight">\(A A^T\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-full-rank-matrix">4. Example: Full Rank Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rank-deficient-matrix">5. Example: Rank-Deficient Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-svd-explorer">Interactive SVD Explorer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-30-linear-transformations-and-their-matrices">Lecture 30: Linear transformations and their matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-and-non-examples">2. Examples and Non-Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-representation">3. Matrix Representation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-bases">4. General Bases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-projection-onto-a-line">5. Example: Projection onto a Line</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-from-mathbb-r-3-to-mathbb-r-2">6. Example: From <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> to <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-differentiation-infinite-dimensions-finite">7. Example: Differentiation (Infinite Dimensions → Finite)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-visualizing-a-linear-transformation">Code: Visualizing a Linear Transformation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-31-change-of-basis-image-compression">Lecture 31: Change of basis; image compression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Lecture 31: Change of basis; image compression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compression-lossless-vs-lossy">1. Compression: Lossless vs Lossy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#change-of-basis-for-compression">2. Change of Basis for Compression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jpeg-discrete-cosine-transform-dct">3. JPEG: Discrete Cosine Transform (DCT)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wavelets-an-alternative-basis">4. Wavelets: An Alternative Basis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formal-change-of-basis">5. Formal Change of Basis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compression-pipeline">6. Compression Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-simple-1d-compression-demo-dct-like">Code: Simple 1D Compression Demo (DCT-like)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-32-left-and-right-inverses-pseudoinverse">Lecture 32: Left and right inverses; pseudoinverse</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-sided-inverse">1. Two-Sided Inverse</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#left-inverse-tall-matrix-full-column-rank">2. Left Inverse (Tall Matrix, Full Column Rank)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#right-inverse-wide-matrix-full-row-rank">3. Right Inverse (Wide Matrix, Full Row Rank)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#projections-revisited">4. Projections Revisited</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudoinverse-for-any-matrix">5. Pseudoinverse (For Any Matrix)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#least-squares-and-minimum-norm-solutions">6. Least-Squares and Minimum-Norm Solutions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-compute-pseudoinverse-and-solve-systems">Code: Compute Pseudoinverse and Solve Systems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-33-recap">Lecture 33: Recap</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1209 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 6: Eigenvalues and Eigenvectors &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_six';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 7: Symmetric and Complex Matrices" href="week_seven.html" />
+    <link rel="prev" title="Week 5: Determinants" href="week_five.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_six.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_six.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_six.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_six.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 6: Eigenvalues and Eigenvectors</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-21-eigenvalues-and-eigenvectors">Lecture 21: Eigenvalues and eigenvectors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#characteristic-polynomial">2. Characteristic Polynomial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rotation-in-2d">3. Example: Rotation in 2D</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-scaling-shear">4. Example: Scaling + Shear</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-intuition">5. Geometric Intuition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-find-eigenvalues-eigenvectors">Code: Find Eigenvalues &amp; Eigenvectors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-22-diagonalization-and-powers-of-a">Lecture 22: Diagonalization and powers of A</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diagonalization">1. Diagonalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">2. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-does-diagonalization-work">3. When Does Diagonalization Work?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#powers-and-stability">4. Powers and Stability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-equations-fibonacci">5. Difference Equations: Fibonacci</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-compute-powers-via-diagonalization">Code: Compute Powers via Diagonalization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-23-differential-equations-and-exp-at">Lecture 23: Differential equations and exp(At)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-of-odes">1. System of ODEs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-system">2. Example System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">3. Stability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decoupling-via-diagonalization">4. Decoupling via Diagonalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-exponential">5. Matrix Exponential</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-discrete-vs-continuous">6. Comparison: Discrete vs Continuous</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-solve-dot-x-ax">Code: Solve <span class="math notranslate nohighlight">\(\dot{x} = Ax\)</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-24-markov-matrices-fourier-series">Lecture 24: Markov matrices; fourier series</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#markov-matrices">1. Markov Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-state-markov-chain">2. Example: 2-State Markov Chain</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-series-eigenfunctions-of-d-2-dx-2">3. Fourier Series: Eigenfunctions of <span class="math notranslate nohighlight">\(d^2/dx^2\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection">4. Connection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-markov-chain-steady-state">Code: Markov Chain Steady State</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-6-eigenvalues-and-eigenvectors">
+<h1>Week 6: Eigenvalues and Eigenvectors<a class="headerlink" href="#week-6-eigenvalues-and-eigenvectors" title="Permalink to this heading">#</a></h1>
+<section id="lecture-21-eigenvalues-and-eigenvectors">
+<h2>Lecture 21: Eigenvalues and eigenvectors<a class="headerlink" href="#lecture-21-eigenvalues-and-eigenvectors" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/cdZnhQjJu4I"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We introduce the most important idea in linear algebra: <strong>eigenvectors</strong> — the directions that are <strong>stretched</strong> (or squashed) by a matrix.</p>
+<hr class="docutils" />
+<section id="definition">
+<h3>1. Definition<a class="headerlink" href="#definition" title="Permalink to this heading">#</a></h3>
+<p>For a square matrix <span class="math notranslate nohighlight">\(A \in \mathbb{R}^{n \times n}\)</span>,<br />
+a vector <span class="math notranslate nohighlight">\(v \neq 0\)</span> is an <strong>eigenvector</strong> with <strong>eigenvalue</strong> <span class="math notranslate nohighlight">\(\lambda\)</span> if<br />
+$<span class="math notranslate nohighlight">\(
+\boxed{A v = \lambda v}
+\)</span>$</p>
+<p>Rewrite:<br />
+$<span class="math notranslate nohighlight">\(
+(A - \lambda I) v = 0 \quad \Rightarrow \quad v \in N(A - \lambda I)
+\)</span>$</p>
+<p>So: <span class="math notranslate nohighlight">\(\lambda\)</span> is an eigenvalue if <span class="math notranslate nohighlight">\(A - \lambda I\)</span> is <strong>singular</strong> → <span class="math notranslate nohighlight">\(\det(A - \lambda I) = 0\)</span></p>
+</section>
+<hr class="docutils" />
+<section id="characteristic-polynomial">
+<h3>2. Characteristic Polynomial<a class="headerlink" href="#characteristic-polynomial" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\boxed{p(\lambda) = \det(A - \lambda I)}
+\]</div>
+<p>Roots of <span class="math notranslate nohighlight">\(p(\lambda) = 0\)</span> → eigenvalues.</p>
+</section>
+<hr class="docutils" />
+<section id="example-rotation-in-2d">
+<h3>3. Example: Rotation in 2D<a class="headerlink" href="#example-rotation-in-2d" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{pmatrix} \quad \text{(90° rotation)}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A - \lambda I = \begin{pmatrix} -\lambda &amp; -1 \\ 1 &amp; -\lambda \end{pmatrix}
+\quad \Rightarrow \quad
+\det = \lambda^2 + 1 = 0 \quad \Rightarrow \quad \lambda = \pm i
+\end{split}\]</div>
+<p><strong>No real eigenvectors</strong> → rotation has no fixed direction.</p>
+</section>
+<hr class="docutils" />
+<section id="example-scaling-shear">
+<h3>4. Example: Scaling + Shear<a class="headerlink" href="#example-scaling-shear" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{pmatrix} 3 &amp; 1 \\ 0 &amp; 2 \end{pmatrix}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[
+\det(A - \lambda I) = (3-\lambda)(2-\lambda) = 0 \quad \Rightarrow \quad \lambda_1 = 3,\; \lambda_2 = 2
+\]</div>
+<p>For <span class="math notranslate nohighlight">\(\lambda = 3\)</span>:<br />
+$<span class="math notranslate nohighlight">\(
+(A - 3I)v = \begin{pmatrix} 0 &amp; 1 \\ 0 &amp; -1 \end{pmatrix} v = 0 \quad \Rightarrow \quad v = \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+\)</span>$</p>
+<p>For <span class="math notranslate nohighlight">\(\lambda = 2\)</span>:<br />
+$<span class="math notranslate nohighlight">\(
+v = \begin{pmatrix} 1 \\ 1 \end{pmatrix}
+\)</span>$</p>
+</section>
+<hr class="docutils" />
+<section id="geometric-intuition">
+<h3>5. Geometric Intuition<a class="headerlink" href="#geometric-intuition" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Eigenvalue</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\lambda &gt; 1\)</span></p></td>
+<td><p>Stretch</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(0 &lt; \lambda &lt; 1\)</span></p></td>
+<td><p>Shrink</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\lambda = 0\)</span></p></td>
+<td><p>Collapse to line</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\lambda &lt; 0\)</span></p></td>
+<td><p>Flip + scale</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="code-find-eigenvalues-eigenvectors">
+<h3>Code: Find Eigenvalues &amp; Eigenvectors<a class="headerlink" href="#code-find-eigenvalues-eigenvectors" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+A = np.array([[3, 1],
+              [0, 2]])
+
+eigvals, eigvecs = np.linalg.eig(A)
+
+display(Markdown(f&quot;&quot;&quot;
+**Matrix** $A = {A.tolist()}$
+
+**Eigenvalues**: ${np.round(eigvals, 3).tolist()}$
+
+**Eigenvectors** (columns):  
+$$    
+\\begin{{pmatrix}}
+{eigvecs[0,0]:.3f} &amp; {eigvecs[0,1]:.3f} \\\\
+{eigvecs[1,0]:.3f} &amp; {eigvecs[1,1]:.3f}
+\\end{{pmatrix}}
+    $$
+
+**Check**: $A v_1 = {np.round(A @ eigvecs[:,0], 3).tolist()} \approx {np.round(eigvals[0] * eigvecs[:,0], 3).tolist()}$
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-22-diagonalization-and-powers-of-a">
+<h2>Lecture 22: Diagonalization and powers of A<a class="headerlink" href="#lecture-22-diagonalization-and-powers-of-a" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/13r9QY6cmjc"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> has <strong>n independent eigenvectors</strong>, we can <strong>diagonalize</strong> it — and compute <strong>powers instantly</strong>.</p>
+<hr class="docutils" />
+<section id="diagonalization">
+<h3>1. Diagonalization<a class="headerlink" href="#diagonalization" title="Permalink to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(S\)</span> = matrix of eigenvectors (columns),<br />
+<span class="math notranslate nohighlight">\(\Lambda\)</span> = diagonal matrix of eigenvalues.</p>
+<p>Then:</p>
+<p>[
+\boxed{A = S \Lambda S^{-1}} \quad \Rightarrow \quad
+\boxed{A^k = S \Lambda^k S^{-1}}
+]</p>
+<p><strong>Derivation</strong>:</p>
+<p>[
+A S = S \Lambda \quad \Rightarrow \quad S^{-1} A S = \Lambda
+]</p>
+</section>
+<hr class="docutils" />
+<section id="example">
+<h3>2. Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 3 &amp; 1 \ 0 &amp; 2 \end{pmatrix}, \quad
+S = \begin{pmatrix} 1 &amp; 1 \ 0 &amp; 1 \end{pmatrix}, \quad
+\Lambda = \begin{pmatrix} 3 &amp; 0 \ 0 &amp; 2 \end{pmatrix}
+]</p>
+<p>[
+A^{10} = S \begin{pmatrix} 3^{10} &amp; 0 \ 0 &amp; 2^{10} \end{pmatrix} S^{-1}
+= \begin{pmatrix} 59049 &amp; 59048 \ 0 &amp; 1024 \end{pmatrix}
+]</p>
+</section>
+<hr class="docutils" />
+<section id="when-does-diagonalization-work">
+<h3>3. When Does Diagonalization Work?<a class="headerlink" href="#when-does-diagonalization-work" title="Permalink to this heading">#</a></h3>
+<p><strong>Theorem</strong>: <span class="math notranslate nohighlight">\(A\)</span> is diagonalizable <span class="math notranslate nohighlight">\(\iff\)</span></p>
+<ul class="simple">
+<li><p>It has <span class="math notranslate nohighlight">\(n\)</span> eigenvalues (counting multiplicity)</p></li>
+<li><p>And <span class="math notranslate nohighlight">\(n\)</span> <strong>independent</strong> eigenvectors</p></li>
+</ul>
+<p>Distinct eigenvalues <span class="math notranslate nohighlight">\(\Rightarrow\)</span> automatically independent eigenvectors <span class="math notranslate nohighlight">\(\Rightarrow\)</span> diagonalizable.</p>
+<p>Repeated eigenvalues: must check (may or may not be diagonalizable).</p>
+<p>Example (not diagonalizable):</p>
+<p>[
+A = \begin{pmatrix} 2 &amp; 1 \ 0 &amp; 2 \end{pmatrix}
+]</p>
+<p>Double eigenvalue <span class="math notranslate nohighlight">\(2\)</span>, only one eigenvector <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 \\ 0 \end{pmatrix}\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="powers-and-stability">
+<h3>4. Powers and Stability<a class="headerlink" href="#powers-and-stability" title="Permalink to this heading">#</a></h3>
+<p>[
+A^k = S \Lambda^k S^{-1} = \sum_{i=1}^n \lambda_i^k , s_i t_i^T
+]</p>
+<p>(outer products of right/left eigenvectors).</p>
+<p><strong>Convergence</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A^k \to 0\)</span> if all <span class="math notranslate nohighlight">\(|\lambda_i| &lt; 1\)</span>.</p></li>
+<li><p>Dominant term: largest <span class="math notranslate nohighlight">\(|\lambda_i|^k\)</span>.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="difference-equations-fibonacci">
+<h3>5. Difference Equations: Fibonacci<a class="headerlink" href="#difference-equations-fibonacci" title="Permalink to this heading">#</a></h3>
+<p>[
+F_{k+2} = F_{k+1} + F_k
+]</p>
+<p>State vector:</p>
+<p>[
+u_k = \begin{pmatrix} F_{k+1} \ F_k \end{pmatrix}, \quad
+A = \begin{pmatrix} 1 &amp; 1 \ 1 &amp; 0 \end{pmatrix}
+]</p>
+<p>[
+u_k = A^k u_0
+]</p>
+<p>Eigenvalues:</p>
+<p>[
+\lambda = \frac{1 \pm \sqrt{5}}{2} \quad (\phi \approx 1.618, , 1-\phi \approx -0.618)
+]</p>
+<p>Distinct <span class="math notranslate nohighlight">\(\Rightarrow\)</span> diagonalizable.</p>
+<p>[
+F_k = c_1 \phi^k + c_2 (1-\phi)^k
+]</p>
+<p><span class="math notranslate nohighlight">\(|(1-\phi)| &lt; 1 \Rightarrow\)</span> second term <span class="math notranslate nohighlight">\(\to 0\)</span>, <span class="math notranslate nohighlight">\(F_k \approx c_1 \phi^k\)</span> (round to nearest integer).</p>
+</section>
+<hr class="docutils" />
+<section id="code-compute-powers-via-diagonalization">
+<h3>Code: Compute Powers via Diagonalization<a class="headerlink" href="#code-compute-powers-via-diagonalization" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+A = np.array([[3, 1],
+              [0, 2]])
+
+eigvals, S = np.linalg.eig(A)
+Lambda = np.diag(eigvals)
+S_inv = np.linalg.inv(S)
+
+k = 10
+A_pow_direct = np.linalg.matrix_power(A, k)
+
+# Via diagonalization
+A_pow_diag = S @ np.diag(eigvals**k) @ S_inv
+
+display(Markdown(f&quot;&quot;&quot;
+**Matrix** $$ A = \\begin{{pmatrix}} 3 &amp; 1 \\\\ 0 &amp; 2 \\end{{pmatrix}} $$
+
+**Eigenvalues** $$ \\lambda = {np.round(eigvals, 3).tolist()} $$
+
+**A^{{{k}}}** (direct):  
+
+$$  \\begin{{pmatrix}} {int(A_pow_direct[0,0])} &amp; {int(A_pow_direct[0,1])} \\\\ {int(A_pow_direct[1,0])} &amp; {int(A_pow_direct[1,1])} \\end{{pmatrix}}  $$
+
+**A^{{{k}}}** (diagonalization): matches exactly!
+
+Try large $$ k $$ (e.g., 100) — direct method overflows, diagonalization stays accurate.
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-23-differential-equations-and-exp-at">
+<h2>Lecture 23: Differential equations and exp(At)<a class="headerlink" href="#lecture-23-differential-equations-and-exp-at" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/IZqwi0wJovM"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Linear systems of differential equations <span class="math notranslate nohighlight">\(\dot{u} = A u\)</span> are solved using eigenvalues and eigenvectors — the continuous analogue of discrete powers <span class="math notranslate nohighlight">\(A^k\)</span>.</p>
+<hr class="docutils" />
+<section id="system-of-odes">
+<h3>1. System of ODEs<a class="headerlink" href="#system-of-odes" title="Permalink to this heading">#</a></h3>
+<p>[
+\boxed{\frac{du}{dt} = A u}
+]</p>
+<p>Assume solution <span class="math notranslate nohighlight">\(u(t) = e^{\lambda t} x\)</span> (exponential growth/decay).</p>
+<p>Substitute:</p>
+<p>[
+\lambda e^{\lambda t} x = A e^{\lambda t} x \quad \Rightarrow \quad A x = \lambda x
+]</p>
+<p>Same eigenvalue problem!</p>
+</section>
+<hr class="docutils" />
+<section id="example-system">
+<h3>2. Example System<a class="headerlink" href="#example-system" title="Permalink to this heading">#</a></h3>
+<p>[
+\frac{du_1}{dt} = -u_1 + 2 u_2, \quad
+\frac{du_2}{dt} = u_1 - 2 u_2
+]</p>
+<p>[
+A = \begin{pmatrix} -1 &amp; 2 \ 1 &amp; -2 \end{pmatrix}
+]</p>
+<p>Characteristic equation:</p>
+<p>[
+\det(A - \lambda I) = \lambda(\lambda + 3) = 0 \quad \Rightarrow \quad \lambda_1 = 0,; \lambda_2 = -3
+]</p>
+<p>Eigenvectors:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\lambda=0\)</span>: <span class="math notranslate nohighlight">\(x_1 = \begin{pmatrix} 2 \\ 1 \end{pmatrix}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda=-3\)</span>: <span class="math notranslate nohighlight">\(x_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}\)</span></p></li>
+</ul>
+<p>General solution:</p>
+<p>[
+\boxed{u(t) = c_1 \begin{pmatrix} 2 \ 1 \end{pmatrix} + c_2 e^{-3t} \begin{pmatrix} 1 \ -1 \end{pmatrix}}
+]</p>
+<p>Interpretation:</p>
+<ul class="simple">
+<li><p>Steady state: eigenvector for <span class="math notranslate nohighlight">\(\lambda=0\)</span>.</p></li>
+<li><p>Transient: <span class="math notranslate nohighlight">\(e^{-3t} \to 0\)</span> (stable).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="stability">
+<h3>3. Stability<a class="headerlink" href="#stability" title="Permalink to this heading">#</a></h3>
+<p>For <span class="math notranslate nohighlight">\(\dot{u} = A u\)</span>:</p>
+<ul class="simple">
+<li><p><strong>Stable</strong> (solutions <span class="math notranslate nohighlight">\(\to 0\)</span>) if all <span class="math notranslate nohighlight">\(\operatorname{Re}(\lambda_i) &lt; 0\)</span>.</p></li>
+<li><p><strong>Steady state nonzero</strong> if some <span class="math notranslate nohighlight">\(\lambda_i = 0\)</span> and others negative.</p></li>
+<li><p><strong>Unstable</strong> (blow-up) if any <span class="math notranslate nohighlight">\(\operatorname{Re}(\lambda_i) &gt; 0\)</span>.</p></li>
+</ul>
+<p>Trace <span class="math notranslate nohighlight">\(&lt; 0\)</span> and <span class="math notranslate nohighlight">\(\det &gt; 0\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> both eigenvalues negative (2×2 real case).</p>
+</section>
+<hr class="docutils" />
+<section id="decoupling-via-diagonalization">
+<h3>4. Decoupling via Diagonalization<a class="headerlink" href="#decoupling-via-diagonalization" title="Permalink to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(S\)</span> = eigenvectors, <span class="math notranslate nohighlight">\(u_0 = S c\)</span>:</p>
+<p>[
+u(t) = S e^{\Lambda t} S^{-1} u_0 = S \begin{pmatrix} e^{\lambda_1 t} &amp; \ &amp; e^{\lambda_2 t} \end{pmatrix} c
+]</p>
+<p>Equations in <span class="math notranslate nohighlight">\(v = S^{-1} u\)</span> become <strong>uncoupled</strong>:</p>
+<p>[
+\dot{v}_i = \lambda_i v_i
+]</p>
+</section>
+<hr class="docutils" />
+<section id="matrix-exponential">
+<h3>5. Matrix Exponential<a class="headerlink" href="#matrix-exponential" title="Permalink to this heading">#</a></h3>
+<p>Define via Taylor series:</p>
+<p>[
+\boxed{e^{At} = \sum_{k=0}^\infty \frac{(At)^k}{k!} = I + At + \frac{(At)^2}{2!} + \cdots}
+]</p>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> diagonalizable (<span class="math notranslate nohighlight">\(A = S \Lambda S^{-1}\)</span>):</p>
+<p>[
+\boxed{e^{At} = S e^{\Lambda t} S^{-1}}, \quad
+e^{\Lambda t} = \begin{pmatrix} e^{\lambda_1 t} &amp;  &amp;  \  &amp; \ddots &amp;  \  &amp;  &amp; e^{\lambda_n t} \end{pmatrix}
+]</p>
+<p>Solution:</p>
+<p>[
+u(t) = e^{At} u(0)
+]</p>
+<p>Converges to steady state if all <span class="math notranslate nohighlight">\(\operatorname{Re}(\lambda_i) &lt; 0\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="comparison-discrete-vs-continuous">
+<h3>6. Comparison: Discrete vs Continuous<a class="headerlink" href="#comparison-discrete-vs-continuous" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Discrete <span class="math notranslate nohighlight">\(u_{k+1} = A u_k\)</span></p></th>
+<th class="head"><p>Continuous <span class="math notranslate nohighlight">\(\dot{u} = A u\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(u_k = A^k u_0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(u(t) = e^{At} u_0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Stability: <span class="math notranslate nohighlight">\(|\lambda_i| &lt; 1\)</span></p></td>
+<td><p>Stability: <span class="math notranslate nohighlight">\(\operatorname{Re}(\lambda_i) &lt; 0\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="code-solve-dot-x-ax">
+<h3>Code: Solve <span class="math notranslate nohighlight">\(\dot{x} = Ax\)</span><a class="headerlink" href="#code-solve-dot-x-ax" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+from IPython.display import Markdown, display
+
+A = np.array([[-1, 2],
+              [1, -2]])
+t = np.linspace(0, 5, 400)
+
+# Diagonalize
+eigvals, S = np.linalg.eig(A)
+Lambda = np.diag(eigvals)
+S_inv = np.linalg.inv(S)
+
+def u(t, u0):
+    return S @ np.diag(np.exp(eigvals * t)) @ S_inv @ u0
+
+# Initial conditions
+u0_list = [np.array([3, 0]), np.array([0, 3]), np.array([2, 1])]
+
+plt.figure(figsize=(10, 6))
+for u0 in u0_list:
+    traj = np.array([u(ti, u0) for ti in t])
+    plt.plot(traj[:,0], traj[:,1], label=f&#39;u0 = {u0}&#39;)
+    plt.plot(u0[0], u0[1], &#39;o&#39;, markersize=8)
+
+plt.axhline(0, color=&#39;k&#39;, lw=0.5); plt.axvline(0, color=&#39;k&#39;, lw=0.5)
+plt.xlabel(&#39;$$ u_1 $$&#39;); plt.ylabel(&#39;$$ u_2 $$&#39;)
+plt.title(&#39;Solutions $$ \\dot{u} = A u $$ → steady state along $$ \\lambda=0 $$&#39;)
+plt.legend(); plt.grid(alpha=0.3)
+plt.show()
+
+display(Markdown(&quot;&quot;&quot;
+All trajectories approach the steady-state line (eigenvector for $$ \\lambda=0 $$).
+
+The fast decay direction is the eigenvector for $$ \\lambda=-3 $$.
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-24-markov-matrices-fourier-series">
+<h2>Lecture 24: Markov matrices; fourier series<a class="headerlink" href="#lecture-24-markov-matrices-fourier-series" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/lGGDIGizcQ0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Two applications: <strong>probability flows</strong> and <strong>signal decomposition</strong>.</p>
+<hr class="docutils" />
+<section id="markov-matrices">
+<h3>1. Markov Matrices<a class="headerlink" href="#markov-matrices" title="Permalink to this heading">#</a></h3>
+<p>A <strong>stochastic matrix</strong> <span class="math notranslate nohighlight">\(A\)</span> has:</p>
+<ul class="simple">
+<li><p>Non-negative entries</p></li>
+<li><p>Each <strong>column sums to 1</strong></p></li>
+</ul>
+<p>Then <span class="math notranslate nohighlight">\(A^k\)</span> gives <strong>k-step transition probabilities</strong>.</p>
+<p><strong>Theorem</strong>: If <span class="math notranslate nohighlight">\(A\)</span> is stochastic and <strong>regular</strong> (some <span class="math notranslate nohighlight">\(k\)</span>: <span class="math notranslate nohighlight">\(A^k &gt; 0\)</span>), then<br />
+[
+\lim_{k \to \infty} A^k = \begin{pmatrix} \pi \ \pi \ \vdots \ \pi \end{pmatrix}
+\quad \text{(all rows = steady-state <span class="math notranslate nohighlight">\(\pi\)</span>)}
+]</p>
+<p>And <span class="math notranslate nohighlight">\(\pi\)</span> is the <strong>eigenvector for <span class="math notranslate nohighlight">\(\lambda = 1\)</span></strong> with <span class="math notranslate nohighlight">\(\pi^T \mathbf{1} = 1\)</span>.</p>
+<p>Why <span class="math notranslate nohighlight">\(\lambda=1\)</span>?<br />
+<span class="math notranslate nohighlight">\(A \mathbf{1} = \mathbf{1}\)</span> (columns sum to 1) <span class="math notranslate nohighlight">\(\Rightarrow\)</span> right eigenvector with <span class="math notranslate nohighlight">\(\lambda=1\)</span>.<br />
+Steady state <span class="math notranslate nohighlight">\(\pi^T A = \pi^T\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> left eigenvector with <span class="math notranslate nohighlight">\(\lambda=1\)</span>.</p>
+<p>All other eigenvalues satisfy <span class="math notranslate nohighlight">\(|\lambda_i| \leq 1\)</span>, and for regular matrices <span class="math notranslate nohighlight">\(&lt;1\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="example-2-state-markov-chain">
+<h3>2. Example: 2-State Markov Chain<a class="headerlink" href="#example-2-state-markov-chain" title="Permalink to this heading">#</a></h3>
+<p>Transition matrix:</p>
+<p>[
+A = \begin{pmatrix} 0.9 &amp; 0.2 \ 0.1 &amp; 0.8 \end{pmatrix}
+]</p>
+<p>Eigenvalues: <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(0.7\)</span>.</p>
+<p>Eigenvectors:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\lambda=1\)</span>: <span class="math notranslate nohighlight">\(\begin{pmatrix} 2 \\ 1 \end{pmatrix}\)</span> (steady state proportions)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda=0.7\)</span>: <span class="math notranslate nohighlight">\(\begin{pmatrix} -1 \\ 1 \end{pmatrix}\)</span></p></li>
+</ul>
+<p>Initial <span class="math notranslate nohighlight">\(u_0 = \begin{pmatrix} 0 \\ 1000 \end{pmatrix}\)</span>:</p>
+<p>[
+u_k = c_1 \begin{pmatrix} 2 \ 1 \end{pmatrix} + c_2 (0.7)^k \begin{pmatrix} -1 \ 1 \end{pmatrix}
+]</p>
+<p><span class="math notranslate nohighlight">\(c_1 = 1000/3\)</span>, <span class="math notranslate nohighlight">\(c_2 = 2000/3\)</span> <span class="math notranslate nohighlight">\(\Rightarrow\)</span> transient term decays, approaches <span class="math notranslate nohighlight">\(\begin{pmatrix} 2000/3 \\ 1000/3 \end{pmatrix}\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="fourier-series-eigenfunctions-of-d-2-dx-2">
+<h3>3. Fourier Series: Eigenfunctions of <span class="math notranslate nohighlight">\(d^2/dx^2\)</span><a class="headerlink" href="#fourier-series-eigenfunctions-of-d-2-dx-2" title="Permalink to this heading">#</a></h3>
+<p>Operator: <span class="math notranslate nohighlight">\(L = \frac{d^2}{dx^2}\)</span> on <span class="math notranslate nohighlight">\([0, 2\pi]\)</span><br />
+Eigenfunctions:<br />
+[
+\boxed{\phi_n(x) = e^{i n x} \quad \Rightarrow \quad L \phi_n = -n^2 \phi_n}
+]</p>
+<p>Any function <span class="math notranslate nohighlight">\(f(x)\)</span>:<br />
+[
+\boxed{f(x) = \sum_{n=-\infty}^\infty c_n e^{i n x}}, \quad
+c_n = \frac{1}{2\pi} \int_0^{2\pi} f(x) e^{-i n x} dx
+]</p>
+<p>Orthogonality (complex inner product over interval):</p>
+<p>[
+\int_0^{2\pi} e^{i m x} e^{-i n x} dx = 2\pi \delta_{mn}
+]</p>
+</section>
+<hr class="docutils" />
+<section id="connection">
+<h3>4. Connection<a class="headerlink" href="#connection" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Concept</p></th>
+<th class="head"><p>Matrix <span class="math notranslate nohighlight">\(A\)</span></p></th>
+<th class="head"><p>Eigenvalue</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Markov</p></td>
+<td><p>Stochastic</p></td>
+<td><p><span class="math notranslate nohighlight">\(\lambda=1\)</span></p></td>
+<td><p>Steady state</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fourier</p></td>
+<td><p><span class="math notranslate nohighlight">\(L = d^2/dx^2\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\lambda = -n^2\)</span></p></td>
+<td><p>Frequency</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Both decompose evolution into independent modes scaled by eigenvalues.</p>
+</section>
+<hr class="docutils" />
+<section id="code-markov-chain-steady-state">
+<h3>Code: Markov Chain Steady State<a class="headerlink" href="#code-markov-chain-steady-state" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+A = np.array([[0.9, 0.2],
+              [0.1, 0.8]], dtype=float)
+
+# Find eigenvector for lambda=1 (left eigenvector for stochastic)
+eigvals, eigvecs = np.linalg.eig(A.T)  # transpose for left
+idx = np.argmin(np.abs(eigvals - 1))
+pi = np.real(eigvecs[:, idx])
+pi = pi / pi.sum()
+
+# Simulate many steps
+u0 = np.array([0, 1000])
+u100 = np.linalg.matrix_power(A, 100) @ u0
+
+display(Markdown(f&quot;&quot;&quot;
+**Transition matrix** $$ A $$:
+
+$$    
+A = \\begin{{pmatrix}}
+0.9 &amp; 0.2 \\\\
+0.1 &amp; 0.8
+\\end{{pmatrix}}
+    $$
+
+**Steady-state** $$ \\pi $$ (eigenvector for $$ \\lambda=1 $$):  
+$$    
+\\pi = \\begin{{pmatrix}} {pi[0]:.3f} \\\\ {pi[1]:.3f} \\end{{pmatrix}}
+    $$
+
+**After 100 steps** from $$ [0, 1000]^T $$:  
+$$ {np.round(u100).astype(int).tolist()} $$
+
+**Check**: $$ A \\pi = \\pi $$ → {np.allclose(A @ pi, pi)}$
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_five.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 5: Determinants</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week_seven.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 7: Symmetric and Complex Matrices</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-21-eigenvalues-and-eigenvectors">Lecture 21: Eigenvalues and eigenvectors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#characteristic-polynomial">2. Characteristic Polynomial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rotation-in-2d">3. Example: Rotation in 2D</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-scaling-shear">4. Example: Scaling + Shear</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-intuition">5. Geometric Intuition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-find-eigenvalues-eigenvectors">Code: Find Eigenvalues &amp; Eigenvectors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-22-diagonalization-and-powers-of-a">Lecture 22: Diagonalization and powers of A</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diagonalization">1. Diagonalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">2. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-does-diagonalization-work">3. When Does Diagonalization Work?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#powers-and-stability">4. Powers and Stability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-equations-fibonacci">5. Difference Equations: Fibonacci</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-compute-powers-via-diagonalization">Code: Compute Powers via Diagonalization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-23-differential-equations-and-exp-at">Lecture 23: Differential equations and exp(At)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-of-odes">1. System of ODEs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-system">2. Example System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stability">3. Stability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decoupling-via-diagonalization">4. Decoupling via Diagonalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-exponential">5. Matrix Exponential</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-discrete-vs-continuous">6. Comparison: Discrete vs Continuous</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-solve-dot-x-ax">Code: Solve <span class="math notranslate nohighlight">\(\dot{x} = Ax\)</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-24-markov-matrices-fourier-series">Lecture 24: Markov matrices; fourier series</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#markov-matrices">1. Markov Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-state-markov-chain">2. Example: 2-State Markov Chain</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-series-eigenfunctions-of-d-2-dx-2">3. Fourier Series: Eigenfunctions of <span class="math notranslate nohighlight">\(d^2/dx^2\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection">4. Connection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-markov-chain-steady-state">Code: Markov Chain Steady State</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

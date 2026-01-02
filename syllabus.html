@@ -1,0 +1,689 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Syllabus &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'syllabus';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 1: Matrix Review" href="week_one.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_seven.html">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fsyllabus.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/syllabus.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Syllabus</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-information">Course Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-description">Course Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topics-covered">Topics Covered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-work">Course Work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-outcomes">Expected Outcomes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grading">Grading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exams">Exams</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#academic-conduct">Academic Conduct</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimum-technical-skills">Minimum Technical Skills</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-modality">Course Modality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turnitin">TurnItIn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-usage-policy">AI Usage Policy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discrimination-harassment-and-civil-discourse">Discrimination, Harassment, and Civil Discourse</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#health-safety-and-support-services">Health, Safety, and Support Services</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emergency-information">Emergency Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-course-policies">Other Course Policies</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="syllabus">
+<h1>Syllabus<a class="headerlink" href="#syllabus" title="Permalink to this heading">#</a></h1>
+<section id="course-information">
+<h2>Course Information<a class="headerlink" href="#course-information" title="Permalink to this heading">#</a></h2>
+<div class="highlight-tip notranslate"><div class="highlight"><pre><span></span>- **Semester:** Fall 2025  
+- **Course Prefix/Number:** COT6905  
+- **Course Title:** Directed Study: Advanced Optimization Algorithms for Large Foundational AI Models  
+- **Course Credit Hours:** 3.0  
+- **Class Meeting Time:** Weekly, by appointment  
+- **Instructor:** Prof. Brian Jalaian  
+  - Computer Science  
+  - Building 4, Room 434 (Main Campus)  
+  - Email: bjalaian@uwf.edu
+</pre></div>
+</div>
+</section>
+<section id="course-description">
+<h2>Course Description<a class="headerlink" href="#course-description" title="Permalink to this heading">#</a></h2>
+<p>This directed study investigates the advanced mathematical and optimization foundations required for training and deploying large-scale foundational AI models. Topics include:</p>
+<ul class="simple">
+<li><p>Matrix theory for understanding and improving optimization algorithms (vector spaces, ranks, block operations, decompositions)</p></li>
+<li><p>Tensor factorization techniques relevant to modern architectures</p></li>
+<li><p>Stochastic gradient descent (SGD) and adaptive optimizers</p></li>
+<li><p>Stability of large-scale training (conditioning, vanishing/exploding gradients)</p></li>
+<li><p>Second-order optimization methods (natural gradient, quasi-Newton)</p></li>
+<li><p>Model compression strategies: quantization, pruning, distillation, low-rank approximations</p></li>
+<li><p>Scaling laws, training dynamics, and hardware-aware optimization</p></li>
+<li><p>Evaluation metrics beyond accuracy: FLOPs, latency, memory footprint, energy cost</p></li>
+</ul>
+<p>Students will develop the mathematical and computational background to contribute to state-of-the-art research in model compression and efficient large-scale AI.</p>
+</section>
+<section id="topics-covered">
+<h2>Topics Covered<a class="headerlink" href="#topics-covered" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Matrix theory foundations for deep learning</p></li>
+<li><p>Block matrix multiplications and tensor factorization</p></li>
+<li><p>Optimization Theory</p></li>
+</ul>
+</section>
+<section id="course-work">
+<h2>Course Work<a class="headerlink" href="#course-work" title="Permalink to this heading">#</a></h2>
+<p>Students are expected to create an <strong>online e-Book</strong> synthesizing the material, with simplified explanations, references to videos, and interactive examples. Computational notebooks should be organized in a <strong>public GitHub repository</strong> for reproducibility.</p>
+</section>
+<section id="expected-outcomes">
+<h2>Expected Outcomes<a class="headerlink" href="#expected-outcomes" title="Permalink to this heading">#</a></h2>
+<p>After this course, students will be able to:</p>
+<ul class="simple">
+<li><p>Demonstrate mastery of matrix theory applied to deep learning</p></li>
+<li><p>Explain modern model compression techniques from a matrix theory perspective</p></li>
+<li><p>Understand advanced optimization algorithms, including second-order methods</p></li>
+<li><p>Apply probabilistic and information-theoretic concepts to optimization and compression</p></li>
+<li><p>Produce professional-quality documentation and computational notebooks</p></li>
+</ul>
+</section>
+<section id="grading">
+<h2>Grading<a class="headerlink" href="#grading" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>100%</strong> – Final e-Book report and GitHub deliverables</p></li>
+</ul>
+</section>
+<section id="exams">
+<h2>Exams<a class="headerlink" href="#exams" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>There are no exams; grades are based solely on reports and supplemental deliverables.</p></li>
+</ul>
+</section>
+<section id="academic-conduct">
+<h2>Academic Conduct<a class="headerlink" href="#academic-conduct" title="Permalink to this heading">#</a></h2>
+<p>Students are expected to comply with the <strong>Student Code of Academic Conduct</strong> regarding plagiarism and misconduct. More information: <a class="reference external" href="https://uwf.edu/deanofstudents">Dean of Students – Academic Conduct</a></p>
+</section>
+<section id="minimum-technical-skills">
+<h2>Minimum Technical Skills<a class="headerlink" href="#minimum-technical-skills" title="Permalink to this heading">#</a></h2>
+<p>Students should be able to:</p>
+<ul class="simple">
+<li><p>Activate a MyUWF student account</p></li>
+<li><p>Access MyUWF portal 2–3 times per week</p></li>
+<li><p>Access UWF email 2–3 times per week</p></li>
+<li><p>Perform basic word processing</p></li>
+</ul>
+<p>Student use of technology is governed by the <strong>Computing Resources Usage Agreement</strong> and the <strong>Student Communications Policy</strong>.</p>
+</section>
+<section id="course-modality">
+<h2>Course Modality<a class="headerlink" href="#course-modality" title="Permalink to this heading">#</a></h2>
+<p>Faculty may adjust the modality of class meetings due to weather, pandemics, or other events. Flexibility is required to maintain continuity.</p>
+</section>
+<section id="turnitin">
+<h2>TurnItIn<a class="headerlink" href="#turnitin" title="Permalink to this heading">#</a></h2>
+<p>UWF maintains a license for <strong>Turnitin</strong> to check originality. Instructors may also use other methods as needed.</p>
+</section>
+<section id="ai-usage-policy">
+<h2>AI Usage Policy<a class="headerlink" href="#ai-usage-policy" title="Permalink to this heading">#</a></h2>
+<p>Generative AI tools are <strong>permitted</strong> for:</p>
+<ul class="simple">
+<li><p>Brainstorming ideas</p></li>
+<li><p>Finding information</p></li>
+<li><p>Drafting outlines</p></li>
+<li><p>Developing code snippets</p></li>
+<li><p>Grammar/style checks</p></li>
+</ul>
+<p>Usage must be documented and cited. Unauthorized use may result in a zero.</p>
+</section>
+<section id="discrimination-harassment-and-civil-discourse">
+<h2>Discrimination, Harassment, and Civil Discourse<a class="headerlink" href="#discrimination-harassment-and-civil-discourse" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Title IX compliance is required. Support services are available confidentially.</p></li>
+<li><p>Civil discourse is expected. Understanding ideas does not require agreement.</p></li>
+</ul>
+</section>
+<section id="health-safety-and-support-services">
+<h2>Health, Safety, and Support Services<a class="headerlink" href="#health-safety-and-support-services" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Student Health Clinic:</strong> 850-474-2172</p></li>
+<li><p><strong>Counseling &amp; Psychological Services:</strong> 850-474-2420</p></li>
+<li><p><strong>TAO Online Self-Help Program:</strong> Available 24/7</p></li>
+<li><p><strong>TogetherAll Peer Support:</strong> <a class="reference external" href="http://uwf.edu/togetherall">http://uwf.edu/togetherall</a></p></li>
+<li><p><strong>ArgoWell Wellness Initiative:</strong> <a class="reference external" href="http://uwf.edu/argowell">http://uwf.edu/argowell</a></p></li>
+<li><p><strong>Ask-a-Librarian Live Chat:</strong> Available 8am–11pm Mon–Thu; 8am–4pm Fri; 9am–4pm Sat; 9am–11pm Sun</p></li>
+</ul>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Cybersecurity library resources</strong></p></li>
+<li><p><strong>Writing Lab:</strong> Graduate/undergraduate assistants available for review</p></li>
+<li><p><strong>Canvas Support Hotline:</strong> 1-844-866-3349<br />
+<strong>UWF ITS Help Desk:</strong> 850-474-2075, <a class="reference external" href="mailto:itshelpdesk&#37;&#52;&#48;uwf&#46;edu">itshelpdesk<span>&#64;</span>uwf<span>&#46;</span>edu</a></p></li>
+<li><p><strong>Career Development &amp; Community Engagement (CDCE):</strong> Resume, cover letter, interview support</p></li>
+</ol>
+</section>
+<section id="emergency-information">
+<h2>Emergency Information<a class="headerlink" href="#emergency-information" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>University closures and alerts: <a class="reference external" href="https://uwf.edu/emergency">UWF Emergency Info</a></p></li>
+<li><p>Mobile Alert and WUWF-FM 88.1 MHz provide official updates</p></li>
+<li><p>Hurricane preparation procedures: <a class="reference external" href="https://uwf.edu/emergency">Emergency Procedures Guide</a></p></li>
+</ul>
+</section>
+<section id="other-course-policies">
+<h2>Other Course Policies<a class="headerlink" href="#other-course-policies" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Online Resources:</strong> Use Discord for course discussions</p></li>
+<li><p><strong>Communication:</strong> Contact instructor by appointment; check UWF email regularly</p></li>
+<li><p><strong>Class Attendance:</strong> Meetings held face-to-face or online</p></li>
+<li><p><strong>Withdraw Policy:</strong> Check UWF Academic Calendar; late withdrawals = WF</p></li>
+<li><p><strong>Incomplete Grades:</strong> Only with extenuating circumstances and ≥70% completed work</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Note:</strong> Any syllabus changes during the semester take precedence.</p>
+</div></blockquote>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="week_one.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 1: Matrix Review</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-information">Course Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-description">Course Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topics-covered">Topics Covered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-work">Course Work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-outcomes">Expected Outcomes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grading">Grading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exams">Exams</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#academic-conduct">Academic Conduct</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimum-technical-skills">Minimum Technical Skills</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#course-modality">Course Modality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#turnitin">TurnItIn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-usage-policy">AI Usage Policy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discrimination-harassment-and-civil-discourse">Discrimination, Harassment, and Civil Discourse</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#health-safety-and-support-services">Health, Safety, and Support Services</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emergency-information">Emergency Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-course-policies">Other Course Policies</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

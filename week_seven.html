@@ -1,0 +1,1218 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 7: Symmetric and Complex Matrices &#8212; COT6905 Advanced Optimization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week_seven';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Week 8: SVD, Linear Transform, Compression" href="week_eight.html" />
+    <link rel="prev" title="Week 6: Eigenvalues and Eigenvectors" href="week_six.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="syllabus.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="COT6905 Advanced Optimization - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="COT6905 Advanced Optimization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="syllabus.html">
+                    Syllabus
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="week_one.html">Week 1: Matrix Review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_two.html">Week 2: Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_three.html">Week 3: Independence, Spaces, Graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_four.html">Week 4: Orthogonal Basis and Projection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_five.html">Week 5: Determinants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_six.html">Week 6: Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 7: Symmetric and Complex Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_eight.html">Week 8: SVD, Linear Transform, Compression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/jhs-39/COT6905_Optimization/master?urlpath=tree/docs/week_seven.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jhs-39/COT6905_Optimization/issues/new?title=Issue%20on%20page%20%2Fweek_seven.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/week_seven.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="_sources/week_seven.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 7: Symmetric and Complex Matrices</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-25-symmetric-matrices-and-positive-definiteness">Lecture 25: Symmetric matrices and positive definiteness</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetric-matrix">1. Symmetric Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-properties">2. Key Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-real-eigenvalues">3. Why Real Eigenvalues?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-1-expansion">4. Rank-1 Expansion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#positive-definite-matrices">5. Positive Definite Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">6. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-check-positive-definiteness">Code: Check Positive Definiteness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-26-complex-matrices-fast-fourier-transform">Lecture 26: Complex matrices; fast fourier transform</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-inner-product">1. Complex Inner Product</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hermitian-matrices">2. Hermitian Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-22-hermitian">3. Example: 2×2 Hermitian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-matrix">4. Fourier Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fast-fourier-transform-fft">5. Fast Fourier Transform (FFT)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-fourier-matrix-and-fft-comparison">Code: Fourier Matrix and FFT Comparison</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-27-positive-definite-matrices-and-minima">Lecture 27: Positive definite matrices and minima</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tests-for-positive-definiteness-22-case">1. Tests for Positive Definiteness (2×2 Case)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2. Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#completing-the-square-gaussian-elimination">3. Completing the Square = Gaussian Elimination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariable-case-second-derivative-test">4. Multivariable Case: Second Derivative Test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tridiagonal-example">5. 3×3 Tridiagonal Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-visualize-quadratic-forms-and-ellipsoids">Code: Visualize Quadratic Forms and Ellipsoids</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-28-similar-matrices-and-jordan-form">Lecture 28: Similar matrices and Jordan form</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similar-matrices">1. Similar Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-diagonalizable">2. Example: Diagonalizable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-diagonalizable-case">3. Non-Diagonalizable Case</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jordan-blocks-and-jordan-form">4. Jordan Blocks and Jordan Form</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-jordan-form">5. Example: Jordan Form</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-eigenvalues-example">6. Zero Eigenvalues Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-compute-jordan-form-via-schur-or-direct">Code: Compute Jordan Form (via Schur or Direct)</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-7-symmetric-and-complex-matrices">
+<h1>Week 7: Symmetric and Complex Matrices<a class="headerlink" href="#week-7-symmetric-and-complex-matrices" title="Permalink to this heading">#</a></h1>
+<section id="lecture-25-symmetric-matrices-and-positive-definiteness">
+<h2>Lecture 25: Symmetric matrices and positive definiteness<a class="headerlink" href="#lecture-25-symmetric-matrices-and-positive-definiteness" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/UCc9q_cAhho"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Symmetric matrices are the most important class in applications: they have <strong>real eigenvalues</strong>, <strong>orthogonal eigenvectors</strong>, and lead to the beautiful <strong>spectral theorem</strong>.</p>
+<hr class="docutils" />
+<section id="symmetric-matrix">
+<h3>1. Symmetric Matrix<a class="headerlink" href="#symmetric-matrix" title="Permalink to this heading">#</a></h3>
+<p>[
+\boxed{A = A^T}
+]</p>
+</section>
+<hr class="docutils" />
+<section id="key-properties">
+<h3>2. Key Properties<a class="headerlink" href="#key-properties" title="Permalink to this heading">#</a></h3>
+<p>For real symmetric <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<ul class="simple">
+<li><p>All eigenvalues <span class="math notranslate nohighlight">\(\lambda_i\)</span> are <strong>real</strong>.</p></li>
+<li><p>Eigenvectors belonging to different eigenvalues are <strong>orthogonal</strong>.</p></li>
+<li><p>We can choose a full set of <strong>orthonormal eigenvectors</strong> <span class="math notranslate nohighlight">\(\{q_1, \dots, q_n\}\)</span>.</p></li>
+</ul>
+<p>Let <span class="math notranslate nohighlight">\(Q = [q_1 \cdots q_n]\)</span> (orthogonal matrix, <span class="math notranslate nohighlight">\(Q^T Q = I\)</span>).</p>
+<p>Then:</p>
+<p>[
+\boxed{A = Q \Lambda Q^T}, \quad \Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)
+]</p>
+<p>This is the <strong>spectral theorem</strong> (or <strong>principal axis theorem</strong>).</p>
+</section>
+<hr class="docutils" />
+<section id="why-real-eigenvalues">
+<h3>3. Why Real Eigenvalues?<a class="headerlink" href="#why-real-eigenvalues" title="Permalink to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(Ax = \lambda x\)</span> (<span class="math notranslate nohighlight">\(x \neq 0\)</span>).</p>
+<p>Take complex conjugate:</p>
+<p>[
+A \bar{x} = \bar{\lambda} \bar{x}
+]</p>
+<p>Multiply first equation by <span class="math notranslate nohighlight">\(\bar{x}^T\)</span> (left):</p>
+<p>[
+\bar{x}^T A x = \lambda \bar{x}^T x
+]</p>
+<p>Transpose:</p>
+<p>[
+x^T A^T \bar{x} = \bar{\lambda} x^T \bar{x}
+]</p>
+<p>Since <span class="math notranslate nohighlight">\(A = A^T\)</span>:</p>
+<p>[
+x^T A \bar{x} = \bar{\lambda} x^T \bar{x}
+]</p>
+<p>But <span class="math notranslate nohighlight">\(x^T A \bar{x} = \bar{x}^T A x = \lambda \bar{x}^T x\)</span>, so</p>
+<p>[
+\lambda \bar{x}^T x = \bar{\lambda} \bar{x}^T x \quad \Rightarrow \quad \lambda = \bar{\lambda}
+]</p>
+<p><span class="math notranslate nohighlight">\(\lambda\)</span> is real!</p>
+</section>
+<hr class="docutils" />
+<section id="rank-1-expansion">
+<h3>4. Rank-1 Expansion<a class="headerlink" href="#rank-1-expansion" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \sum_{i=1}^n \lambda_i q_i q_i^T
+]</p>
+<p>Each term <span class="math notranslate nohighlight">\(\lambda_i q_i q_i^T\)</span> is a scaled <strong>projection</strong> onto the direction <span class="math notranslate nohighlight">\(q_i\)</span>.</p>
+<p>Symmetric matrices are linear combinations of perpendicular rank-1 projections.</p>
+</section>
+<hr class="docutils" />
+<section id="positive-definite-matrices">
+<h3>5. Positive Definite Matrices<a class="headerlink" href="#positive-definite-matrices" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(A\)</span> (symmetric) is <strong>positive definite</strong> if</p>
+<p>[
+\boxed{x^T A x &gt; 0 \quad \forall x \neq 0}
+]</p>
+<p><strong>Equivalent conditions</strong>:</p>
+<ul class="simple">
+<li><p>All eigenvalues <span class="math notranslate nohighlight">\(\lambda_i &gt; 0\)</span></p></li>
+<li><p>All pivots <span class="math notranslate nohighlight">\(&gt; 0\)</span> (in elimination)</p></li>
+<li><p>All leading principal minors <span class="math notranslate nohighlight">\(&gt; 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\det(A) &gt; 0\)</span> and all submatrix determinants positive</p></li>
+<li><p>Cholesky factorization exists: <span class="math notranslate nohighlight">\(A = L L^T\)</span> (<span class="math notranslate nohighlight">\(L\)</span> lower triangular)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="example">
+<h3>6. Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 5 &amp; 2 \ 2 &amp; 3 \end{pmatrix}
+]</p>
+<p>Eigenvalues: solve <span class="math notranslate nohighlight">\(\det(A - \lambda I) = (5-\lambda)(3-\lambda) - 4 = \lambda^2 - 8\lambda + 11 = 0\)</span></p>
+<p>[
+\lambda = \frac{8 \pm \sqrt{64-44}}{2} = 4 \pm \sqrt{5} \quad (\text{both positive})
+]</p>
+<p>Quadratic form:</p>
+<p>[
+x^T A x = 5x_1^2 + 4x_1 x_2 + 3x_2^2 = (x_1 + x_2)^2 + 4x_1^2 + 2x_2^2 &gt; 0 \quad (x \neq 0)
+]</p>
+<p>Positive definite.</p>
+</section>
+<hr class="docutils" />
+<section id="code-check-positive-definiteness">
+<h3>Code: Check Positive Definiteness<a class="headerlink" href="#code-check-positive-definiteness" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+A = np.array([[5, 2],
+              [2, 3]], dtype=float)
+
+eigvals = np.linalg.eigvals(A)
+is_pd_eig = np.all(eigvals &gt; 0)
+
+# Cholesky (fails if not PD)
+try:
+    L = np.linalg.cholesky(A)
+    cholesky_success = True
+except np.linalg.LinAlgError:
+    cholesky_success = False
+
+display(Markdown(f&quot;&quot;&quot;
+**Matrix** $$ A = \\begin{{pmatrix}} 5 &amp; 2 \\\\ 2 &amp; 3 \\end{{pmatrix}} $$
+
+**Eigenvalues**: $$ {np.round(eigvals, 4).tolist()} $$
+
+Positive definite (eigenvalues)? **{&#39;Yes&#39; if is_pd_eig else &#39;No&#39;}**
+
+Cholesky factorization exists? **{&#39;Yes&#39; if cholesky_success else &#39;No&#39;}**
+
+$$ L = \\begin{{pmatrix}} {L[0,0]:.3f} &amp; 0 \\\\ {L[1,0]:.3f} &amp; {L[1,1]:.3f} \\end{{pmatrix}} $$ (if successful)
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-26-complex-matrices-fast-fourier-transform">
+<h2>Lecture 26: Complex matrices; fast fourier transform<a class="headerlink" href="#lecture-26-complex-matrices-fast-fourier-transform" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/M0Sa8fLOajA"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>We extend linear algebra to complex numbers — necessary for the <strong>Fourier transform</strong> and its fast algorithm, the <strong>FFT</strong>.</p>
+<hr class="docutils" />
+<section id="complex-inner-product">
+<h3>1. Complex Inner Product<a class="headerlink" href="#complex-inner-product" title="Permalink to this heading">#</a></h3>
+<p>For complex vectors <span class="math notranslate nohighlight">\(x, y \in \mathbb{C}^n\)</span>:</p>
+<p>[
+\boxed{\langle y, x \rangle = y^H x}
+]</p>
+<p>where <span class="math notranslate nohighlight">\(y^H = \bar{y}^T\)</span> is the <strong>conjugate transpose</strong> (Hermitian transpose).</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\|x\|^2 = x^H x = \sum |x_i|^2 \geq 0\)</span></p></li>
+<li><p>Orthogonality: <span class="math notranslate nohighlight">\(y^H x = 0\)</span></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="hermitian-matrices">
+<h3>2. Hermitian Matrices<a class="headerlink" href="#hermitian-matrices" title="Permalink to this heading">#</a></h3>
+<p>A complex matrix <span class="math notranslate nohighlight">\(A\)</span> is <strong>Hermitian</strong> if</p>
+<p>[
+\boxed{A^H = A}
+]</p>
+<p>Properties (analogous to real symmetric):</p>
+<ul class="simple">
+<li><p>Diagonal entries are real.</p></li>
+<li><p>Eigenvalues are <strong>real</strong>.</p></li>
+<li><p>Eigenvectors for distinct eigenvalues are orthogonal (w.r.t. complex inner product).</p></li>
+<li><p>Orthonormal basis of eigenvectors exists: <span class="math notranslate nohighlight">\(Q\)</span> with <span class="math notranslate nohighlight">\(Q^H Q = I\)</span>.</p></li>
+</ul>
+<p>Then:</p>
+<p>[
+\boxed{A = Q \Lambda Q^H}, \quad \Lambda \text{ real diagonal}
+]</p>
+<p>Such <span class="math notranslate nohighlight">\(Q\)</span> is called <strong>unitary</strong> (<span class="math notranslate nohighlight">\(Q^{-1} = Q^H\)</span>).</p>
+</section>
+<hr class="docutils" />
+<section id="example-22-hermitian">
+<h3>3. Example: 2×2 Hermitian<a class="headerlink" href="#example-22-hermitian" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 2 &amp; 3+i \ 3-i &amp; 5 \end{pmatrix}
+]</p>
+<p><span class="math notranslate nohighlight">\(A^H = A\)</span>, diagonal real → Hermitian.</p>
+<p>Eigenvalues real, eigenvectors orthogonal under <span class="math notranslate nohighlight">\(y^H x = 0\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="fourier-matrix">
+<h3>4. Fourier Matrix<a class="headerlink" href="#fourier-matrix" title="Permalink to this heading">#</a></h3>
+<p>The <span class="math notranslate nohighlight">\(n \times n\)</span> <strong>Fourier matrix</strong> <span class="math notranslate nohighlight">\(F_n\)</span>:</p>
+<p>[
+(F_n)_{jk} = \omega^{jk}, \quad \omega = e^{2\pi i / n} = \cos\frac{2\pi}{n} + i \sin\frac{2\pi}{n}
+]</p>
+<p>(Indices usually <span class="math notranslate nohighlight">\(j,k = 0,\dots,n-1\)</span>.)</p>
+<p>Example <span class="math notranslate nohighlight">\(n=4\)</span> (<span class="math notranslate nohighlight">\(\omega = i\)</span>):</p>
+<p>[
+F_4 = \begin{pmatrix}
+1 &amp; 1 &amp; 1 &amp; 1 \
+1 &amp; i &amp; i^2 &amp; i^3 \
+1 &amp; i^2 &amp; i^4 &amp; i^6 \
+1 &amp; i^3 &amp; i^6 &amp; i^9
+\end{pmatrix}
+= \begin{pmatrix}
+1 &amp; 1 &amp; 1 &amp; 1 \
+1 &amp; i &amp; -1 &amp; -i \
+1 &amp; -1 &amp; 1 &amp; -1 \
+1 &amp; -i &amp; -1 &amp; i
+\end{pmatrix}
+]</p>
+<p>Key property: columns are orthogonal under complex inner product.</p>
+<p>Scaled version is unitary: <span class="math notranslate nohighlight">\(F_n^H F_n = n I\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="fast-fourier-transform-fft">
+<h3>5. Fast Fourier Transform (FFT)<a class="headerlink" href="#fast-fourier-transform-fft" title="Permalink to this heading">#</a></h3>
+<p>Direct matrix-vector multiply <span class="math notranslate nohighlight">\(F_n x\)</span>: <span class="math notranslate nohighlight">\(O(n^2)\)</span> operations.</p>
+<p><strong>Cooley–Tukey FFT</strong> exploits structure recursively:</p>
+<p>[
+F_{2m} = P \begin{pmatrix} I &amp; D \ I &amp; -D \end{pmatrix} \begin{pmatrix} F_m &amp; 0 \ 0 &amp; F_m \end{pmatrix}
+]</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(D\)</span>: diagonal with powers of <span class="math notranslate nohighlight">\(\omega^2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(P\)</span>: permutation (evens first, odds second)</p></li>
+</ul>
+<p>Cost recurrence:</p>
+<p>[
+T(n) = 2 T(n/2) + O(n) \quad \Rightarrow \quad \boxed{T(n) = O(n \log n)}
+]</p>
+<p>Huge speedup: <span class="math notranslate nohighlight">\(n=10^6\)</span> → <span class="math notranslate nohighlight">\(10^{12}\)</span> vs <span class="math notranslate nohighlight">\(\sim 2 \times 10^7\)</span> operations.</p>
+</section>
+<hr class="docutils" />
+<section id="code-fourier-matrix-and-fft-comparison">
+<h3>Code: Fourier Matrix and FFT Comparison<a class="headerlink" href="#code-fourier-matrix-and-fft-comparison" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from IPython.display import Markdown, display
+
+n = 8
+omega = np.exp(2j * np.pi / n)
+j, k = np.meshgrid(np.arange(n), np.arange(n))
+F = omega ** (j * k)
+
+# Orthonormality check (up to scaling)
+scaled_F = F / np.sqrt(n)
+error = np.linalg.norm(scaled_F.conj().T @ scaled_F - np.eye(n))
+
+# Compare direct vs np.fft
+x = np.random.randn(n) + 1j * np.random.randn(n)
+direct = F @ x
+fft_result = np.fft.fft(x)
+
+display(Markdown(f&quot;&quot;&quot;
+**Fourier matrix** $$ F_{{{n}}} $$ (first 4×4 block shown):
+
+$$  \\begin{{pmatrix}}
+{np.real(F[:4,:4]).astype(int)} + i\\{np.imag(F[:4,:4]).astype(int)}
+\\end{{pmatrix}}  $$
+
+Scaled $$ F/\\sqrt{{{n}}} $$ is unitary (error $$ \\approx {error:.2e} $$)
+
+**Direct multiply**: {np.round(direct[:4], 3)}
+
+**np.fft.fft**      : {np.round(fft_result[:4], 3)}
+
+Match? **{&#39;Yes&#39; if np.allclose(direct, fft_result) else &#39;No&#39;}**
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-27-positive-definite-matrices-and-minima">
+<h2>Lecture 27: Positive definite matrices and minima<a class="headerlink" href="#lecture-27-positive-definite-matrices-and-minima" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/vF7eyJ2g3kU"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Positive definite matrices define <strong>quadratic functions with a unique global minimum</strong> — the foundation of optimization and least squares.</p>
+<hr class="docutils" />
+<section id="tests-for-positive-definiteness-22-case">
+<h3>1. Tests for Positive Definiteness (2×2 Case)<a class="headerlink" href="#tests-for-positive-definiteness-22-case" title="Permalink to this heading">#</a></h3>
+<p>For symmetric</p>
+<p>[
+A = \begin{pmatrix} a &amp; b \ b &amp; c \end{pmatrix}
+]</p>
+<p><span class="math notranslate nohighlight">\(A\)</span> is <strong>positive definite</strong> <span class="math notranslate nohighlight">\(\iff\)</span></p>
+<ul class="simple">
+<li><p>All eigenvalues <span class="math notranslate nohighlight">\(&gt; 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(a &gt; 0\)</span> and <span class="math notranslate nohighlight">\(\det(A) = ac - b^2 &gt; 0\)</span></p></li>
+<li><p>Both pivots <span class="math notranslate nohighlight">\(&gt; 0\)</span>: <span class="math notranslate nohighlight">\(a &gt; 0\)</span>, <span class="math notranslate nohighlight">\(\frac{ac-b^2}{a} &gt; 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\boxed{x^T A x &gt; 0 \quad \forall x \neq 0}\)</span></p></li>
+</ul>
+<p><strong>Positive semidefinite</strong>: <span class="math notranslate nohighlight">\(x^T A x \geq 0\)</span> (allows zero eigenvalue, <span class="math notranslate nohighlight">\(\det(A) = 0\)</span>).</p>
+</section>
+<hr class="docutils" />
+<section id="examples">
+<h3>2. Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Matrix</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(x^T A x\)</span></p></th>
+<th class="head"><p>Classification</p></th>
+<th class="head"><p>Reason</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\begin{pmatrix} 2 &amp; 6 \\ 6 &amp; 18 \end{pmatrix}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2x_1^2 + 12x_1 x_2 + 18x_2^2 = 2(x_1 + 3x_2)^2 \geq 0\)</span></p></td>
+<td><p>Semidefinite</p></td>
+<td><p><span class="math notranslate nohighlight">\(\det=0\)</span>, rank 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\begin{pmatrix} 2 &amp; 6 \\ 6 &amp; 7 \end{pmatrix}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2x_1^2 + 12x_1 x_2 + 7x_2^2\)</span></p></td>
+<td><p>Indefinite</p></td>
+<td><p>Saddle (can be negative)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\begin{pmatrix} 2 &amp; 6 \\ 6 &amp; 20 \end{pmatrix}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2x_1^2 + 12x_1 x_2 + 20x_2^2 = 2(x_1 + 3x_2)^2 + 2x_2^2 &gt; 0\)</span></p></td>
+<td><p>Definite</p></td>
+<td><p>Completed square positive</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="completing-the-square-gaussian-elimination">
+<h3>3. Completing the Square = Gaussian Elimination<a class="headerlink" href="#completing-the-square-gaussian-elimination" title="Permalink to this heading">#</a></h3>
+<p>For <span class="math notranslate nohighlight">\(f(x,y) = ax^2 + 2hxy + cy^2\)</span>:</p>
+<p>[
+f = a\left(x + \frac{h}{a}y\right)^2 + \left(c - \frac{h^2}{a}\right)y^2
+]</p>
+<ul class="simple">
+<li><p>First coefficient <span class="math notranslate nohighlight">\(a\)</span> → first pivot</p></li>
+<li><p>Second coefficient <span class="math notranslate nohighlight">\(c - h^2/a\)</span> → second pivot</p></li>
+</ul>
+<p>Positive definite <span class="math notranslate nohighlight">\(\iff\)</span> both coefficients <span class="math notranslate nohighlight">\(&gt; 0\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="multivariable-case-second-derivative-test">
+<h3>4. Multivariable Case: Second Derivative Test<a class="headerlink" href="#multivariable-case-second-derivative-test" title="Permalink to this heading">#</a></h3>
+<p>Consider <span class="math notranslate nohighlight">\(f(\mathbf{x}) = \frac{1}{2} \mathbf{x}^T A \mathbf{x} - \mathbf{b}^T \mathbf{x} + c\)</span>.</p>
+<p>Critical point: <span class="math notranslate nohighlight">\(\nabla f = A \mathbf{x} - \mathbf{b} = 0 \quad \Rightarrow \quad \mathbf{x}^* = A^{-1} \mathbf{b}\)</span> (if <span class="math notranslate nohighlight">\(A\)</span> invertible).</p>
+<p>Second derivative (Hessian): <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A\)</span> positive definite <span class="math notranslate nohighlight">\(\Rightarrow\)</span> <strong>global minimum</strong> at <span class="math notranslate nohighlight">\(\mathbf{x}^*\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A\)</span> indefinite <span class="math notranslate nohighlight">\(\Rightarrow\)</span> saddle.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="tridiagonal-example">
+<h3>5. 3×3 Tridiagonal Example<a class="headerlink" href="#tridiagonal-example" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix}
+2 &amp; -1 &amp; 0 \
+-1 &amp; 2 &amp; -1 \
+0 &amp; -1 &amp; 2
+\end{pmatrix}
+]</p>
+<p>Leading minors: <span class="math notranslate nohighlight">\(2 &gt; 0\)</span>, <span class="math notranslate nohighlight">\(\det\begin{pmatrix}2 &amp; -1\\-1 &amp; 2\end{pmatrix}=3 &gt; 0\)</span>, <span class="math notranslate nohighlight">\(\det(A)=4 &gt; 0\)</span>.</p>
+<p>Pivots (after elimination): <span class="math notranslate nohighlight">\(2\)</span>, <span class="math notranslate nohighlight">\(3/2\)</span>, <span class="math notranslate nohighlight">\(4/3\)</span> (all positive).</p>
+<p>Eigenvalues: <span class="math notranslate nohighlight">\(2 - \sqrt{2} \approx 0.586\)</span>, <span class="math notranslate nohighlight">\(2\)</span>, <span class="math notranslate nohighlight">\(2 + \sqrt{2} \approx 3.414\)</span> (all positive).</p>
+<p>Quadratic form contours: <strong>ellipsoids</strong> (not hyperbolas).</p>
+<p>Axis lengths <span class="math notranslate nohighlight">\(\propto 1/\sqrt{\lambda_i}\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="code-visualize-quadratic-forms-and-ellipsoids">
+<h3>Code: Visualize Quadratic Forms and Ellipsoids<a class="headerlink" href="#code-visualize-quadratic-forms-and-ellipsoids" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_quadratic_form(A, title):
+    x = np.linspace(-3, 3, 400)
+    y = np.linspace(-3, 3, 400)
+    X, Y = np.meshgrid(x, y)
+    Z = A[0,0]*X**2 + 2*A[0,1]*X*Y + A[1,1]*Y**2
+    
+    plt.figure(figsize=(6,6))
+    plt.contourf(X, Y, Z, levels=20, cmap=&#39;viridis&#39;)
+    plt.colorbar(label=&#39;$$ f(x,y) $$&#39;)
+    plt.contour(X, Y, Z, levels=[0], colors=&#39;red&#39;, linewidths=2)
+    plt.xlabel(&#39;$$ x $$&#39;); plt.ylabel(&#39;$$ y $$&#39;)
+    plt.title(title)
+    plt.axis(&#39;equal&#39;)
+    plt.grid(alpha=0.3)
+    plt.show()
+
+# Positive definite
+A_pd = np.array([[2, 6], [6, 20]])
+plot_quadratic_form(A_pd, &#39;Positive Definite: Elliptical Bowl&#39;)
+
+# Semidefinite
+A_psd = np.array([[2, 6], [6, 18]])
+plot_quadratic_form(A_psd, &#39;Positive Semidefinite: Trough&#39;)
+
+# Indefinite
+A_ind = np.array([[2, 6], [6, 7]])
+plot_quadratic_form(A_ind, &#39;Indefinite: Saddle&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lecture-28-similar-matrices-and-jordan-form">
+<h2>Lecture 28: Similar matrices and Jordan form<a class="headerlink" href="#lecture-28-similar-matrices-and-jordan-form" title="Permalink to this heading">#</a></h2>
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/TSdXJw83kyA"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+<p>Not every matrix is diagonalizable, but <strong>every</strong> square matrix is similar to a nearly diagonal <strong>Jordan form</strong> — the cleanest representative of its similarity class.</p>
+<hr class="docutils" />
+<section id="similar-matrices">
+<h3>1. Similar Matrices<a class="headerlink" href="#similar-matrices" title="Permalink to this heading">#</a></h3>
+<p>Two <span class="math notranslate nohighlight">\(n \times n\)</span> matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are <strong>similar</strong> if there exists invertible <span class="math notranslate nohighlight">\(M\)</span> such that</p>
+<p>[
+\boxed{B = M^{-1} A M}
+]</p>
+<p>Consequences:</p>
+<ul class="simple">
+<li><p>Same eigenvalues (characteristic polynomial <span class="math notranslate nohighlight">\(\det(A - \lambda I) = \det(B - \lambda I)\)</span>)</p></li>
+<li><p>Same trace, determinant, rank</p></li>
+<li><p>Eigenvectors related by <span class="math notranslate nohighlight">\(M\)</span>: if <span class="math notranslate nohighlight">\(A x = \lambda x\)</span>, then <span class="math notranslate nohighlight">\(B (M^{-1} x) = \lambda (M^{-1} x)\)</span></p></li>
+</ul>
+<p>Diagonalizable case: <span class="math notranslate nohighlight">\(A = M \Lambda M^{-1}\)</span> → <span class="math notranslate nohighlight">\(A\)</span> similar to diagonal <span class="math notranslate nohighlight">\(\Lambda\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="example-diagonalizable">
+<h3>2. Example: Diagonalizable<a class="headerlink" href="#example-diagonalizable" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 2 &amp; 1 \ 1 &amp; 2 \end{pmatrix}, \quad
+\Lambda = \begin{pmatrix} 3 &amp; 0 \ 0 &amp; 1 \end{pmatrix}
+]</p>
+<p>Change-of-basis matrix (easy to invert):</p>
+<p>[
+M = \begin{pmatrix} 1 &amp; 4 \ 0 &amp; 1 \end{pmatrix}
+]</p>
+<p>Verify <span class="math notranslate nohighlight">\(M^{-1} A M = \Lambda\)</span> (or equivalently <span class="math notranslate nohighlight">\(M^T A M\)</span> in some symmetric cases).</p>
+<p>All matrices with eigenvalues <span class="math notranslate nohighlight">\(3,1\)</span> form a similarity class.</p>
+</section>
+<hr class="docutils" />
+<section id="non-diagonalizable-case">
+<h3>3. Non-Diagonalizable Case<a class="headerlink" href="#non-diagonalizable-case" title="Permalink to this heading">#</a></h3>
+<p>Repeated eigenvalue but insufficient eigenvectors → cannot diagonalize.</p>
+<p>Example:</p>
+<p>[
+A = \begin{pmatrix} 4 &amp; 1 \ 0 &amp; 4 \end{pmatrix}
+]</p>
+<p>Eigenvalues: <span class="math notranslate nohighlight">\(4,4\)</span> (trace <span class="math notranslate nohighlight">\(8\)</span>, det <span class="math notranslate nohighlight">\(16\)</span>).</p>
+<p>Only one eigenvector <span class="math notranslate nohighlight">\(\begin{pmatrix} 1 \\ 0 \end{pmatrix}\)</span> → geometric multiplicity <span class="math notranslate nohighlight">\(1 &lt; 2\)</span>.</p>
+<p>Still similar to itself (trivial), but the <strong>Jordan form</strong> reveals the structure.</p>
+</section>
+<hr class="docutils" />
+<section id="jordan-blocks-and-jordan-form">
+<h3>4. Jordan Blocks and Jordan Form<a class="headerlink" href="#jordan-blocks-and-jordan-form" title="Permalink to this heading">#</a></h3>
+<p>A <strong>Jordan block</strong> <span class="math notranslate nohighlight">\(J_k(\lambda)\)</span> (<span class="math notranslate nohighlight">\(k \times k\)</span>):</p>
+<p>[
+J_k(\lambda) = \begin{pmatrix}
+\lambda &amp; 1 &amp; &amp; \
+&amp; \lambda &amp; 1 &amp; \
+&amp; &amp; \ddots &amp; 1 \
+&amp; &amp; &amp; \lambda
+\end{pmatrix}
+]</p>
+<p><strong>Jordan canonical form theorem</strong>:</p>
+<p>Every square matrix <span class="math notranslate nohighlight">\(A\)</span> is similar to a block-diagonal <strong>Jordan matrix</strong> <span class="math notranslate nohighlight">\(J\)</span>:</p>
+<p>[
+\boxed{A = P J P^{-1}}
+]</p>
+<ul class="simple">
+<li><p>Diagonal blocks are Jordan blocks.</p></li>
+<li><p>Number of blocks for eigenvalue <span class="math notranslate nohighlight">\(\lambda\)</span> = geometric multiplicity (dimension of eigenspace).</p></li>
+<li><p>Size of largest block = index of eigenvalue.</p></li>
+<li><p>Diagonalizable <span class="math notranslate nohighlight">\(\iff\)</span> all blocks <span class="math notranslate nohighlight">\(1\times1\)</span> (i.e., <span class="math notranslate nohighlight">\(J = \Lambda\)</span>).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="example-jordan-form">
+<h3>5. Example: Jordan Form<a class="headerlink" href="#example-jordan-form" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix} 4 &amp; 1 \ 0 &amp; 4 \end{pmatrix} \quad \Rightarrow \quad J = \begin{pmatrix} 4 &amp; 1 \ 0 &amp; 4 \end{pmatrix}
+]</p>
+<p>(Same as <span class="math notranslate nohighlight">\(A\)</span> — already in Jordan form.)</p>
+<p>Another matrix with same eigenvalues but different structure:</p>
+<p>[
+\begin{pmatrix} 5 &amp; 1 \ -1 &amp; 3 \end{pmatrix}
+]</p>
+<p>Trace <span class="math notranslate nohighlight">\(8\)</span>, det <span class="math notranslate nohighlight">\(16\)</span> → same characteristic polynomial → similar.</p>
+</section>
+<hr class="docutils" />
+<section id="zero-eigenvalues-example">
+<h3>6. Zero Eigenvalues Example<a class="headerlink" href="#zero-eigenvalues-example" title="Permalink to this heading">#</a></h3>
+<p>[
+A = \begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \
+0 &amp; 0 &amp; 1 &amp; 0 \
+0 &amp; 0 &amp; 0 &amp; 0 \
+0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+]</p>
+<p>Eigenvalues: <span class="math notranslate nohighlight">\(0\)</span> (multiplicity <span class="math notranslate nohighlight">\(4\)</span>).</p>
+<p>Rank <span class="math notranslate nohighlight">\(2\)</span> → nullity <span class="math notranslate nohighlight">\(2\)</span> → geometric multiplicity <span class="math notranslate nohighlight">\(2\)</span>.</p>
+<p>Jordan form: two blocks (e.g., one <span class="math notranslate nohighlight">\(2\times2\)</span>, one <span class="math notranslate nohighlight">\(1\times1\)</span>, one <span class="math notranslate nohighlight">\(1\times1\)</span>).</p>
+</section>
+<hr class="docutils" />
+<section id="code-compute-jordan-form-via-schur-or-direct">
+<h3>Code: Compute Jordan Form (via Schur or Direct)<a class="headerlink" href="#code-compute-jordan-form-via-schur-or-direct" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from scipy.linalg import schur, eig
+from IPython.display import Markdown, display
+
+# Non-diagonalizable example
+A = np.array([[4, 1],
+              [0, 4]])
+
+# Real Schur form (triangular, close to Jordan for real matrices)
+T, Z = schur(A, output=&#39;real&#39;)
+
+# Eigenvalues
+eigvals = eig(A)[0]
+
+display(Markdown(f&quot;&quot;&quot;
+**Matrix** $$ A = \\begin{{pmatrix}} 4 &amp; 1 \\\\ 0 &amp; 4 \\end{{pmatrix}} $$
+
+**Eigenvalues**: $$ {np.round(eigvals, 3).tolist()} $$ (repeated)
+
+**Real Schur form** $$ T \\approx $$ Jordan form:
+
+$$  T = \\begin{{pmatrix}} {T[0,0]:.3f} &amp; {T[0,1]:.3f} \\\\ {T[1,0]:.3f} &amp; {T[1,1]:.3f} \\end{{pmatrix}}  $$
+
+Note the $1$ above diagonal → single $2\\times2$ Jordan block for $$ \\lambda=4 $$.
+
+Geometric multiplicity = $1$ (rank$$ (A-4I)=1 $$).
+&quot;&quot;&quot;))
+
+# Try another matrix
+A2 = np.array([[5, 1], [-1, 3]])
+T2, Z2 = schur(A2, output=&#39;real&#39;)
+display(Markdown(f&quot;&quot;&quot;
+**Another similar matrix**:
+
+Schur form confirms same Jordan structure.
+&quot;&quot;&quot;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "jhs-39/COT6905_Optimization",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="week_six.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 6: Eigenvalues and Eigenvectors</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="week_eight.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 8: SVD, Linear Transform, Compression</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-25-symmetric-matrices-and-positive-definiteness">Lecture 25: Symmetric matrices and positive definiteness</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetric-matrix">1. Symmetric Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-properties">2. Key Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-real-eigenvalues">3. Why Real Eigenvalues?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-1-expansion">4. Rank-1 Expansion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#positive-definite-matrices">5. Positive Definite Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">6. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-check-positive-definiteness">Code: Check Positive Definiteness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-26-complex-matrices-fast-fourier-transform">Lecture 26: Complex matrices; fast fourier transform</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-inner-product">1. Complex Inner Product</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hermitian-matrices">2. Hermitian Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-22-hermitian">3. Example: 2×2 Hermitian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-matrix">4. Fourier Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fast-fourier-transform-fft">5. Fast Fourier Transform (FFT)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-fourier-matrix-and-fft-comparison">Code: Fourier Matrix and FFT Comparison</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-27-positive-definite-matrices-and-minima">Lecture 27: Positive definite matrices and minima</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tests-for-positive-definiteness-22-case">1. Tests for Positive Definiteness (2×2 Case)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2. Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#completing-the-square-gaussian-elimination">3. Completing the Square = Gaussian Elimination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariable-case-second-derivative-test">4. Multivariable Case: Second Derivative Test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tridiagonal-example">5. 3×3 Tridiagonal Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-visualize-quadratic-forms-and-ellipsoids">Code: Visualize Quadratic Forms and Ellipsoids</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-28-similar-matrices-and-jordan-form">Lecture 28: Similar matrices and Jordan form</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similar-matrices">1. Similar Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-diagonalizable">2. Example: Diagonalizable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-diagonalizable-case">3. Non-Diagonalizable Case</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jordan-blocks-and-jordan-form">4. Jordan Blocks and Jordan Form</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-jordan-form">5. Example: Jordan Form</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-eigenvalues-example">6. Zero Eigenvalues Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-compute-jordan-form-via-schur-or-direct">Code: Compute Jordan Form (via Schur or Direct)</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jacob Sander
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
